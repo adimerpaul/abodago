@@ -224,7 +224,8 @@ export default {
     }
   },
   created() {
-    this.misdatos()
+    console.log()
+    this.misdatos(process.env.API)
     // for (let i=1;i<=1000;i++){
     //   this.folios.push(i)
     // }
