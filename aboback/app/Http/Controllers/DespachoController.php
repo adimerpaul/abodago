@@ -36,6 +36,20 @@ class DespachoController extends Controller
     public function store(Request $request)
     {
         //
+        $despacho=new Despacho;
+        $despacho->fecha=$request->fecha;
+        $despacho->hora=$request->hora;
+        $despacho->tipo=$request->tipo;
+        $despacho->juzgado=strtoupper($request->juzgado);
+        $despacho->webid=$request->webid;
+        $despacho->nurej=$request->nurej;
+        $despacho->proceso=strtoupper($request->proceso);
+        $despacho->demandante=strtoupper($request->demandante);
+        $despacho->demandados=strtoupper($request->demandados);
+        $despacho->tramite_id=$request->tramite_id;
+        $despacho->cliente_id=$request->cliente_id;
+        $despacho->save();
+
     }
 
     /**

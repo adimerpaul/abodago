@@ -23,8 +23,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Clientes " :rows="clientes" :columns="columns" :filter="filter"       :rows-per-page-options="[50,100,150,200,0]"
-        >
+        <q-table dense title="Clientes " :rows="clientes" :columns="columns" :filter="filter"       :rows-per-page-options="[50,100,150,200,0]">
           <template v-slot:top-right>
             <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -85,7 +84,7 @@
               </q-td>
               <q-td key="dias" :props="props">
                 <q-badge :color="props.row.dias==0?'positive':props.row.dias==1?'amber':'negative'">
-                  {{ props.row.dias }} d
+                  {{ props.row.dias }} 
                 </q-badge>
               </q-td>
               <q-td key="estado" :props="props">
@@ -136,7 +135,7 @@
               <q-form @submit.prevent="registrarlog">
 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-select use-input :options="tramites" label="Seleccionar personal" v-model="usuario" @filter="filterFn" outlined >
+                <q-select use-input :options="tramites" label="Seleccionar Tramite / Proceso" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -145,6 +144,21 @@
                     </q-item>
                   </template>
                 </q-select>
+                <div class="row">
+                  <div class="col-6"><q-input type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
+                  <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>                  
+                </div>
+                <q-input label="Juzgado" outlined  v-model="despacho.juzgado"/>
+                <div class="row">
+                  <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
+                  <div class="col-6"><q-input label="NuRej" outlined  v-model="despacho.nurej"/></div>
+                  
+                </div>
+                
+                <q-input label="Proceso" outlined  v-model="despacho.proceso"/>
+                <q-input label="demandante" outlined  v-model="despacho.demandante"/>
+                <q-input label="demandados" outlined  v-model="despacho.demandados"/>
+
                 <q-btn label="Remitir" color="teal" icon="send" class="full-width" type="submit"/>
               </q-form>
             </q-card-section>
@@ -153,6 +167,7 @@
             </q-card-section>
           </q-card>
         </q-dialog>
+
         <q-dialog v-model="dialogarchivo">
           <q-card style="width: 300px;min-width: 40vh">
             <q-card-section>
@@ -189,6 +204,8 @@ export default {
       dialogcliente:false,
       dialogarchivo:false,
       url:process.env.API,
+      tramite:{},
+      despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
       tramites:[],
       tramites2:[],
       dato:{tipo:'INTERNO',fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),folio:1},
@@ -258,6 +275,7 @@ export default {
         d.label=r.tipo+' '+r.nombre
         this.tramites.push(d)
       })
+      this.tramite=this.tramites[0];
       this.tramites2=this.tramites
     })
   },
@@ -331,28 +349,17 @@ export default {
       });
     },
     registrarlog(){
-      // console.log({
-      //   mail_id:this.mail.id,
-      //   user_id2:this.usuario.id,
-      //   destinatario:this.usuario.name,
-      //   unit_id:this.usuario.unit_id,
-      //   accion:this.miaccion
-      // })
-      // return false
+      this.despacho.tipo=this.tramite.tipo;
+      this.despacho.tramite_id=this.tramite.id;
+      this.despacho.cliente_id=this.cliente2.id;  
       this.$q.loading.show()
-      this.$axios.post(process.env.API+'/log',{
-        mail_id:this.mail.id,
-        user_id2:this.usuario.id,
-        destinatario:this.usuario.name,
-        unit_id:this.usuario.unit_id,
-        accion:this.miaccion
-      }).then(res=>{
+      this.$axios.post(process.env.API+'/despacho',this.despacho).then(res=>{
         // console.log(res.data)
         this.misdatos()
         this.$q.loading.hide()
         this.dialogcliente=false
         this.$q.notify({
-          message:'Renviado correctamente!!',
+          message:'Despacho registrado!!',
           color:'green',
           icon:'done'
         })
