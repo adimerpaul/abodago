@@ -112,6 +112,7 @@
                 <!--            </q-badge>-->
                 <q-btn-group >
                   <q-btn dense @click="aceptar(props.row)" color="positive" label="Agregar" icon="add_circle" size="xs" />
+                  <q-btn dense @click="despacho(props.row)" color="accent" label="Despacho" icon="text_snippet" size="xs" />
                 </q-btn-group >
 <!--                <q-btn-group v-if="props.row.estado=='ACEPTADO'">-->
 <!--&lt;!&ndash;                  <q-btn type="a"  target="__blank" dense :href="url+'/mail/'+props.row.id" color="primary" label="Imprimir" icon="timeline" size="xs" />&ndash;&gt;-->
@@ -220,6 +221,18 @@ export default {
         // {field:'folio',name:'folio',label:'folio',align:'right'},
         // {field:'archivo',name:'archivo',label:'archivo',align:'right'},
         {field:'opciones',name:'opciones',label:'opciones',align:'right'},
+      ],
+
+      descol:[
+        {field:'fecha',name:'fecha',label:'fecha',align:'right'},
+        {field:'tipo',name:'tipo',label:'tipo',align:'right'},
+        {field:'juzgado',name:'juzgado',label:'juzgado',align:'right'},
+        {field:'despachos',name:'despachos',label:'despachos',align:'right'},
+         {field:'webid',name:'webid',label:'webid',align:'left'},
+         {field:'nurej',name:'nurej',label:'nurej',align:'left'},
+         {field:'demandante',name:'demandante',label:'demandante',align:'right'},
+         {field:'demandados',name:'demandados',label:'demandados',align:'right'},
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'}
       ]
     }
   },
