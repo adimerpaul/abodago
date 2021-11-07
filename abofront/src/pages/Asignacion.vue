@@ -111,7 +111,7 @@
                 <!--            </q-badge>-->
                 <q-btn-group >
                   <q-btn dense @click="aceptar(props.row)" color="positive" label="Agregar" icon="add_circle" size="xs" />
-                  <q-btn dense @click="despacho(props.row)" color="accent" label="Despacho" icon="text_snippet" size="xs" />
+                  <q-btn dense @click="listdespacho(props.row)" color="accent" label="Despacho" icon="text_snippet" size="xs" />
                 </q-btn-group >
 <!--                <q-btn-group v-if="props.row.estado=='ACEPTADO'">-->
 <!--&lt;!&ndash;                  <q-btn type="a"  target="__blank" dense :href="url+'/mail/'+props.row.id" color="primary" label="Imprimir" icon="timeline" size="xs" />&ndash;&gt;-->
@@ -168,6 +168,35 @@
           </q-card>
         </q-dialog>
 
+        <q-dialog full-width v-model="dialog_despacho">
+          <q-card >
+            <q-card-section>
+              <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+             <q-table 
+                   title="LISTA DE DESPACHO"
+              :rows="infodespacho"
+              :columns="descol"
+              row-key="name"
+             >
+            <template v-slot:body-cell-opcion="props">
+              <q-tr :props="props">
+              <q-td key="opcion" :props="props">
+                <q-btn dense round flat color="yellow" @click="addRow(props.row)" icon="add"></q-btn>
+                <q-btn dense round flat color="red" @click="removeRow(props.row)" icon="remove"></q-btn>
+                <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
+              </q-td>
+              </q-tr>
+             </template>
+             </q-table>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
         <q-dialog v-model="dialogarchivo">
           <q-card style="width: 300px;min-width: 40vh">
             <q-card-section>
@@ -180,6 +209,64 @@
                 :factory="uploadFile"
                 max-files="1"
               />
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="dialog_add">
+          <q-card style="width: 300px;min-width: 40vh">
+
+            <q-card-section class="q-pt-none">
+            <div class="text-h6">INGRESO</div>
+              <q-form @submit.prevent="regingreso">
+                <div class="row">
+                <div class="col-6"><q-input outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
+                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
+                </div>
+                <q-btn flat label="Registrar" type="submit" color="primary" icon="send" />
+
+              </q-form>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="dialog_remove">
+          <q-card style="width: 300px;min-width: 40vh">
+
+            <q-card-section class="q-pt-none">
+            <div class="text-h6">EGRESO</div>
+              <q-form @submit.prevent="regegreso">
+                <div class="row">
+                <div class="col-6"><q-input outlined label="Concepto" v-model="egreso.concepto"/></div>
+                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="egreso.monto"/></div>
+                </div>
+                <q-btn flat label="Registrar" type="submit" color="primary" icon="send" />
+
+              </q-form>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
+        <q-dialog v-model="dialog_gastos">
+          <q-card style="width: 600px;min-width: 40vh">
+
+            <q-card-section class="q-pt-none">
+            <div class="text-h6">Ingresos Egresos</div>
+                         <q-table 
+                   title="LISTA DE ENGRESOS Y EGRESOS"
+              :rows="gastos"
+              :columns="gastocol"
+              row-key="name"
+             />
             </q-card-section>
             <q-card-section align="right">
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
@@ -203,6 +290,11 @@ export default {
       usuario:'',
       dialogcliente:false,
       dialogarchivo:false,
+      dialog_despacho:false,
+      dialog_add:false,
+      dialog_remove:false,
+      dialog_list:false,
+      dialog_gastos:false,
       url:process.env.API,
       tramite:{},
       despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
@@ -218,9 +310,14 @@ export default {
       mail:{},
       remitentes:[],
       remitentes2:[],
+      datodespacho:{},
       remitente:'',
+      infodespacho:{},
       cargo:'',
       institucion:'',
+      ingreso:{},
+      egreso:{},
+      gastos:[],
       columns:[
         {field:'ci',name:'ci',label:'ci',align:'right'},
         {field:'nombre',name:'nombre',label:'nombre',align:'right'},
@@ -242,14 +339,23 @@ export default {
 
       descol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
+        {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'tipo',name:'tipo',label:'tipo',align:'right'},
         {field:'juzgado',name:'juzgado',label:'juzgado',align:'right'},
-        {field:'despachos',name:'despachos',label:'despachos',align:'right'},
          {field:'webid',name:'webid',label:'webid',align:'left'},
          {field:'nurej',name:'nurej',label:'nurej',align:'left'},
+         {field:'proceso',name:'proceso',label:'proceso',align:'left'},
          {field:'demandante',name:'demandante',label:'demandante',align:'right'},
          {field:'demandados',name:'demandados',label:'demandados',align:'right'},
-        {field:'opcion',name:'opcion',label:'opcion',align:'right'}
+          {field:'opcion',name:'opcion',label:'opcion',align:'center'}
+      ],
+            gastocol:[
+        {field:'fecha',name:'fecha',label:'fecha',align:'right'},
+        {field:'hora',name:'hora',label:'hora',align:'right'},
+        {field:'monto',name:'monto',label:'monto',align:'right'},
+        {field:'recibo',name:'recibo',label:'recibo',align:'right'},
+         {field:'concepto',name:'concepto',label:'concepto',align:'left'},
+         {field:'tipo',name:'tipo',label:'tipo',align:'left'}
       ]
     }
   },
@@ -280,6 +386,56 @@ export default {
     })
   },
   methods:{
+    regingreso(){
+      this.ingreso.despacho_id=this.datodespacho.id;
+      this.ingreso.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
+      this.ingreso.hora=date.formatDate(Date.now(),'HH:mm');
+      this.$axios.post(process.env.API+'/ingreso',this.ingreso).then(res=>{
+          this.$q.notify({
+          message:"Agregado",
+          color:'green',
+          icon:'done'
+        })
+        this.dialog_add=false;
+        this.misdatos();
+      });      
+    },
+        regegreso(){
+      this.egreso.despacho_id=this.datodespacho.id;
+      this.egreso.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
+      this.egreso.hora=date.formatDate(Date.now(),'HH:mm');
+      this.$axios.post(process.env.API+'/egreso',this.egreso).then(res=>{
+          this.$q.notify({
+          message:"Agregado",
+          color:'green',
+          icon:'done'
+        })
+        this.dialog_remove=false;
+        this.misdatos();
+      });      
+    },
+    addRow(prop){
+      this.datodespacho=prop;
+      this.dialog_add=true;
+    },
+    removeRow(prop){
+      this.datodespacho=prop;
+      this.dialog_remove=true;
+
+    },
+    listRow(prop){
+      this.datodespacho=prop;
+            this.$axios.post(process.env.API+'/resumen/'+this.datodespacho.id).then(res=>{
+              this.gastos=res.data;
+             this.dialog_gastos=true;
+      }); 
+    },
+    listdespacho(prop){
+      this.cliente2=prop
+
+      this.infodespacho=prop.despachos;
+      this.dialog_despacho=true;
+    },
     crearcliente(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/cliente',this.cliente).then(res=>{
@@ -357,6 +513,7 @@ export default {
         // console.log(res.data)
         this.misdatos()
         this.$q.loading.hide()
+        this.despacho={fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')};
         this.dialogcliente=false
         this.$q.notify({
           message:'Despacho registrado!!',

@@ -29,6 +29,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/asignacion',\App\Http\Controllers\AsignacionController::class);
     Route::post('/misremetentes',[\App\Http\Controllers\UserController::class,'misremetentes']);
     Route::post('/usuarios',[\App\Http\Controllers\UserController::class,'usuarios']);
+    Route::post('/resumen/{id}',[\App\Http\Controllers\ClienteController::class,'resumen']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
 
     Route::resource('/despacho',\App\Http\Controllers\DespachoController::class);

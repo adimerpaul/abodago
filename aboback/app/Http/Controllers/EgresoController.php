@@ -36,6 +36,14 @@ class EgresoController extends Controller
     public function store(Request $request)
     {
         //
+        $egreso=new Egreso;
+        $egreso->user_id=$request->user()->id;
+        $egreso->despacho_id=$request->despacho_id;
+        $egreso->concepto=$request->concepto;
+        $egreso->monto=$request->monto;
+        $egreso->fecha=$request->fecha;
+        $egreso->hora=$request->hora;
+        $egreso->save();
     }
 
     /**

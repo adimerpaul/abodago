@@ -36,6 +36,14 @@ class IngresoController extends Controller
     public function store(Request $request)
     {
         //
+        $ingreso=new Ingreso;
+        $ingreso->user_id=$request->user()->id;
+        $ingreso->despacho_id=$request->despacho_id;
+        $ingreso->recibo=$request->recibo;
+        $ingreso->monto=$request->monto;
+        $ingreso->fecha=$request->fecha;
+        $ingreso->hora=$request->hora;
+        $ingreso->save();
     }
 
     /**
