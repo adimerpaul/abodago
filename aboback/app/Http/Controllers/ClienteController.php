@@ -36,7 +36,25 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-        Cliente::create($request->all());
+//        return  $request;
+        $nombreArchivo='';
+        if ($request->hasFile('imagen')) {
+//            return "si";
+            $file=$request->file('imagen');
+            $nombreArchivo = time().".".$file->getClientOriginalExtension();
+//        return $nombreArchivo;
+            $file->move(\public_path('imagenes'), $nombreArchivo);
+//            return $nombreArchivo;
+//            $request->imagen=$nombreArchivo;
+        }
+//        return $request;
+//        Cliente::create($request->all());
+        $cliente= new Cliente();
+        $cliente->ci=$request->ci;
+        $cliente->nombre= strtoupper( $request->nombre);
+        $cliente->tipo=$request->tipo;
+        $cliente->imagen=$nombreArchivo;
+        $cliente->save();
     }
 
     /**

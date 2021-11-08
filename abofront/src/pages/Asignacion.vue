@@ -4,19 +4,19 @@
       <div class="col-12 q-pa-xs">
         <q-form @submit="crearcliente">
           <div class="row">
-            <div class="col-2">
+            <div class="col-12 col-sm-2">
               <q-input dense outlined label="CI/NIT" v-model="cliente.ci"/>
             </div>
-            <div class="col-3">
+            <div class="col-12 col-sm-3">
               <q-input dense outlined label="Nombre completo" v-model="cliente.nombre" required/>
             </div>
-            <div class="col-2">
+            <div class="col-12 col-sm-2">
               <q-select dense outlined label="Tipo" v-model="cliente.tipo" :options="['PERSONA','EMPRESA']"/>
             </div>
-            <div class="col-3">
-              <q-input type="file" dense outlined />
+            <div class="col-12 col-sm-3">
+              <input type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
             </div>
-            <div class="col-2 flex flex-center">
+            <div class="col-12 col-sm-2 flex flex-center">
               <q-btn type="submit" color="primary" icon="send" label="Crear"/>
             </div>
           </div>
@@ -50,7 +50,7 @@
                 <!--            <q-badge color="purple">-->
 <!--                {{ props.row.imagen }}-->
                 <q-img
-                  v-if="props.row.imagen!=''"
+                  v-if="props.row.imagen!='' && props.row.imagen!=null"
                   :src="url+'/../imagenes/'+props.row.imagen"
                   spinner-color="white"
                   style="height: 30px; width: 75px"
@@ -84,7 +84,7 @@
               </q-td>
               <q-td key="dias" :props="props">
                 <q-badge :color="props.row.dias==0?'positive':props.row.dias==1?'amber':'negative'">
-                  {{ props.row.dias }} 
+                  {{ props.row.dias }}
                 </q-badge>
               </q-td>
               <q-td key="estado" :props="props">
@@ -146,15 +146,15 @@
                 </q-select>
                 <div class="row">
                   <div class="col-6"><q-input type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
-                  <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>                  
+                  <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
                 </div>
                 <q-input label="Juzgado" outlined  v-model="despacho.juzgado"/>
                 <div class="row">
                   <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
                   <div class="col-6"><q-input label="NuRej" outlined  v-model="despacho.nurej"/></div>
-                  
+
                 </div>
-                
+
                 <q-input label="Proceso" outlined  v-model="despacho.proceso"/>
                 <q-input label="demandante" outlined  v-model="despacho.demandante"/>
                 <q-input label="demandados" outlined  v-model="despacho.demandados"/>
@@ -174,7 +174,7 @@
               <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
             </q-card-section>
             <q-card-section class="q-pt-none">
-             <q-table 
+             <q-table
                    title="LISTA DE DESPACHO"
               :rows="infodespacho"
               :columns="descol"
@@ -261,7 +261,7 @@
 
             <q-card-section class="q-pt-none">
             <div class="text-h6">Ingresos Egresos</div>
-                         <q-table 
+                         <q-table
                    title="LISTA DE ENGRESOS Y EGRESOS"
               :rows="gastos"
               :columns="gastocol"
@@ -285,6 +285,7 @@ import {date} from 'quasar'
 export default {
   data(){
     return {
+      imagen : null,
       miaccion:'',
       filter:'',
       usuario:'',
@@ -360,7 +361,8 @@ export default {
     }
   },
   created() {
-    console.log()
+
+    // console.log()
     this.misdatos(process.env.API)
     // for (let i=1;i<=1000;i++){
     //   this.folios.push(i)
@@ -386,6 +388,11 @@ export default {
     })
   },
   methods:{
+    getImage(event){
+      //Asignamos la imagen a  nuestra data
+      // console.log(event.target)
+      this.imagen = event.target.files[0];
+    },
     regingreso(){
       this.ingreso.despacho_id=this.datodespacho.id;
       this.ingreso.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
@@ -398,7 +405,7 @@ export default {
         })
         this.dialog_add=false;
         this.misdatos();
-      });      
+      });
     },
         regegreso(){
       this.egreso.despacho_id=this.datodespacho.id;
@@ -412,7 +419,7 @@ export default {
         })
         this.dialog_remove=false;
         this.misdatos();
-      });      
+      });
     },
     addRow(prop){
       this.datodespacho=prop;
@@ -428,7 +435,7 @@ export default {
             this.$axios.post(process.env.API+'/resumen/'+this.datodespacho.id).then(res=>{
               this.gastos=res.data;
              this.dialog_gastos=true;
-      }); 
+      });
     },
     listdespacho(prop){
       this.cliente2=prop
@@ -438,12 +445,21 @@ export default {
     },
     crearcliente(){
       this.$q.loading.show()
-      this.$axios.post(process.env.API+'/cliente',this.cliente).then(res=>{
+      var data = new  FormData();
+      //Añadimos la imagen seleccionada
+      data.append('imagen', this.imagen);
+      data.append('ci', this.cliente.ci);
+      data.append('nombre', this.cliente.nombre);
+      data.append('tipo', this.cliente.tipo);
+      // this.cliente.imagen=this.imagen
+
+      this.$axios.post(process.env.API+'/cliente',data).then(res=>{
         // console.log(res.data)
         // this.dato={tipo:'INTERNO',fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),folio:1};
         // this.remitente=''
         // this.cargo=''
         // this.institucion=''
+        this.$refs.ima.value=''
         this.misdatos()
         this.cliente={tipo:'PERSONA'}
         this.$q.notify({
@@ -453,14 +469,15 @@ export default {
         })
         // this.misremitentes()
         // this.$q.loading.hide()
-      }).catch(err=>{
-        this.$q.loading.hide()
-        this.$q.notify({
-          message:err.response.data.message,
-          color:'red',
-          icon:'error'
-        })
       })
+      //   .catch(err=>{
+      //   this.$q.loading.hide()
+      //   this.$q.notify({
+      //     message:err.response.data.message,
+      //     color:'red',
+      //     icon:'error'
+      //   })
+      // })
     },
     filterFn (val, update) {
       if (val === '') {
@@ -507,7 +524,7 @@ export default {
     registrarlog(){
       this.despacho.tipo=this.tramite.tipo;
       this.despacho.tramite_id=this.tramite.id;
-      this.despacho.cliente_id=this.cliente2.id;  
+      this.despacho.cliente_id=this.cliente2.id;
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/despacho',this.despacho).then(res=>{
         // console.log(res.data)
