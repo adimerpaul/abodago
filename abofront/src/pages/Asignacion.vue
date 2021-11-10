@@ -73,15 +73,15 @@
               <!--&lt;!&ndash;            <q-badge color="teal">&ndash;&gt;-->
               <!--              {{ props.row.fecha }}-->
               <!--&lt;!&ndash;            </q-badge>&ndash;&gt;-->
-              <!--          </q-td>-->
+              <!--          </q-td>
               <q-td key="despachos" :props="props">
-                <!--            <q-badge color="teal">-->
-                <!--              {{ props.row.logs }}-->
+                           <q-badge color="teal">
+                             {{ props.row.logs }}
                 <ul style="font-size: 0.8em;padding: 0px;margin: 0px;border: 0px;    list-style: none;">
                   <li v-for="l in props.row.despachos" :key="l.id">J:{{l.juzgado}} N:{{l.nurej}} P:{{l.proceso}} F:{{l.fecha}}</li>
                 </ul>
-                <!--            </q-badge>-->
-              </q-td>
+                           </q-badge>
+              </q-td>-->
               <q-td key="dias" :props="props">
                 <q-badge :color="props.row.dias==0?'positive':props.row.dias==1?'amber':'negative'">
                   {{ props.row.dias }}
@@ -110,8 +110,10 @@
 <!--                              {{ props.row.estado }}-->
                 <!--            </q-badge>-->
                 <q-btn-group >
-                  <q-btn dense @click="aceptar(props.row)" color="positive" label="Agregar" icon="add_circle" size="xs" />
-                  <q-btn dense @click="listdespacho(props.row)" color="accent" label="Despacho" icon="text_snippet" size="xs" />
+                  <q-btn dense @click="aceptar(props.row)" color="positive"  icon="add_circle" size="sm" />
+                  <q-btn dense @click="mod(props.row)" color="yellow"  icon="edit" size="sm" />
+                  <q-btn dense @click="modimg(props.row)" color="teal"  icon="image" size="sm" />
+                  <q-btn dense @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="sm" />
                 </q-btn-group >
 <!--                <q-btn-group v-if="props.row.estado=='ACEPTADO'">-->
 <!--&lt;!&ndash;                  <q-btn type="a"  target="__blank" dense :href="url+'/mail/'+props.row.id" color="primary" label="Imprimir" icon="timeline" size="xs" />&ndash;&gt;-->
@@ -135,7 +137,7 @@
               <q-form @submit.prevent="registrarlog">
 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-select use-input :options="tramites" label="Seleccionar Tramite / Proceso" v-model="tramite" @filter="filterFn" outlined >
+                <q-select use-input :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -144,6 +146,14 @@
                     </q-item>
                   </template>
                 </q-select>
+                <div class="row">
+                  <div class="col-4">
+                    <div class="text-h6">REQUISITOS</div>
+                    <span v-for="(r,i) in requisitos" :key="i"> -){{r.nombre}}<br></span>
+                  </div>
+                  <div class="col-8">
+
+
                 <div class="row">
                   <div class="col-6"><q-input type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
                   <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
@@ -160,6 +170,8 @@
                 <q-input label="demandados" outlined  v-model="despacho.demandados"/>
 
                 <q-btn label="Remitir" color="teal" icon="send" class="full-width" type="submit"/>
+                                  </div>
+                </div>
               </q-form>
             </q-card-section>
             <q-card-section align="right">
@@ -180,6 +192,17 @@
               :columns="descol"
               row-key="name"
              >
+
+            <template v-slot:body-cell-tipo="props">
+              <q-tr :props="props">
+              <q-td key="estado" :props="props">
+                <q-badge :color="props.row.tipo=='TRAMITE'?'accent':'teal'">
+                  {{ props.row.tipo }}
+                </q-badge>
+              </q-td>
+              </q-tr>
+            </template>
+
             <template v-slot:body-cell-opcion="props">
               <q-tr :props="props">
               <q-td key="opcion" :props="props">
@@ -226,13 +249,14 @@
                 <div class="col-6"><q-input outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
                 <div class="col-6"><q-input outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
                 </div>
-                <q-btn flat label="Registrar" type="submit" color="primary" icon="send" />
+              <q-card-section align="right" class="row">
+                <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
+                <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
+            </q-card-section>
 
               </q-form>
             </q-card-section>
-            <q-card-section align="right">
-              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
-            </q-card-section>
+ 
           </q-card>
         </q-dialog>
 
@@ -246,12 +270,14 @@
                 <div class="col-6"><q-input outlined label="Concepto" v-model="egreso.concepto"/></div>
                 <div class="col-6"><q-input outlined label="Monto" type="number" v-model="egreso.monto"/></div>
                 </div>
-                <q-btn flat label="Registrar" type="submit" color="primary" icon="send" />
+            <q-card-section align="right" class="row">
+                <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
+                <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
+                
+                
+            </q-card-section>
 
               </q-form>
-            </q-card-section>
-            <q-card-section align="right">
-              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
         </q-dialog>
@@ -297,6 +323,7 @@ export default {
       dialog_list:false,
       dialog_gastos:false,
       url:process.env.API,
+      requisitos:[],
       tramite:{},
       despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
       tramites:[],
@@ -320,11 +347,11 @@ export default {
       egreso:{},
       gastos:[],
       columns:[
-        {field:'ci',name:'ci',label:'ci',align:'right'},
-        {field:'nombre',name:'nombre',label:'nombre',align:'right'},
-        {field:'tipo',name:'tipo',label:'tipo',align:'right'},
-        {field:'imagen',name:'imagen',label:'imagen',align:'right'},
-        {field:'despachos',name:'despachos',label:'despachos',align:'right'},
+        {field:'ci',name:'ci',label:'CI',align:'right'},
+        {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
+        {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
+        {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
+       // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
         // {field:'ref',name:'ref',label:'ref',align:'right'},
         // {field:'remitente',name:'remitente',label:'remitente',align:'right'},
         // // {field:'cargo',name:'cargo',label:'cargo',align:'right'},
@@ -335,20 +362,20 @@ export default {
         // // {field:'estado',name:'estado',label:'estado',align:'right'},
         // {field:'folio',name:'folio',label:'folio',align:'right'},
         // {field:'archivo',name:'archivo',label:'archivo',align:'right'},
-        {field:'opciones',name:'opciones',label:'opciones',align:'right'},
+        {field:'opciones',name:'opciones',label:'OPCIONES',align:'right'},
       ],
 
       descol:[
-        {field:'fecha',name:'fecha',label:'fecha',align:'right'},
-        {field:'hora',name:'hora',label:'hora',align:'right'},
-        {field:'tipo',name:'tipo',label:'tipo',align:'right'},
-        {field:'juzgado',name:'juzgado',label:'juzgado',align:'right'},
-         {field:'webid',name:'webid',label:'webid',align:'left'},
-         {field:'nurej',name:'nurej',label:'nurej',align:'left'},
-         {field:'proceso',name:'proceso',label:'proceso',align:'left'},
-         {field:'demandante',name:'demandante',label:'demandante',align:'right'},
-         {field:'demandados',name:'demandados',label:'demandados',align:'right'},
-          {field:'opcion',name:'opcion',label:'opcion',align:'center'}
+        {field:'fecha',name:'fecha',label:'FECHA',align:'right'},
+        {field:'hora',name:'hora',label:'HORA',align:'right'},
+        {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
+        {field:'juzgado',name:'juzgado',label:'JUZGADO',align:'right'},
+         {field:'webid',name:'webid',label:'WEBID',align:'left'},
+         {field:'nurej',name:'nurej',label:'NUREJ',align:'left'},
+         {field:'proceso',name:'proceso',label:'PROCESO',align:'left'},
+         {field:'demandante',name:'demandante',label:'DEMANDANTE',align:'right'},
+         {field:'demandados',name:'demandados',label:'DEMANDADOS',align:'right'},
+          {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
             gastocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
@@ -388,6 +415,9 @@ export default {
     })
   },
   methods:{
+    lrequisito(){
+      this.requisitos=this.tramite.requisitos;
+    },
     getImage(event){
       //Asignamos la imagen a  nuestra data
       // console.log(event.target)

@@ -14,7 +14,7 @@ class TramiteController extends Controller
      */
     public function index()
     {
-        return Tramite::all();
+        return Tramite::with('requisitos')->get();
     }
 
     /**

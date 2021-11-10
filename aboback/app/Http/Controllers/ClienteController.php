@@ -102,9 +102,11 @@ class ClienteController extends Controller
         //
     }
 
-    public function resumen($id){
-        return db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id
-        union
-        select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egresos where despacho_id= $id");
+    public function regreso($id){
+        return db::select("select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egresos where despacho_id= $id");
+    }
+
+    public function ringreso($id){
+        return db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
     }
 }
