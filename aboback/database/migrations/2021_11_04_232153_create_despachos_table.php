@@ -18,12 +18,12 @@ class CreateDespachosTable extends Migration
             $table->date("fecha");
             $table->time("hora");
             $table->string("tipo");
-            $table->string("juzgado");
-            $table->string("webid");
-            $table->string("nurej");
-            $table->string("proceso");
-            $table->string("demandante");
-            $table->string("demandados");
+            $table->string("juzgado")->nullable();
+            $table->string("webid")->nullable();
+            $table->string("nurej")->nullable();
+            $table->string("proceso")->nullable();
+            $table->string("demandante")->nullable();
+            $table->string("demandados")->nullable();
             $table->unsignedBigInteger('tramite_id');
             $table->foreign('tramite_id')->references('id')->on('tramites');
             $table->unsignedBigInteger('cliente_id');

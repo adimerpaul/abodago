@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Despacho;
+use App\Models\Empleado;
 use Illuminate\Http\Request;
 
-class DespachoController extends Controller
+class EmpleadoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class DespachoController extends Controller
      */
     public function index()
     {
-        return Despacho::all();
+        //
     }
 
     /**
@@ -36,29 +36,15 @@ class DespachoController extends Controller
     public function store(Request $request)
     {
         //
-        $despacho=new Despacho;
-        $despacho->fecha=$request->fecha;
-        $despacho->hora=$request->hora;
-        $despacho->tipo=$request->tipo;
-        $despacho->juzgado=strtoupper($request->juzgado);
-        $despacho->webid=$request->webid;
-        $despacho->nurej=$request->nurej;
-        $despacho->proceso=strtoupper($request->proceso);
-        $despacho->demandante=strtoupper($request->demandante);
-        $despacho->demandados=strtoupper($request->demandados);
-        $despacho->tramite_id=$request->tramite_id;
-        $despacho->cliente_id=$request->cliente_id;
-        $despacho->save();
-
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Despacho  $despacho
+     * @param  \App\Models\Empleado  $empleado
      * @return \Illuminate\Http\Response
      */
-    public function show(Despacho $despacho)
+    public function show(Empleado $empleado)
     {
         //
     }
@@ -66,10 +52,10 @@ class DespachoController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Despacho  $despacho
+     * @param  \App\Models\Empleado  $empleado
      * @return \Illuminate\Http\Response
      */
-    public function edit(Despacho $despacho)
+    public function edit(Empleado $empleado)
     {
         //
     }
@@ -78,10 +64,10 @@ class DespachoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Despacho  $despacho
+     * @param  \App\Models\Empleado  $empleado
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Despacho $despacho)
+    public function update(Request $request, Empleado $empleado)
     {
         //
     }
@@ -89,15 +75,11 @@ class DespachoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Despacho  $despacho
+     * @param  \App\Models\Empleado  $empleado
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Despacho $despacho)
+    public function destroy(Empleado $empleado)
     {
         //
-    }
-
-    public function etiqueta($id){
-
     }
 }

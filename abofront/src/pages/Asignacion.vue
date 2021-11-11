@@ -158,6 +158,7 @@
                   <div class="col-6"><q-input type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
                   <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
                 </div>
+                <div v-if="tramite.tipo!='TRAMITE'">
                 <q-input label="Juzgado" outlined  v-model="despacho.juzgado"/>
                 <div class="row">
                   <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
@@ -168,7 +169,7 @@
                 <q-input label="Proceso" outlined  v-model="despacho.proceso"/>
                 <q-input label="demandante" outlined  v-model="despacho.demandante"/>
                 <q-input label="demandados" outlined  v-model="despacho.demandados"/>
-
+                </div>
                 <q-btn label="Remitir" color="teal" icon="send" class="full-width" type="submit"/>
                                   </div>
                 </div>
@@ -282,17 +283,35 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="dialog_gastos">
-          <q-card style="width: 600px;min-width: 40vh">
+        <q-dialog maximized v-model="dialog_gastos">
+          <q-card style="width: 1200px;min-width: 40vh">
 
             <q-card-section class="q-pt-none">
             <div class="text-h6">Ingresos Egresos</div>
-                         <q-table
-                   title="LISTA DE ENGRESOS Y EGRESOS"
-              :rows="gastos"
-              :columns="gastocol"
-              row-key="name"
-             />
+            <div class="row">
+              <div class="col-6">
+                <q-table
+                  title="LISTA DE INGRESOS"
+                  :rows="tabingreso"
+                  :columns="ingresocol"
+                  row-key="name"
+                />
+              </div>
+              <div class="col-6">
+                <q-table
+                  title="LISTA EGRESOS"
+                  :rows="tabegreso"
+                  :columns="egresocol"
+                  row-key="name"
+                />
+              </div>
+            </div>
+            <div>
+              <span>Total Ingreso: {{totaling}}</span> <br>
+              <span>Total Egreso: {{totaleg}}</span> <br>
+              <span>Total Adeudado: {{totaling - totaleg}}</span>
+            </div>
+
             </q-card-section>
             <q-card-section align="right">
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
@@ -345,6 +364,9 @@ export default {
       institucion:'',
       ingreso:{},
       egreso:{},
+
+      tabingreso:[],
+      tabegreso:[],
       gastos:[],
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
@@ -377,13 +399,17 @@ export default {
          {field:'demandados',name:'demandados',label:'DEMANDADOS',align:'right'},
           {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
-            gastocol:[
+            ingresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
+      ],
+                  egresocol:[
+        {field:'fecha',name:'fecha',label:'fecha',align:'right'},
+        {field:'hora',name:'hora',label:'hora',align:'right'},
+        {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
-         {field:'tipo',name:'tipo',label:'tipo',align:'left'}
       ]
     }
   },
@@ -411,8 +437,10 @@ export default {
         this.tramites.push(d)
       })
       this.tramite=this.tramites[0];
+      this.requisitos=this.tramites[0].requisitos;
       this.tramites2=this.tramites
     })
+    this.resetdespacho();
   },
   methods:{
     lrequisito(){
@@ -434,6 +462,7 @@ export default {
           icon:'done'
         })
         this.dialog_add=false;
+        this.ingreso={};
         this.misdatos();
       });
     },
@@ -448,6 +477,7 @@ export default {
           icon:'done'
         })
         this.dialog_remove=false;
+        this.egreso={};
         this.misdatos();
       });
     },
@@ -461,11 +491,14 @@ export default {
 
     },
     listRow(prop){
-      this.datodespacho=prop;
-            this.$axios.post(process.env.API+'/resumen/'+this.datodespacho.id).then(res=>{
-              this.gastos=res.data;
-             this.dialog_gastos=true;
+            this.datodespacho=prop;
+      this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+              this.tabingreso=res.data;
       });
+            this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
+              this.tabegreso=res.data;
+      });
+             this.dialog_gastos=true;
     },
     listdespacho(prop){
       this.cliente2=prop
@@ -561,6 +594,7 @@ export default {
         this.misdatos()
         this.$q.loading.hide()
         this.despacho={fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')};
+        this.resetdespacho();
         this.dialogcliente=false
         this.$q.notify({
           message:'Despacho registrado!!',
@@ -817,6 +851,13 @@ export default {
         })
       })
     },
+    resetdespacho(){
+      this.despacho.webid=' ';
+      this.despacho.nurej=' ';
+      this.despacho.proceso=' ';
+      this.despacho.demandante=' ';
+      this.despacho.demandados=' ';
+    },
     guardar(){
       if (!confirm("seguro de registrar?")){
         return false
@@ -870,6 +911,23 @@ export default {
         })
       }
     }
+  },
+  computed:{
+      totaleg:function (){
+      let t=0;
+      this.tabegreso.forEach(r=>{
+        t+= parseFloat(r.monto);
+      })
+      return t.toFixed(2);
+    },
+     totaling:function (){
+      let t=0;
+      this.tabingreso.forEach(r=>{
+        t+= parseFloat(r.monto);
+      })
+      return t.toFixed(2);
+    }
+
   }
 
 }
