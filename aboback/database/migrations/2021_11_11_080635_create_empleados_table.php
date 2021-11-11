@@ -18,6 +18,10 @@ class CreateEmpleadosTable extends Migration
             $table->string('ci')->unique();
             $table->string('nombre');
             $table->string('cargo');
+            $table->double('salario');
+            $table->date('fechaing');
+            $table->integer('dias')->default(0);
+            $table->string('celular')->nullable()->default('');
             $table->timestamps();
         });
     }
