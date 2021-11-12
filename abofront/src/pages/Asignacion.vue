@@ -314,6 +314,7 @@
 
             </q-card-section>
             <q-card-section align="right">
+              <q-btn flat label="Imprimir" color="primary" icon="print" @click="imprimir"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
@@ -499,6 +500,19 @@ export default {
               this.tabegreso=res.data;
       });
              this.dialog_gastos=true;
+    },
+    imprimir(){
+            this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
+              let myWindow = window.open("", "Imprimir", "width=200,height=100");
+              myWindow.document.write(res.data);
+              myWindow.document.close();
+              myWindow.focus();
+              setTimeout(function(){
+                myWindow.print();
+                myWindow.close();
+              },500);
+            })
+
     },
     listdespacho(prop){
       this.cliente2=prop

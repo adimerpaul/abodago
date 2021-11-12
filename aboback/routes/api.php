@@ -31,6 +31,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/usuarios',[\App\Http\Controllers\UserController::class,'usuarios']);
     Route::post('/regreso/{id}',[\App\Http\Controllers\ClienteController::class,'regreso']);
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
+    Route::post('/impresion/{id}',[\App\Http\Controllers\DespachoController::class,'impresion']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
 
     Route::resource('/despacho',\App\Http\Controllers\DespachoController::class);
