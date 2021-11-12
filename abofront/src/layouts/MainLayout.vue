@@ -78,24 +78,24 @@
             </q-item-section>
           </q-item>
 
-          <q-item
-            v-if="$store.state.login.boolrecepcion"
-            clickable
-            to="/recepcion"
-          >
-            <q-item-section
-              avatar
-            >
-              <q-icon name="article" />
-            </q-item-section>
+<!--          <q-item-->
+<!--            v-if="$store.state.login.boolrecepcion"-->
+<!--            clickable-->
+<!--            to="/recepcion"-->
+<!--          >-->
+<!--            <q-item-section-->
+<!--              avatar-->
+<!--            >-->
+<!--              <q-icon name="article" />-->
+<!--            </q-item-section>-->
 
-            <q-item-section>
-              <q-item-label>Registro de correspondencia</q-item-label>
-              <q-item-label caption>
-                Recepciones de correspondencia
-              </q-item-label>
-            </q-item-section>
-          </q-item>
+<!--            <q-item-section>-->
+<!--              <q-item-label>Registro de correspondencia</q-item-label>-->
+<!--              <q-item-label caption>-->
+<!--                Recepciones de correspondencia-->
+<!--              </q-item-label>-->
+<!--            </q-item-section>-->
+<!--          </q-item>-->
           <q-item
             v-if="$store.state.login.booldesignacion"
             clickable
