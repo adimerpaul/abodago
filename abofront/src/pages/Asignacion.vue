@@ -32,17 +32,17 @@
             </q-input>
           </template>
           <template v-slot:body="props">
-            <q-tr :props="props">
-              <q-td key="ci" :props="props">
+            <q-tr :props="props" @click="listdespacho(props.row)">
+              <q-td key="ci" :props="props" @click="listdespacho(props.row)">
                 {{ props.row.ci }}
               </q-td>
-              <q-td key="nombre" :props="props">
+              <q-td key="nombre" :props="props" @click="listdespacho(props.row)">
                 <!--            <q-badge color="green">-->
                 {{ props.row.nombre }}
                 <!--            </q-badge>-->
               </q-td>
               <q-td key="tipo" :props="props">
-                <q-badge :color="props.row.tipo=='EMPRESA'?'purple':'teal'">
+                <q-badge @click="listdespacho(props.row)" :color="props.row.tipo=='EMPRESA'?'purple':'teal'">
                   {{ props.row.tipo }}
                 </q-badge>
               </q-td>
@@ -50,6 +50,7 @@
                 <!--            <q-badge color="purple">-->
 <!--                {{ props.row.imagen }}-->
                 <q-img
+                  @click="listdespacho(props.row)"
                   v-if="props.row.imagen!='' && props.row.imagen!=null"
                   :src="url+'/../imagenes/'+props.row.imagen"
                   spinner-color="white"
@@ -97,10 +98,10 @@
                 {{ props.row.folio }}
                 <!--            </q-badge>-->
               </q-td>
-              <q-td key="archivo" :props="props">
+              <q-td key="archivo" :props="props" @click="listdespacho(props.row)">
                 <!--            <q-badge color="amber">-->
                 <!--            {{ props.row.archivo }}-->
-                <template v-if="props.row.archivo!=''">
+                <template v-if="props.row.archivo!=''" >
                   <q-btn label="Descargar" color="primary" size="xs" type="a" :href="url+'/../imagenes/'+props.row.archivo" target="__blank"/>
                 </template>
                 <!--            </q-badge>-->
@@ -257,7 +258,7 @@
 
               </q-form>
             </q-card-section>
- 
+
           </q-card>
         </q-dialog>
 
@@ -274,8 +275,8 @@
             <q-card-section align="right" class="row">
                 <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
                 <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
-                
-                
+
+
             </q-card-section>
 
               </q-form>

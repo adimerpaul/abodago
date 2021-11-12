@@ -29,7 +29,6 @@ class CreateBoletasTable extends Migration
             $table->double("descuento",11,2);
             $table->double("descuentootros",11,2);
             $table->double("ganado",11,2);
-            $table->double("descuento",11,2);
             $table->double("liquido",11,2);
             $table->string("texto");
             $table->unsignedBigInteger('empleado_id');
