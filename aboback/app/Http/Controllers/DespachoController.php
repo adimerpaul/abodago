@@ -117,22 +117,24 @@ class DespachoController extends Controller
           table {
             border-collapse: collapse;
           }</style>
-        <div style='text-align:center'>GASTOS". $cliente[0]->nom."</div>";
-        $cadena.="<div style='text-align:center'>".$cliente[0]->tipo." ".$cliente[0]->tram."</div>";
+        <div style='font-weight: bold;text-align:center'>GASTOS ". $cliente[0]->nom."</div>";
+        $cadena.="<div style='font-weight: bold;text-align:center' >".$cliente[0]->tipo." ".$cliente[0]->tram."</div>";
         $cadena.="
         <div><table style='width:100%; border:0'><tr style='border:0'><td style='border:0'>
-        <table style='width:100%'><tr><td colspan=3>INGRESOS</td></tr>
-        <tr><td>FECHA</td><td>RECIBO</td><td>BOLIVIANOS</td></tr>";
+        <table style='width:100%'>
+        <tr><td style='font-weight: bold' colspan=3>INGRESOS</td></tr>
+        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>";
 
         foreach ($ingresos as $ing) {
             # code...
             $cadena.="<tr><td>$ing->fecha</td><td>$ing->recibo</td><td>$ing->monto</td></tr>";
             $totaling+=$ing->monto;
         }
-        $cadena.="</table> </td><td style='border:0'>      
-      
-        <table style='width:100%'><tr><td colspan=2>EGRESOS</td></tr>
-        <tr><td>CONCEPTO</td><td>BOLIVIANOS</td></tr>";
+        $cadena.="</table> </td><td style='border:0'>
+
+        <table style='width:100%'>
+        <tr style='font-weight: bold'><td colspan=2>EGRESOS</td></tr>
+        <tr style='font-weight: bold'><td>CONCEPTO</td><td>BOLIVIANOS</td></tr>";
         foreach ($egresos as $egr) {
             # code...
             $cadena.="<tr><td>$egr->concepto</td><td>$egr->monto</td></tr>";
