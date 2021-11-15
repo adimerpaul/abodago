@@ -12,6 +12,7 @@ class Ingreso extends Model
     'user_id',
     'despacho_id',
     "recibo",
+    "motivo",
     "monto",
     "fecha",
     "hora",

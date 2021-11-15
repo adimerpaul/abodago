@@ -40,6 +40,7 @@ class IngresoController extends Controller
         $ingreso->user_id=$request->user()->id;
         $ingreso->despacho_id=$request->despacho_id;
         $ingreso->recibo=$request->recibo;
+        $ingreso->motivo=$request->motivo;
         $ingreso->monto=$request->monto;
         $ingreso->fecha=$request->fecha;
         $ingreso->hora=$request->hora;

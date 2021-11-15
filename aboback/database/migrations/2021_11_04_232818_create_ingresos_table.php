@@ -20,6 +20,7 @@ class CreateIngresosTable extends Migration
             $table->unsignedBigInteger('despacho_id');
             $table->foreign('despacho_id')->references('id')->on('despachos');
             $table->string("recibo");
+            $table->string("motivo");
             $table->double("monto",11,2);
             $table->date("fecha");
             $table->time("hora");

@@ -162,8 +162,8 @@
                 <div v-if="tramite.tipo!='TRAMITE'">
                 <q-input label="Juzgado" outlined  v-model="despacho.juzgado"/>
                 <div class="row">
-                  <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
                   <div class="col-6"><q-input label="NuRej" outlined  v-model="despacho.nurej"/></div>
+                  <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
 
                 </div>
 
@@ -248,8 +248,9 @@
             <div class="text-h6">INGRESO</div>
               <q-form @submit.prevent="regingreso">
                 <div class="row">
-                <div class="col-6"><q-input outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
-                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
+                <div class="col-4"><q-input outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
+                <div class="col-4"><q-input outlined label="Motivo" v-model="ingreso.motivo"/></div>
+                <div class="col-4"><q-input outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
                 </div>
               <q-card-section align="right" class="row">
                 <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
