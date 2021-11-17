@@ -150,7 +150,7 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
-                    <span v-for="(r,i) in requisitos" :key="i"> -){{r.nombre}}<br></span>
+                     <q-checkbox rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
                   </div>
                   <div class="col-8">
 
@@ -448,6 +448,7 @@ export default {
   methods:{
     lrequisito(){
       this.requisitos=this.tramite.requisitos;
+   
     },
     getImage(event){
       //Asignamos la imagen a  nuestra data
@@ -604,6 +605,7 @@ export default {
       this.despacho.tipo=this.tramite.tipo;
       this.despacho.tramite_id=this.tramite.id;
       this.despacho.cliente_id=this.cliente2.id;
+      this.despacho.requisitos=this.requisitos;
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/despacho',this.despacho).then(res=>{
         // console.log(res.data)

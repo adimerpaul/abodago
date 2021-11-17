@@ -21,4 +21,7 @@ class Despacho extends Model
         'tramite_id',
         'cliente_id',
     ];
+    public function requisitos(){
+        return $this->belongsToMany(Requisito::class);
+    }
 }

@@ -51,6 +51,10 @@ class DespachoController extends Controller
         $despacho->cliente_id=$request->cliente_id;
         $despacho->save();
 
+        foreach ($request->requisitos as $row) {
+            DB::table('despacho_requisito')->insert(['requisito_id'=>$row['id'],'despacho_id'=>$despacho->id]);
+        }
+
     }
 
     /**
