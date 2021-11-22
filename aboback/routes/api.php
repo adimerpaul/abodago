@@ -30,6 +30,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/misremetentes',[\App\Http\Controllers\UserController::class,'misremetentes']);
     Route::post('/usuarios',[\App\Http\Controllers\UserController::class,'usuarios']);
     Route::post('/regreso/{id}',[\App\Http\Controllers\ClienteController::class,'regreso']);
+    Route::post('/regotro/{id}',[\App\Http\Controllers\ClienteController::class,'regotro']);
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
     Route::post('/impresion/{id}',[\App\Http\Controllers\DespachoController::class,'impresion']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
@@ -39,6 +40,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/tramite',\App\Http\Controllers\TramiteController::class);
     Route::resource('/ingreso',\App\Http\Controllers\IngresoController::class);
     Route::resource('/egreso',\App\Http\Controllers\EgresoController::class);
+    Route::resource('/egotro',\App\Http\Controllers\EgotroController::class);
     Route::resource('/requisitos',\App\Http\Controllers\RequisitoController::class);
     Route::resource('/empleado',\App\Http\Controllers\EmpleadoController::class);
     Route::resource('/sueldo',\App\Http\Controllers\SueldoController::class);

@@ -32,7 +32,7 @@
             </q-input>
           </template>
           <template v-slot:body="props">
-            <q-tr :props="props" @click="listdespacho(props.row)">
+            <q-tr :props="props">
               <q-td key="ci" :props="props" @click="listdespacho(props.row)">
                 {{ props.row.ci }}
               </q-td>
@@ -138,7 +138,7 @@
               <q-form @submit.prevent="registrarlog">
 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-select use-input :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito" v-model="tramite" @filter="filterFn" outlined >
+                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -150,26 +150,50 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
-                     <q-checkbox rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
+                     <q-checkbox dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
                   </div>
                   <div class="col-8">
 
 
                 <div class="row">
-                  <div class="col-6"><q-input type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
-                  <div class="col-6"><q-input type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
+                  <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
+                  <div class="col-6"><q-input dense type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
                 </div>
                 <div v-if="tramite.tipo!='TRAMITE'">
-                <q-input label="Juzgado" outlined  v-model="despacho.juzgado"/>
+                <q-input label="Juzgado" outlined dense v-model="despacho.juzgado"/>
                 <div class="row">
-                  <div class="col-6"><q-input label="NuRej" outlined  v-model="despacho.nurej"/></div>
-                  <div class="col-6"><q-input label="WebId" outlined  v-model="despacho.webid"/></div>
+                  <div class="col-6"><q-input dense label="NuRej" outlined  v-model="despacho.nurej"/></div>
+                  <div class="col-6"><q-input dense label="WebId" outlined  v-model="despacho.webid"/></div>
 
                 </div>
 
-                <q-input label="Proceso" outlined  v-model="despacho.proceso"/>
-                <q-input label="demandante" outlined  v-model="despacho.demandante"/>
-                <q-input label="demandados" outlined  v-model="despacho.demandados"/>
+                <q-input label="Proceso" outlined dense v-model="despacho.proceso"/>
+                <q-input label="ci" outlined dense v-model="despacho.ci"/>
+                <q-input label="demandante" outlined dense v-model="despacho.demandante"/>
+                <q-input label="representante" outlined dense v-model="despacho.representante"/>
+                <div class="text-h6">DEMANDADOS</div>
+                <table style="width:100%;  border: 1px solid black;" >
+                <thead>
+                  <tr>
+                  <th>ID</th>
+                  <th>CI</th>
+                  <th>NOMBRE</th>
+                  <th>OPCION</th>
+                  </tr>
+                </thead>
+                <tbody>
+                            <tr v-for="(i,index) in demandados" :key="index">
+                                <th scope="row">{{index+1}}</th>
+                                <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci"></td>
+                                <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
+                                <td>
+                                     <q-btn color="green" @click="mas" icon="add"/>
+                                     <q-btn  color="red" icon="remove" @click="menos(index)"/>
+                                    
+                                </td>
+                            </tr>
+                </tbody>
+                </table>
                 </div>
                 <q-btn label="Remitir" color="teal" icon="send" class="full-width" type="submit"/>
                                   </div>
@@ -210,6 +234,7 @@
               <q-td key="opcion" :props="props">
                 <q-btn dense round flat color="yellow" @click="addRow(props.row)" icon="add"></q-btn>
                 <q-btn dense round flat color="red" @click="removeRow(props.row)" icon="remove"></q-btn>
+                <q-btn dense round flat color="accent" @click="reclRow(props.row)" icon="remove"></q-btn>
                 <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
               </q-td>
               </q-tr>
@@ -285,25 +310,55 @@
           </q-card>
         </q-dialog>
 
+        <q-dialog v-model="dialog_remcl">
+          <q-card style="width: 300px;min-width: 40vh">
+
+            <q-card-section class="q-pt-none">
+            <div class="text-h6">EGRESO CLIENTE</div>
+              <q-form @submit.prevent="regegrcliente">
+                <div class="row">
+                <div class="col-6"><q-input outlined label="Concepto" v-model="egrcl.concepto"/></div>
+                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="egrcl.monto"/></div>
+                </div>
+            <q-card-section align="right" class="row">
+                <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
+                <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
+
+
+            </q-card-section>
+ 
+              </q-form>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
         <q-dialog maximized v-model="dialog_gastos">
           <q-card style="width: 1200px;min-width: 40vh">
 
             <q-card-section class="q-pt-none">
             <div class="text-h6">Ingresos Egresos</div>
             <div class="row">
-              <div class="col-6">
-                <q-table
+              <div class="col-4">
+                <q-table dense
                   title="LISTA DE INGRESOS"
                   :rows="tabingreso"
                   :columns="ingresocol"
                   row-key="name"
                 />
               </div>
-              <div class="col-6">
-                <q-table
+              <div class="col-4">
+                <q-table dense
                   title="LISTA EGRESOS"
                   :rows="tabegreso"
                   :columns="egresocol"
+                  row-key="name"
+                />
+              </div>
+              <div class="col-4">
+                <q-table dense
+                  title="LISTA EGRESOS CLIENTE"
+                  :rows="tabegcl"
+                  :columns="egrclcol"
                   row-key="name"
                 />
               </div>
@@ -311,6 +366,7 @@
             <div>
               <span>Total Ingreso: {{totaling}}</span> <br>
               <span>Total Egreso: {{totaleg}}</span> <br>
+              <span>Total Egreso Cliente: {{totalegcl}}</span> <br>
               <span>Total Adeudado: {{totaling - totaleg}}</span>
             </div>
 
@@ -344,7 +400,9 @@ export default {
       dialog_remove:false,
       dialog_list:false,
       dialog_gastos:false,
+      dialog_remcl:false,
       url:process.env.API,
+      demandados:[{ci:'',nombre:''}],
       requisitos:[],
       tramite:{},
       despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
@@ -367,9 +425,11 @@ export default {
       institucion:'',
       ingreso:{},
       egreso:{},
+      egrcl:{},
 
       tabingreso:[],
       tabegreso:[],
+      tabegcl:[],
       gastos:[],
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
@@ -398,8 +458,9 @@ export default {
          {field:'webid',name:'webid',label:'WEBID',align:'left'},
          {field:'nurej',name:'nurej',label:'NUREJ',align:'left'},
          {field:'proceso',name:'proceso',label:'PROCESO',align:'left'},
+         {field:'ci',name:'ci',label:'ci',align:'right'},
          {field:'demandante',name:'demandante',label:'DEMANDANTE',align:'right'},
-         {field:'demandados',name:'demandados',label:'DEMANDADOS',align:'right'},
+         {field:'representante',name:'representante',label:'representante',align:'right'},
           {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
             ingresocol:[
@@ -409,6 +470,12 @@ export default {
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
       ],
                   egresocol:[
+        {field:'fecha',name:'fecha',label:'fecha',align:'right'},
+        {field:'hora',name:'hora',label:'hora',align:'right'},
+        {field:'monto',name:'monto',label:'monto',align:'right'},
+         {field:'concepto',name:'concepto',label:'concepto',align:'left'},
+      ],
+                  egrclcol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
@@ -446,8 +513,20 @@ export default {
     this.resetdespacho();
   },
   methods:{
+                mas(){
+                this.demandados.push({ci:'',nombre:''});
+            },
+            menos(index){
+                if(index>=1)
+                this.demandados.splice(index, 1);
+                if(index==0)
+                this.demandados=[{ci:'',nombre:''}]
+            },
     lrequisito(){
       this.requisitos=this.tramite.requisitos;
+      this.requisitos.forEach(element => {
+        element.estado=false;
+      });
    
     },
     getImage(event){
@@ -485,6 +564,21 @@ export default {
         this.misdatos();
       });
     },
+          regegrcliente(){
+      this.egrcl.despacho_id=this.datodespacho.id;
+      this.egrcl.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
+      this.egrcl.hora=date.formatDate(Date.now(),'HH:mm');
+      this.$axios.post(process.env.API+'/egotro',this.egrcl).then(res=>{
+          this.$q.notify({
+          message:"Agregado",
+          color:'green',
+          icon:'done'
+        })
+        this.dialog_remcl=false;
+        this.egreso={};
+        this.misdatos();
+      });
+    },
     addRow(prop){
       this.datodespacho=prop;
       this.dialog_add=true;
@@ -494,6 +588,11 @@ export default {
       this.dialog_remove=true;
 
     },
+        reclRow(prop){
+      this.datodespacho=prop;
+      this.dialog_remcl=true;
+
+    },
     listRow(prop){
             this.datodespacho=prop;
       this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
@@ -501,6 +600,9 @@ export default {
       });
             this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
               this.tabegreso=res.data;
+      });
+                  this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
+              this.tabegcl=res.data;
       });
              this.dialog_gastos=true;
     },
@@ -873,8 +975,9 @@ export default {
       this.despacho.webid=' ';
       this.despacho.nurej=' ';
       this.despacho.proceso=' ';
+      this.despacho.ci=' ';
       this.despacho.demandante=' ';
-      this.despacho.demandados=' ';
+      this.despacho.representate=' ';
     },
     guardar(){
       if (!confirm("seguro de registrar?")){
@@ -934,6 +1037,13 @@ export default {
       totaleg:function (){
       let t=0;
       this.tabegreso.forEach(r=>{
+        t+= parseFloat(r.monto);
+      })
+      return t.toFixed(2);
+    },
+          totalegcl:function (){
+      let t=0;
+      this.tabegcl.forEach(r=>{
         t+= parseFloat(r.monto);
       })
       return t.toFixed(2);

@@ -15,7 +15,7 @@ class DespachoController extends Controller
      */
     public function index()
     {
-        return Despacho::all();
+        return Despacho::all()->with('demandados');
     }
 
     /**
@@ -46,13 +46,18 @@ class DespachoController extends Controller
         $despacho->nurej=$request->nurej;
         $despacho->proceso=strtoupper($request->proceso);
         $despacho->demandante=strtoupper($request->demandante);
-        $despacho->demandados=strtoupper($request->demandados);
         $despacho->tramite_id=$request->tramite_id;
         $despacho->cliente_id=$request->cliente_id;
         $despacho->save();
 
         foreach ($request->requisitos as $row) {
             DB::table('despacho_requisito')->insert(['requisito_id'=>$row['id'],'despacho_id'=>$despacho->id]);
+        }
+
+        foreach($request->demandados as $r){
+
+            $dem=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
+            DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$dem->id]);
         }
 
     }

@@ -23,7 +23,8 @@ class CreateDespachosTable extends Migration
             $table->string("nurej")->nullable();
             $table->string("proceso")->nullable();
             $table->string("demandante")->nullable();
-            $table->string("demandados")->nullable();
+            $table->string("representante")->nullable();
+            $table->string("ci")->nullable();
             $table->unsignedBigInteger('tramite_id');
             $table->foreign('tramite_id')->references('id')->on('tramites');
             $table->unsignedBigInteger('cliente_id');

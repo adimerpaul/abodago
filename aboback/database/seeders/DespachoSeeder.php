@@ -23,7 +23,6 @@ class DespachoSeeder extends Seeder
             "nurej"=>"4014383",
             "proceso"=>"EJECUTIVO",
             "demandante"=>"ADIMER PAUL CHAMBI AJATA",
-            "demandados"=>"JOSE FULANITO",
             'tramite_id'=>"1",
             'cliente_id'=>"6",
         ]);

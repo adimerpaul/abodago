@@ -109,4 +109,8 @@ class ClienteController extends Controller
     public function ringreso($id){
         return db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
     }
+
+    public function regotro($id){
+        return db::select("select fecha,hora,monto,'' as recibo, concepto,'EGCLIENTE' as tipo from egotros where despacho_id= $id");
+    }
 }

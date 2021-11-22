@@ -17,11 +17,15 @@ class Despacho extends Model
         "nurej",
         "proceso",
         "demandante",
-        "demandados",
+        "ci",
+        "representante",
         'tramite_id',
         'cliente_id',
     ];
     public function requisitos(){
         return $this->belongsToMany(Requisito::class);
+    }
+    public function demandados(){
+        return $this->belongsToMany(Demandado::class);
     }
 }
