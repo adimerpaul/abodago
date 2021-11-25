@@ -55,9 +55,16 @@ class DespachoController extends Controller
         }
 
         foreach($request->demandados as $r){
-
+            $dd=Demandado::where('ci',$r['ci'])->get();
+            if($dd->count()==0){
             $dem=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
-            DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$dem->id]);
+                $demadado=$dem;
+            }
+            else{
+                $demandado->nombre=$r['nombre'];
+                $demandado->save();
+            }
+            DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demadado->id]);
         }
 
     }
@@ -160,4 +167,54 @@ class DespachoController extends Controller
         return $cadena;
 
     }
+    public function impcliente($id){
+        $cadena='';
+        $totaling=0;
+        $totalegr=0;
+        $adeudado=0;
+        $cliente = DB::SELECT("SELECT c.nombre as nom,t.nombre as tram,t.tipo  from clientes c inner join despachos d on d.cliente_id= c.id inner join tramites t on d.tramite_id=t.id where d.id=$id");
+        $egresos= db::select("select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egotros where despacho_id= $id");
+        $ingresos= db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
+
+        $cadena="<style>table, th, td {
+            border: 0.8px solid black;
+          }
+          table {
+            border-collapse: collapse;
+          }</style>
+        <div style='font-weight: bold;text-align:center'>GASTOS ". $cliente[0]->nom."</div>";
+        $cadena.="<div style='font-weight: bold;text-align:center' >".$cliente[0]->tipo." ".$cliente[0]->tram."</div>";
+        $cadena.="
+        <div><table style='width:100%; border:0'><tr style='border:0'><td style='border:0'>
+        <table style='width:100%'>
+        <tr><td style='font-weight: bold' colspan=3>INGRESOS</td></tr>
+        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>";
+
+        foreach ($ingresos as $ing) {
+            # code...
+            $cadena.="<tr><td>$ing->fecha</td><td>$ing->recibo</td><td>$ing->monto</td></tr>";
+            $totaling+=$ing->monto;
+        }
+        $cadena.="</table> </td><td style='border:0'>
+
+        <table style='width:100%'>
+        <tr style='font-weight: bold'><td colspan=2>EGRESOS</td></tr>
+        <tr style='font-weight: bold'><td>CONCEPTO</td><td>BOLIVIANOS</td></tr>";
+        foreach ($egresos as $egr) {
+            # code...
+            $cadena.="<tr><td>$egr->concepto</td><td>$egr->monto</td></tr>";
+            $totalegr+=$egr->monto;
+        }
+        $adeudado=$totaling - $totalegr;
+        $cadena.="
+        </table></td></tr></table>
+        </div><br>
+        <div style='width:100%'><table style='width:100%'><tr><td>INGRESOS TOTAL</td><td>$totaling</td><td>EGRESOS TOTAL</td><td>$totalegr</td></tr>
+        <tr><td colspan=2>TOTAL ADEUDADO</td><td colspan=2>$adeudado</td></tr>
+        </table></div>
+        ";
+        return $cadena;
+
+    }
+
 }

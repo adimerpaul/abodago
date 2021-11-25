@@ -44,6 +44,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/requisitos',\App\Http\Controllers\RequisitoController::class);
     Route::resource('/empleado',\App\Http\Controllers\EmpleadoController::class);
     Route::resource('/sueldo',\App\Http\Controllers\SueldoController::class);
+    Route::resource('/demandado',\App\Http\Controllers\DemandadoController::class);
     
 });
 

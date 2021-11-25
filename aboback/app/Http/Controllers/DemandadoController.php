@@ -44,9 +44,10 @@ class DemandadoController extends Controller
      * @param  \App\Models\Demandado  $demandado
      * @return \Illuminate\Http\Response
      */
-    public function show(Demandado $demandado)
+    public function show($ci)
     {
         //
+        return Demandado::where('ci',$ci)->get();
     }
 
     /**

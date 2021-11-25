@@ -184,7 +184,7 @@
                 <tbody>
                             <tr v-for="(i,index) in demandados" :key="index">
                                 <th scope="row">{{index+1}}</th>
-                                <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci"></td>
+                                <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" @keyup="buscar(i,index)"></td>
                                 <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
                                 <td>
                                      <q-btn color="green" @click="mas" icon="add"/>
@@ -521,6 +521,18 @@ export default {
                 this.demandados.splice(index, 1);
                 if(index==0)
                 this.demandados=[{ci:'',nombre:''}]
+            },
+            buscar(i,index){
+              this.$axios.get(process.env.API+'/demandado/'+i.ci).then(res=>{
+                console.log(res.data)
+                if(res.data.length>0){
+                this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
+                else{
+                this.demandados[index]={ci:i.ci,nombre:''};
+
+                }
+              })
+
             },
     lrequisito(){
       this.requisitos=this.tramite.requisitos;
