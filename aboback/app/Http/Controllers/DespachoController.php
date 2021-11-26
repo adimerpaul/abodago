@@ -45,7 +45,9 @@ class DespachoController extends Controller
         $despacho->webid=$request->webid;
         $despacho->nurej=$request->nurej;
         $despacho->proceso=strtoupper($request->proceso);
+        $despacho->ci=strtoupper($request->ci);
         $despacho->demandante=strtoupper($request->demandante);
+        $despacho->representante=strtoupper($request->representante);
         $despacho->tramite_id=$request->tramite_id;
         $despacho->cliente_id=$request->cliente_id;
         $despacho->save();
