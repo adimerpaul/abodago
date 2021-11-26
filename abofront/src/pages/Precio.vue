@@ -1,0 +1,199 @@
+<template>
+<q-page>
+<div class="row">
+  <div class="col-12">
+    <q-badge color="primary" class="full-width text-center" >Cotizacion de precios</q-badge>
+  </div>
+  <div class="col-12 col-sm-6">
+    <q-card>
+      <div class="row">
+        <div class="col-12 q-pa-xs">
+          <q-form @submit.prevent="crear">
+            <div class="row">
+              <div class="col-5"><q-input dense outlined label="Nombre" v-model="precio.nombre" required/></div>
+              <div class="col-5"><q-input dense outlined label="precio" type="number" v-model="precio.precio" required/></div>
+              <div class="col-2 flex flex-center"><q-btn size="xs" icon="add_circle" label="crear" color="positive" type="submit"/></div>
+            </div>
+          </q-form>
+        </div>
+        <div class="col-12">
+          <q-table dense  :rows="precios" :columns="columns" :rows-per-page-options="[50,100,200,0]" :filter="filter">
+            <template v-slot:top-right>
+              <q-input borderless outlined dense v-model="filter" placeholder="Buscar">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="nombre" :props="props">
+                  <input type="text" v-model="props.row.nombre" style="width: 150%">
+                </q-td>
+                <q-td key="nombre" :props="props" >
+                  <div style="text-align: right">
+                    <input type="text" v-model="props.row.precio" style="width: 30%"> Bs.
+                  </div>
+                </q-td>
+                <q-td key="nombre" :props="props">
+                  <q-btn color="info" icon="add_circle" @click="addcotizar(props.row)" size="xs" label="cotizar"/>
+                  <q-btn color="negative" @click="eliminar(props.row)" label="eliminar" icon="remove_circle" size="xs"/>
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </div>
+      </div>
+    </q-card>
+  </div>
+  <div class="col-12 col-sm-6">
+    <div class="row">
+      <div class="col-12">
+        <q-table title="Mi cotizacion" dense  :rows="cotizacion" :columns="columns" :rows-per-page-options="[10,100,200,0]" :filter="filter">
+          <template v-slot:top-right>
+            <q-input borderless outlined dense v-model="filter" placeholder="Buscar">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="nombre" :props="props">
+<!--                <input type="text" v-model="props.row.nombre" style="width: 150%">-->
+                {{props.row.nombre}}
+              </q-td>
+              <q-td key="nombre" :props="props" >
+                <div style="text-align: right">
+<!--                  <input type="text" v-model="props.row.precio" style="width: 30%"> Bs.-->
+                  {{props.row.precio}}
+                </div>
+              </q-td>
+              <q-td key="nombre" :props="props">
+<!--                <q-btn color="info" icon="add_circle" @click="addcotizar(props.row)" size="xs" label="cotizar"/>-->
+                <q-btn color="negative" @click="quitar(props.row)" label="quitar" icon="delete" size="xs"/>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </div>
+      <div class="col-12 flex flex-center">
+        <q-btn :label="'Imprimir TOTAL: '+total+'Bs'" @click="imprimir" class="full-width" icon="print" color="accent"/>
+      </div>
+    </div>
+  </div>
+</div>
+</q-page>
+</template>
+<script>
+import { jsPDF } from "jspdf";
+export default {
+  data(){
+    return{
+      filter:'',
+      precios:[],
+      precio:{},
+      cotizacion:[],
+      columns:[
+        {field:'nombre',name:'nombre',label:'Nombre',align:'left'},
+        {field:'precio',name:'precio',label:'Precio',align:'right'},
+        {field:'option',name:'option',label:'Opciones',align:'right'},
+      ]
+
+    }
+  },
+  created() {
+    this.misprecios()
+  },
+  methods: {
+    misprecios(){
+      this.$q.loading.show()
+      this.$axios.get(process.env.API+'/precio').then(res=>{
+        this.precios=res.data
+        this.$q.loading.hide()
+      })
+    },
+    crear(){
+      this.$q.loading.show()
+      this.$axios.post(process.env.API+'/precio',this.precio).then(res=>{
+        this.precio={}
+        this.misprecios()
+        // this.$q.loading.hide()
+      })
+    },
+    eliminar(precio){
+      this.$q.loading.show()
+      this.$axios.delete(process.env.API+'/precio/'+precio.id).then(res=>{
+        this.misprecios()
+        // this.$q.loading.hide()
+      })
+    },
+    addcotizar(precio){
+      this.cotizacion.push(precio)
+    },
+    quitar(precio){
+      let index =this.cotizacion.findIndex(c=>c.id===precio.id)
+      this.cotizacion.splice(index,1)
+    },
+    imprimir(){
+        function header(fecha){
+          // var img = new Image()
+          // img.src = 'logo.jpg'
+          // doc.addImage(img, 'jpg', 0.5, 0.5, 2, 2)
+          doc.setFont(undefined,'bold')
+          doc.text(5, 1, 'RESUMEN DIARIO DE INGRESOS')
+          doc.text(5, 1.5, ' '+fecha)
+          doc.text(1, 3, 'Nº COMPROBANTE')
+          doc.text(4, 3, 'Nº TRAMITE')
+          doc.text(7, 3, 'CONTRIBUYENTE')
+          doc.text(13.5, 3, 'CI/RUN/RUC')
+          doc.text(16, 3, 'MONTO BS.')
+          doc.text(18, 3, 'CAJERO')
+          doc.setFont(undefined,'normal')
+        }
+
+        var doc = new jsPDF('p','cm','letter')
+        // console.log(dat);
+        doc.setFont("courier");
+        doc.setFontSize(9);
+        // var x=0,y=
+        header(Date.now())
+        // let xx=x
+        // let yy=y
+        let y=0
+        // this.pagos.forEach(r=>{
+        //   // xx+=0.5
+        //   y+=0.5
+        //   doc.text(1, y+3, r.nrocomprobante)
+        //   doc.text(4, y+3, r.nrotramite)
+        //   doc.text(7, y+3, r.cliente)
+        //   doc.text(13.5, y+3, r.ci)
+        //   doc.text(16, y+3, r.total)
+        //   doc.text(18, y+3, r.cajero )
+        //   if (y+3>25){
+        //     doc.addPage();
+        //     header(this.fecha)
+        //     y=0
+        //   }
+        // })
+        doc.text(12, y+4, 'TOTAL RECAUDADCION: ')
+        doc.text(18, y+4, '1000 Bs')
+        // doc.save("Pago"+date.formatDate(Date.now(),'DD-MM-YYYY')+".pdf");
+        window.open(doc.output('bloburl'), '_blank');
+    }
+  },
+  computed: {
+    total(){
+      let t=0
+      this.cotizacion.forEach(c=>{
+        t+=c.precio
+      })
+      return t
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

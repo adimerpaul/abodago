@@ -4,6 +4,7 @@ import User from "pages/User";
 import Seguimiento from "pages/Seguimiento";
 import Asignacion from "pages/Asignacion";
 import Misrecepciones from "pages/Misrecepciones";
+import Precio from "pages/Precio";
 
 const routes = [
   {
@@ -15,6 +16,7 @@ const routes = [
       { path: '/user', component: User,meta: {requiresAuth: true,} },
       { path: '/seguimiento', component: Seguimiento,meta: {requiresAuth: true,} },
       { path: '/asiganacion', component: Asignacion,meta: {requiresAuth: true,} },
+      { path: '/precio', component: Precio,meta: {requiresAuth: true,} },
       { path: '/misrecepciones', component: Misrecepciones,meta: {requiresAuth: true,} },
     ]
   },

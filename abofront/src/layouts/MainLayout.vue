@@ -153,6 +153,22 @@
             </q-item-section>
           </q-item>
 
+          <q-item
+            v-if="$store.getters['login/isLoggedIn']"
+            clickable
+            to="/precio"
+          >
+            <q-item-section avatar>
+              <q-icon name="code" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Cotizaciones</q-item-label>
+              <q-item-label caption>
+                creacion de cotizaciones
+              </q-item-label>
+            </q-item-section>
+          </q-item>
 
           <q-item
             v-if="$store.getters['login/isLoggedIn']"

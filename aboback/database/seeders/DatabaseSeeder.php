@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             RequisitoSeeder::class,
             ClienteSeeder::class,
             DespachoSeeder::class,
+            PrecioSeeder::class,
         ]);
     }
 }
