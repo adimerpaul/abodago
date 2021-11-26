@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Despacho;
+use App\Models\Demandado;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -63,10 +64,11 @@ class DespachoController extends Controller
                 $demadado=$dem;
             }
             else{
-                $demandado->nombre=$r['nombre'];
-                $demandado->save();
+                Demandado::where('ci',$r['ci'])                
+                ->update(['nombre'=>$r['nombre']]);
+                $demandado=$dd[0];
             }
-            DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demadado->id]);
+            DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demandado->id]);
         }
 
     }

@@ -17,7 +17,8 @@
               <input type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
             </div>
             <div class="col-12 col-sm-2 flex flex-center">
-              <q-btn type="submit" color="primary" icon="send" label="Crear"/>
+              <q-btn @click="modcliente" color="yellow" icon="edit" label="Modificar" v-if="boolmod"/>
+              <q-btn type="submit" color="primary" icon="send" label="Crear" v-else/>
             </div>
           </div>
         </q-form>
@@ -431,6 +432,7 @@ export default {
       tabegreso:[],
       tabegcl:[],
       gastos:[],
+      boolmod:false,
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
@@ -720,6 +722,7 @@ export default {
       this.despacho.tramite_id=this.tramite.id;
       this.despacho.cliente_id=this.cliente2.id;
       this.despacho.requisitos=this.requisitos;
+      this.despacho.demandados=this.demandados;
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/despacho',this.despacho).then(res=>{
         // console.log(res.data)
@@ -766,6 +769,13 @@ export default {
       })
     },
     // remitir(){},
+    mod(prop){
+      this.cliente=prop;
+      this.boolmod=true;
+    },
+    modcliente(){
+      this.boolmod=false;
+    },
     aceptar(cliente){
       this.cliente2=cliente
       this.dialogcliente=true
@@ -990,6 +1000,7 @@ export default {
       this.despacho.ci=' ';
       this.despacho.demandante=' ';
       this.despacho.representate=' ';
+      this.demandados=[{ci:'',nombre:''}];
     },
     guardar(){
       if (!confirm("seguro de registrar?")){
