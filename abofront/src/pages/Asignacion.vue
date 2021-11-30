@@ -188,8 +188,8 @@
                                 <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" @keyup="buscar(i,index)"></td>
                                 <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
                                 <td>
-                                     <q-btn color="green" @click="mas" icon="add"/>
-                                     <q-btn  color="red" icon="remove" @click="menos(index)"/>
+                                     <q-btn dense color="green" @click="mas" icon="add"/>
+                                     <q-btn dense color="red" icon="remove" @click="menos(index)"/>
                                     
                                 </td>
                             </tr>
@@ -633,11 +633,17 @@ export default {
             })
 
     },
+    modimg(prop){
+      
+    },
     listdespacho(prop){
       this.cliente2=prop
 
       this.infodespacho=prop.despachos;
       this.dialog_despacho=true;
+    },
+    modimagen(){
+
     },
     crearcliente(){
       this.$q.loading.show()
@@ -774,7 +780,18 @@ export default {
       this.boolmod=true;
     },
     modcliente(){
+
       this.boolmod=false;
+        this.$axios.put(process.env.API+'/cliente/'+this.cliente.id,this.cliente).then(res=>{
+                    this.$q.notify({
+            message: 'Modificado',
+            caption: 'Registro Modifcado',
+            color: 'green',
+            icon:'done'
+          });
+          this.cliente={}
+        });
+
     },
     aceptar(cliente){
       this.cliente2=cliente

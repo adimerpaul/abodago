@@ -63,9 +63,29 @@ class ClienteController extends Controller
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
+
+     public function imgupdate(Request $request){
+         $cliente=Cliente::find($request->id);
+        $nombreArchivo='';
+        if ($request->hasFile('imagen')) {
+//            return "si";
+            $file=$request->file('imagen');
+            $nombreArchivo = time().".".$file->getClientOriginalExtension();
+//        return $nombreArchivo;
+            $file->move(\public_path('imagenes'), $nombreArchivo);
+//            return $nombreArchivo;
+//            $request->imagen=$nombreArchivo;
+        }
+//        return $request;
+//        Cliente::create($request->all());
+        $cliente->imagen=$nombreArchivo;
+        $cliente->save();
+     }
+     
     public function show(Cliente $cliente)
     {
-        //
+        //        $nombreArchivo='';
+
     }
 
     /**
@@ -86,9 +106,14 @@ class ClienteController extends Controller
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cliente $cliente)
+    public function update(Request $request, $id)
     {
-        //
+        $cliente=Cliente::find($id);
+        $cliente->ci=$request->ci;
+        $cliente->nombre= strtoupper( $request->nombre);
+        $cliente->tipo=$request->tipo;
+        $cliente->save();
+
     }
 
     /**

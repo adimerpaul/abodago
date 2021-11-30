@@ -32,7 +32,8 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/regreso/{id}',[\App\Http\Controllers\ClienteController::class,'regreso']);
     Route::post('/regotro/{id}',[\App\Http\Controllers\ClienteController::class,'regotro']);
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
-    Route::post('/impresion/{id}',[\App\Http\Controllers\DespachoController::class,'impresion']);
+    Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
+    Route::post('/imgupdate',[\App\Http\Controllers\ClienteController::class,'imgupdate']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
 
     Route::resource('/despacho',\App\Http\Controllers\DespachoController::class);
