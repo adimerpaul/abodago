@@ -41,7 +41,7 @@ class UserController extends Controller
         $user->email=$request->email;
         $user->password=Hash::make( $request->password);
         $user->carnet=$request->carnet;
-        $user->unit_id=$request->unit_id;
+//        $user->unit_id=$request->unit_id;
         $user->fechalimite=date('Y-m-d', strtotime(now(). ' + 7 days'));;
         $user->save();
         $permiso = Permiso::find([3]);
@@ -54,10 +54,10 @@ class UserController extends Controller
         $user->name=$request->name;
         $user->email=$request->email;
         $user->password= Hash::make($request->password) ;
-        $user->unit_id=$request->unit_id;
+//        $user->unit_id=$request->unit_id;
         $user->fechalimite=$request->fechalimite;
         $user->carnet=$request->carnet;
-        $user->unit_id=$request->unit_id;
+//        $user->unit_id=$request->unit_id;
 //        $user->codigo= strtoupper( substr($request->name,0,3));
         $user->save();
         $permisos= array();

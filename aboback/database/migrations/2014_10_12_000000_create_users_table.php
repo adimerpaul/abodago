@@ -22,8 +22,8 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->date('fechalimite');
             $table->string('password');
-            $table->unsignedBigInteger('unit_id')->default(1);
-            $table->foreign('unit_id')->references('id')->on('units');
+//            $table->unsignedBigInteger('unit_id')->default(1);
+//            $table->foreign('unit_id')->references('id')->on('units');
             $table->rememberToken();
             $table->timestamps();
         });
