@@ -17,7 +17,6 @@ class CreateDemandadosTable extends Migration
             $table->id();
             $table->string('ci')->unique();
             $table->string('nombre');
-
             $table->timestamps();
         });
     }

@@ -104,7 +104,7 @@
             <q-item-section
               avatar
             >
-              <q-icon name="code" />
+              <q-icon name="list" />
             </q-item-section>
 
             <q-item-section>

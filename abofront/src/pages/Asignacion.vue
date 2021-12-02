@@ -190,13 +190,13 @@
                                 <td>
                                      <q-btn dense color="green" @click="mas" icon="add"/>
                                      <q-btn dense color="red" icon="remove" @click="menos(index)"/>
-                                    
+
                                 </td>
                             </tr>
                 </tbody>
                 </table>
                 </div>
-                <q-btn label="Remitir" color="teal" icon="send" class="full-width" type="submit"/>
+                <q-btn label="CREAR" color="teal" icon="send" class="full-width" type="submit"/>
                                   </div>
                 </div>
               </q-form>
@@ -327,7 +327,7 @@
 
 
             </q-card-section>
- 
+
               </q-form>
             </q-card-section>
           </q-card>
@@ -541,7 +541,7 @@ export default {
       this.requisitos.forEach(element => {
         element.estado=false;
       });
-   
+
     },
     getImage(event){
       //Asignamos la imagen a  nuestra data
@@ -634,7 +634,7 @@ export default {
 
     },
     modimg(prop){
-      
+
     },
     listdespacho(prop){
       this.cliente2=prop
