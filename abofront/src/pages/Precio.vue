@@ -136,6 +136,18 @@ export default {
       this.cotizacion.splice(index,1)
     },
     imprimir(){
+      console.log(this.cotizacion)
+      this.$axios.post(process.env.API+'/impcosto',{datos:this.cotizacion}).then(res=>{
+              let myWindow = window.open("", "Imprimir", "width=200,height=100");
+              myWindow.document.write(res.data);
+              myWindow.document.close();
+              myWindow.focus();
+              setTimeout(function(){
+                myWindow.print();
+                myWindow.close();
+              },500);
+            })
+        return false;
         function header(fecha){
           // var img = new Image()
           // img.src = 'logo.jpg'

@@ -130,6 +130,22 @@
             </q-tr>
           </template>
         </q-table>
+                        <q-dialog  v-model="dialog_modimg">
+          <q-card style="width: 1200px;min-width: 40vh">
+
+            <q-card-section class="q-pt-none">
+            <div class="text-h6">Imagen / logo Cliente</div>
+
+            </q-card-section>
+              <input type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
+
+            <q-card-section align="right">
+              <q-btn flat label="Modificar" color="primary" icon="image" @click="onmodimg"/>
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
         <q-dialog full-width v-model="dialogcliente">
           <q-card >
             <q-card-section>
@@ -233,9 +249,6 @@
             <template v-slot:body-cell-opcion="props">
               <q-tr :props="props">
               <q-td key="opcion" :props="props">
-                <q-btn dense round flat color="yellow" @click="addRow(props.row)" icon="add"></q-btn>
-                <q-btn dense round flat color="red" @click="removeRow(props.row)" icon="remove"></q-btn>
-                <q-btn dense round flat color="accent" @click="reclRow(props.row)" icon="remove"></q-btn>
                 <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
               </q-td>
               </q-tr>
@@ -340,6 +353,8 @@
             <div class="text-h6">Ingresos Egresos</div>
             <div class="row">
               <div class="col-4">
+                <q-btn dense round label="Ingreso" flat color="green" @click="addRow()" icon="add"></q-btn>
+
                 <q-table dense
                   title="LISTA DE INGRESOS"
                   :rows="tabingreso"
@@ -348,6 +363,8 @@
                 />
               </div>
               <div class="col-4">
+                <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove"></q-btn>
+
                 <q-table dense
                   title="LISTA EGRESOS"
                   :rows="tabegreso"
@@ -356,6 +373,7 @@
                 />
               </div>
               <div class="col-4">
+                <q-btn dense round flat label="Egr Cliente" color="accent" @click="reclRow()" icon="remove"></q-btn>
                 <q-table dense
                   title="LISTA EGRESOS CLIENTE"
                   :rows="tabegcl"
@@ -373,11 +391,14 @@
 
             </q-card-section>
             <q-card-section align="right">
-              <q-btn flat label="Imprimir" color="primary" icon="print" @click="imprimir"/>
+              <q-btn flat label="ImprimirEgr" color="primary" icon="print" @click="imprimir"/>
+              <q-btn flat label="ImprimirEgrCliente" color="primary" icon="print" @click="impcliente"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
         </q-dialog>
+
+
       </div>
     </div>
   </q-page>
@@ -402,6 +423,7 @@ export default {
       dialog_list:false,
       dialog_gastos:false,
       dialog_remcl:false,
+      dialog_modimg:false,
       url:process.env.API,
       demandados:[{ci:'',nombre:''}],
       requisitos:[],
@@ -415,6 +437,7 @@ export default {
       usuarios2:[],
       clientes:[],
       cliente:{tipo:'PERSONA'},
+      infocliente:{},
       cliente2:'',
       mail:{},
       remitentes:[],
@@ -561,6 +584,7 @@ export default {
         this.dialog_add=false;
         this.ingreso={};
         this.misdatos();
+             this.dialog_gastos=false;
       });
     },
         regegreso(){
@@ -576,6 +600,8 @@ export default {
         this.dialog_remove=false;
         this.egreso={};
         this.misdatos();
+             this.dialog_gastos=false;
+        
       });
     },
           regegrcliente(){
@@ -591,19 +617,17 @@ export default {
         this.dialog_remcl=false;
         this.egreso={};
         this.misdatos();
+             this.dialog_gastos=false;
       });
     },
     addRow(prop){
-      this.datodespacho=prop;
       this.dialog_add=true;
     },
     removeRow(prop){
-      this.datodespacho=prop;
       this.dialog_remove=true;
 
     },
         reclRow(prop){
-      this.datodespacho=prop;
       this.dialog_remcl=true;
 
     },
@@ -633,9 +657,20 @@ export default {
             })
 
     },
-    modimg(prop){
+        impcliente(){
+            this.$axios.post(process.env.API+'/impcliente/'+this.datodespacho.id).then(res=>{
+              let myWindow = window.open("", "Imprimir", "width=200,height=100");
+              myWindow.document.write(res.data);
+              myWindow.document.close();
+              myWindow.focus();
+              setTimeout(function(){
+                myWindow.print();
+                myWindow.close();
+              },500);
+            })
 
     },
+
     listdespacho(prop){
       this.cliente2=prop
 
@@ -775,6 +810,27 @@ export default {
       })
     },
     // remitir(){},
+    modimg(prop){
+      this.infocliente=prop;
+      this.dialog_modimg=true;
+
+    },
+    onmodimg(){
+            this.$q.loading.show()
+      var data = new  FormData();
+      data.append('imagen', this.imagen);
+      data.append('id', this.infocliente.id);
+
+      this.$axios.post(process.env.API+'/clienteimg',data).then(res=>{
+        this.$refs.ima.value=''
+        this.misdatos()
+        this.$q.notify({
+          message:"Cambio imagen",
+          color:'green',
+          icon:'done'
+        })
+      })
+    },
     mod(prop){
       this.cliente=prop;
       this.boolmod=true;

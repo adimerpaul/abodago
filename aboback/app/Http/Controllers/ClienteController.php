@@ -64,7 +64,7 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     public function imgupdate(Request $request){
+     public function clienteimg(Request $request){
          $cliente=Cliente::find($request->id);
         $nombreArchivo='';
         if ($request->hasFile('imagen')) {

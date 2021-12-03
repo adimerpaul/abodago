@@ -132,20 +132,33 @@ class DespachoController extends Controller
         $cliente = DB::SELECT("SELECT c.nombre as nom,t.nombre as tram,t.tipo  from clientes c inner join despachos d on d.cliente_id= c.id inner join tramites t on d.tramite_id=t.id where d.id=$id");
         $egresos= db::select("select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egresos where despacho_id= $id");
         $ingresos= db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
-
-        $cadena="<style>table, th, td {
+        $path = 'app/public/imagenes/clinica.jpg';
+        $cadena="<html>
+        <style>table, th, td {
             border: 0.8px solid black;
           }
           table {
             border-collapse: collapse;
-          }</style>
+          }
+          .fondo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: auto;
+            opacity: 0.2;
+        }
+          </style>
+          <body>
+          <img class='fondo' src='img/logocastillogonzales.png'>
         <div style='font-weight: bold;text-align:center'>GASTOS ". $cliente[0]->nom."</div>";
         $cadena.="<div style='font-weight: bold;text-align:center' >".$cliente[0]->tipo." ".$cliente[0]->tram."</div>";
         $cadena.="
         <div><table style='width:100%; border:0'><tr style='border:0'><td style='border:0'>
         <table style='width:100%'>
         <tr><td style='font-weight: bold' colspan=3>INGRESOS</td></tr>
-        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>";
+        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>
+        ";
 
         foreach ($ingresos as $ing) {
             # code...
@@ -168,7 +181,7 @@ class DespachoController extends Controller
         </div><br>
         <div style='width:100%'><table style='width:100%'><tr><td>INGRESOS TOTAL</td><td>$totaling</td><td>EGRESOS TOTAL</td><td>$totalegr</td></tr>
         <tr><td colspan=2>TOTAL ADEUDADO</td><td colspan=2>$adeudado</td></tr>
-        </table></div>
+        </table></div></body></html>
         ";
         return $cadena;
 
@@ -182,19 +195,32 @@ class DespachoController extends Controller
         $egresos= db::select("select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egotros where despacho_id= $id");
         $ingresos= db::select("select fecha, hora, monto, recibo,'' as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
 
-        $cadena="<style>table, th, td {
+        $cadena="<html>
+        <style>table, th, td {
             border: 0.8px solid black;
           }
           table {
             border-collapse: collapse;
-          }</style>
-        <div style='font-weight: bold;text-align:center'>GASTOS ". $cliente[0]->nom."</div>";
+          }
+          .fondo {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: auto;
+            opacity: 0.2;
+        }</style>
+        <body>
+          <img class='fondo' src='img/logocastillogonzales.png'>
+          <div style='font-weight: bold;text-align:center'>GASTOS ". $cliente[0]->nom."</div>";
         $cadena.="<div style='font-weight: bold;text-align:center' >".$cliente[0]->tipo." ".$cliente[0]->tram."</div>";
         $cadena.="
         <div><table style='width:100%; border:0'><tr style='border:0'><td style='border:0'>
         <table style='width:100%'>
         <tr><td style='font-weight: bold' colspan=3>INGRESOS</td></tr>
-        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>";
+        <tr><td style='font-weight: bold' >FECHA</td><td style='font-weight: bold'>RECIBO</td><td style='font-weight: bold'>BOLIVIANOS</td></tr>
+        </body>
+        </html>";
 
         foreach ($ingresos as $ing) {
             # code...

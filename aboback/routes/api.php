@@ -35,8 +35,11 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
     Route::post('/imgupdate',[\App\Http\Controllers\ClienteController::class,'imgupdate']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
+    Route::post('/clienteimg',[\App\Http\Controllers\ClienteController::class,'clienteimg']);
 
     Route::resource('/despacho',\App\Http\Controllers\DespachoController::class);
+    Route::post('/impresion/{id}',[\App\Http\Controllers\DespachoController::class,'impresion']);
+    Route::post('/impcliente/{id}',[\App\Http\Controllers\DespachoController::class,'impcliente']);
     Route::resource('/cliente',\App\Http\Controllers\ClienteController::class);
     Route::resource('/tramite',\App\Http\Controllers\TramiteController::class);
     Route::resource('/ingreso',\App\Http\Controllers\IngresoController::class);
@@ -47,6 +50,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/sueldo',\App\Http\Controllers\SueldoController::class);
     Route::resource('/demandado',\App\Http\Controllers\DemandadoController::class);
     Route::resource('/precio',\App\Http\Controllers\PrecioController::class);
+    Route::post('/impcosto',[\App\Http\Controllers\PrecioController::class,'impcosto']);
 
 });
 
