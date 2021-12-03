@@ -62,14 +62,14 @@ class DespachoController extends Controller
                 $dd=Demandado::where('ci',$r['ci'])->get();
                 if($dd->count()==0){
                     $dem=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
-                    $demadado=$dem;
+                    $demandado=$dem;
                 }
                 else{
                     Demandado::where('ci',$r['ci'])
                         ->update(['nombre'=>$r['nombre']]);
                     $demandado=$dd[0];
                 }
-                DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demandado->id]);
+                DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demandado['id']]);
             }
         }
 
@@ -248,5 +248,6 @@ class DespachoController extends Controller
         return $cadena;
 
     }
+
 
 }

@@ -28,4 +28,8 @@ class Despacho extends Model
     public function demandados(){
         return $this->belongsToMany(Demandado::class);
     }
+
+    public function tramite(){
+        return $this->belongsTo(Tramite::class);
+    }
 }

@@ -83,4 +83,8 @@ class DemandadoController extends Controller
     {
         //
     }
+
+    public function listdemandado($ci){
+        return Demandado::where('ci',$ci)->with('despachos')->get();
+    }
 }

@@ -49,6 +49,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/empleado',\App\Http\Controllers\EmpleadoController::class);
     Route::resource('/sueldo',\App\Http\Controllers\SueldoController::class);
     Route::resource('/demandado',\App\Http\Controllers\DemandadoController::class);
+    Route::post('/listdemandado/{ci}',[\App\Http\Controllers\DemandadoController::class,'listdemandado']);
     Route::resource('/precio',\App\Http\Controllers\PrecioController::class);
     Route::post('/impcosto',[\App\Http\Controllers\PrecioController::class,'impcosto']);
 

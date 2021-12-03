@@ -12,4 +12,9 @@ class Demandado extends Model
         'ci',
         'nombre',
     ];
+
+    public function despachos(){
+        return $this->belongsToMany(Despacho::class)->with('tramite');
+        
+    }
 }

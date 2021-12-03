@@ -148,7 +148,7 @@ export default {
   },
   created() {
     if (this.$store.getters["login/isLoggedIn"]){
-      this.$router.push('/asiganacion')
+      this.$router.push('/asignacion')
     }
 
     this.$q.loading.show()
@@ -212,7 +212,7 @@ export default {
       this.$q.loading.show()
       this.$store.dispatch('login/login', { email:this.email, password:this.password }).then(() =>{
         this.$q.loading.hide()
-        this.$router.push('/asiganacion')
+        this.$router.push('/asignacion')
       })
         .catch(err => {
           this.$q.loading.hide();

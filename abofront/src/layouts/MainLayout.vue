@@ -99,7 +99,7 @@
           <q-item
             v-if="$store.state.login.booldesignacion"
             clickable
-            to="/asiganacion"
+            to="/asignacion"
           >
             <q-item-section
               avatar
@@ -116,9 +116,9 @@
           </q-item>
 
           <q-item
-            v-if="$store.state.login.boolseguimiento"
+            
             clickable
-            to="/seguimiento"
+            to="/demandado"
           >
             <q-item-section
               avatar
@@ -127,9 +127,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Seguimiento</q-item-label>
+              <q-item-label>Demandado</q-item-label>
               <q-item-label caption>
-                Seguimiento de archivos
+                Demandado y procesos
               </q-item-label>
             </q-item-section>
           </q-item>

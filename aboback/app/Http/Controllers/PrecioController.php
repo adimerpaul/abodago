@@ -115,7 +115,7 @@ class PrecioController extends Controller
           <img class='fondo' src='img/logocastillogonzales.png'>
           <table class='head'>
           
-          <tr><td style='text-align:center'><img class='contact' src='img/contacto.png'></td><td>Fecha:".date('d/m/Y')."</td></tr>
+          <tr><td style='text-align:center'><img class='contact' src='img/contacto.png'></td><td>Oruro, ".date('d/m/Y')."</td></tr>
           <tr><td colspan=2 style='text-align:center'>ESTIMACION DE COSTO</td></tr>
           </table><br>
           <table> <tr><th>CONCEPTO</th> <th>MONTO Bs.</th></tr>";
@@ -133,4 +133,5 @@ class PrecioController extends Controller
         </html>";
         return $cadena;
     }
+    
 }
