@@ -14,7 +14,7 @@
       </q-form>
     </div>
 
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-md-8">
       <q-banner dense class="bg-primary text-white">
         Procesos del Demandado {{demandado.nombre}}
       </q-banner>
@@ -61,8 +61,8 @@ export default {
       this.$q.loading.show()
       this.demandado={}
       this.$axios.post(process.env.API+'/listdemandado/'+this.cedula).then(res=>{
-         console.log(res.data[0])
-         if(res.data){
+        console.log(res.data);
+         if(res.data.length >0){
         this.demandado=res.data[0];
         this.procesos=this.demandado.despachos;
         console.log(this.demandado)
