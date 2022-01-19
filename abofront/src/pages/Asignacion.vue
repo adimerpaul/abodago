@@ -185,8 +185,10 @@
                 </div>
 
                 <q-input label="Proceso" outlined dense v-model="despacho.proceso"/>
+                </div>
                 <q-input label="ci" outlined dense v-model="despacho.ci"/>
                 <q-input label="demandante" outlined dense v-model="despacho.demandante"/>
+                <div v-if="tramite.tipo!='TRAMITE'">
                 <q-input label="representante" outlined dense v-model="despacho.representante"/>
                 <div class="text-h6">DEMANDADOS</div>
                 <table style="width:100%;  border: 1px solid black;" >
@@ -479,6 +481,7 @@ export default {
         {field:'fecha',name:'fecha',label:'FECHA',align:'right'},
         {field:'hora',name:'hora',label:'HORA',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
+        {field:'tramite',name:'tramite',label:'tramite',align:'right'},
         {field:'juzgado',name:'juzgado',label:'JUZGADO',align:'right'},
          {field:'webid',name:'webid',label:'WEBID',align:'left'},
          {field:'nurej',name:'nurej',label:'NUREJ',align:'left'},
@@ -601,7 +604,7 @@ export default {
         this.egreso={};
         this.misdatos();
              this.dialog_gastos=false;
-        
+
       });
     },
           regegrcliente(){
@@ -675,6 +678,7 @@ export default {
       this.cliente2=prop
 
       this.infodespacho=prop.despachos;
+      console.log(this.infodespacho)
       this.dialog_despacho=true;
     },
     modimagen(){

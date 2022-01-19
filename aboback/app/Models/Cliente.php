@@ -15,6 +15,6 @@ class Cliente extends Model
         'imagen',
     ];
     public function despachos(){
-        return $this->hasMany(Despacho::class);
+        return $this->hasMany(Despacho::class)->with('tramite');
     }
 }
