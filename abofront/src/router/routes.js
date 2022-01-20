@@ -5,6 +5,7 @@ import Asignacion from "pages/Asignacion";
 import Demandado from "pages/Demandado";
 import Misrecepciones from "pages/Misrecepciones";
 import Precio from "pages/Precio";
+import Requisitos from "pages/Requisitos";
 
 const routes = [
   {
@@ -14,6 +15,7 @@ const routes = [
       { path: '', component: Login },
       { path: '/recepcion', component: Recepcion,meta: {requiresAuth: true,} },
       { path: '/user', component: User,meta: {requiresAuth: true,} },
+      { path: '/requisitos', component: Requisitos,meta: {requiresAuth: true,} },
       { path: '/demandado', component: Demandado,meta: {requiresAuth: true,} },
       { path: '/asignacion', component: Asignacion,meta: {requiresAuth: true,} },
       { path: '/precio', component: Precio,meta: {requiresAuth: true,} },

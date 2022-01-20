@@ -99,24 +99,61 @@
           <q-item
             v-if="$store.state.login.booldesignacion"
             clickable
-            to="/asignacion"
+            to="/requisitos"
           >
             <q-item-section
               avatar
             >
-              <q-icon name="list" />
+              <q-icon name="pending_actions" />
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Mis clientes</q-item-label>
+              <q-item-label>Requisitos</q-item-label>
               <q-item-label caption>
-                Mis clientes
+                Requisitos
               </q-item-label>
             </q-item-section>
           </q-item>
 
           <q-item
-            
+            v-if="$store.state.login.booldesignacion"
+            clickable
+            to="/asignacion"
+          >
+            <q-item-section
+              avatar
+            >
+              <q-icon name="verified_user" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Empresas</q-item-label>
+              <q-item-label caption>
+                Empresas
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            v-if="$store.state.login.booldesignacion"
+            clickable
+            to="/clientes"
+          >
+            <q-item-section
+              avatar
+            >
+              <q-icon name="supervised_user_circle" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Clientes</q-item-label>
+              <q-item-label caption>
+                Clientes
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
             clickable
             to="/demandado"
           >

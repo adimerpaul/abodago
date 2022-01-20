@@ -4,19 +4,19 @@
       <div class="col-12 q-pa-xs">
         <q-form @submit="crearcliente">
           <div class="row">
-            <div class="col-12 col-sm-2">
+            <div class="col-12 q-pa-xs col-sm-2">
               <q-input dense outlined label="CI/NIT" v-model="cliente.ci"/>
             </div>
-            <div class="col-12 col-sm-3">
+            <div class="col-12 q-pa-xs col-sm-3">
               <q-input dense outlined label="Nombre completo" v-model="cliente.nombre" required/>
             </div>
-            <div class="col-12 col-sm-2">
+            <div class="col-12 q-pa-xs col-sm-2">
               <q-select dense outlined label="Tipo" v-model="cliente.tipo" :options="['PERSONA','EMPRESA']"/>
             </div>
-            <div class="col-12 col-sm-3">
+            <div class="col-12 q-pa-xs col-sm-3 flex flex-center">
               <input type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
             </div>
-            <div class="col-12 col-sm-2 flex flex-center">
+            <div class="col-12 q-pa-xs col-sm-2 flex flex-center">
               <q-btn @click="modcliente" color="yellow" icon="edit" label="Modificar" v-if="boolmod"/>
               <q-btn type="submit" color="primary" icon="send" label="Crear" v-else/>
             </div>
@@ -24,9 +24,10 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Clientes " :rows="clientes" :columns="columns" :filter="filter"       :rows-per-page-options="[50,100,150,200,0]">
+        <q-table dense title="Clientes " :rows="clientes" :columns="columns" :filter="filter"  >
+<!--          :rows-per-page-options="[50,100,150,200,0]"-->
           <template v-slot:top-right>
-            <q-input borderless dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
@@ -112,10 +113,10 @@
 <!--                              {{ props.row.estado }}-->
                 <!--            </q-badge>-->
                 <q-btn-group >
-                  <q-btn dense @click="aceptar(props.row)" color="positive"  icon="add_circle" size="sm" />
-                  <q-btn dense @click="mod(props.row)" color="yellow"  icon="edit" size="sm" />
-                  <q-btn dense @click="modimg(props.row)" color="teal"  icon="image" size="sm" />
-                  <q-btn dense @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="sm" />
+                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />
+                  <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
+                  <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
+                  <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
                 </q-btn-group >
 <!--                <q-btn-group v-if="props.row.estado=='ACEPTADO'">-->
 <!--&lt;!&ndash;                  <q-btn type="a"  target="__blank" dense :href="url+'/mail/'+props.row.id" color="primary" label="Imprimir" icon="timeline" size="xs" />&ndash;&gt;-->
@@ -167,11 +168,9 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
-                     <q-checkbox dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
+                     <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
                   </div>
                   <div class="col-8">
-
-
                 <div class="row">
                   <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
                   <div class="col-6"><q-input dense type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
@@ -283,58 +282,49 @@
         </q-dialog>
 
         <q-dialog v-model="dialog_add">
-          <q-card style="width: 300px;min-width: 40vh">
-
+          <q-card style="width: 700px; max-width: 80vw;">
             <q-card-section class="q-pt-none">
             <div class="text-h6">INGRESO</div>
               <q-form @submit.prevent="regingreso">
                 <div class="row">
-                <div class="col-4"><q-input outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
-                <div class="col-4"><q-input outlined label="Motivo" v-model="ingreso.motivo"/></div>
-                <div class="col-4"><q-input outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
+                <div class="col-4"><q-input dense outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
+                <div class="col-4"><q-input dense outlined label="Motivo" v-model="ingreso.motivo"/></div>
+                <div class="col-4"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
                 </div>
-              <q-card-section align="right" class="row">
-                <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
-                <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
-            </q-card-section>
-
+                <q-card-section align="right" class="row">
+                  <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
+                  <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
+                </q-card-section>
               </q-form>
             </q-card-section>
-
           </q-card>
         </q-dialog>
-
         <q-dialog v-model="dialog_remove">
-          <q-card style="width: 300px;min-width: 40vh">
-
+          <q-card style="width: 700px; max-width: 80vw;">
             <q-card-section class="q-pt-none">
             <div class="text-h6">EGRESO</div>
               <q-form @submit.prevent="regegreso">
                 <div class="row">
-                <div class="col-6"><q-input outlined label="Concepto" v-model="egreso.concepto"/></div>
-                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="egreso.monto"/></div>
+                <div class="col-6"><q-input dense outlined label="Concepto" v-model="egreso.concepto"/></div>
+                <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egreso.monto"/></div>
                 </div>
-            <q-card-section align="right" class="row">
-                <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
-                <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
-
-
-            </q-card-section>
-
+                <q-card-section align="right" class="row">
+                    <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
+                    <div class="col-6"><q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup /></div>
+                </q-card-section>
               </q-form>
             </q-card-section>
           </q-card>
         </q-dialog>
 
         <q-dialog v-model="dialog_remcl">
-          <q-card style="width: 300px;min-width: 40vh">
-
+          <q-card style="width: 700px; max-width: 80vw;">
             <q-card-section class="q-pt-none">
             <div class="text-h6">EGRESO CLIENTE</div>
               <q-form @submit.prevent="regegrcliente">
                 <div class="row">
-                <div class="col-6"><q-input outlined label="Concepto" v-model="egrcl.concepto"/></div>
-                <div class="col-6"><q-input outlined label="Monto" type="number" v-model="egrcl.monto"/></div>
+                <div class="col-6"><q-input dense outlined label="Concepto" v-model="egrcl.concepto"/></div>
+                <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egrcl.monto"/></div>
                 </div>
             <q-card-section align="right" class="row">
                 <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
@@ -350,13 +340,11 @@
 
         <q-dialog maximized v-model="dialog_gastos">
           <q-card style="width: 1200px;min-width: 40vh">
-
             <q-card-section class="q-pt-none">
             <div class="text-h6">Ingresos Egresos</div>
             <div class="row">
               <div class="col-4">
                 <q-btn dense round label="Ingreso" flat color="green" @click="addRow()" icon="add"></q-btn>
-
                 <q-table dense
                   title="LISTA DE INGRESOS"
                   :rows="tabingreso"
@@ -366,7 +354,6 @@
               </div>
               <div class="col-4">
                 <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove"></q-btn>
-
                 <q-table dense
                   title="LISTA EGRESOS"
                   :rows="tabegreso"
@@ -385,22 +372,20 @@
               </div>
             </div>
             <div>
-              <span>Total Ingreso: {{totaling}}</span> <br>
-              <span>Total Egreso: {{totaleg}}</span> <br>
-              <span>Total Egreso Cliente: {{totalegcl}}</span> <br>
-              <span>Total Adeudado: {{totaling - totaleg}}</span>
+              <span><b>Total Ingreso: </b>{{totaling}}</span> <br>
+              <span><b>Total Egreso: </b>{{totaleg}}</span> <br>
+              <span><b>Total Egreso Cliente: </b>{{totalegcl}}</span> <br>
+              <span><b>Total Adeudado: </b>{{totaling - totaleg}}</span>
             </div>
 
             </q-card-section>
             <q-card-section align="right">
-              <q-btn flat label="ImprimirEgr" color="primary" icon="print" @click="imprimir"/>
-              <q-btn flat label="ImprimirEgrCliente" color="primary" icon="print" @click="impcliente"/>
+              <q-btn flat label="Imprimir Egresos" color="primary" icon="print" @click="imprimir"/>
+              <q-btn flat label="Imprimir Egresos clientes" color="primary" icon="print" @click="impcliente"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
         </q-dialog>
-
-
       </div>
     </div>
   </q-page>
@@ -452,7 +437,6 @@ export default {
       ingreso:{},
       egreso:{},
       egrcl:{},
-
       tabingreso:[],
       tabegreso:[],
       tabegcl:[],
@@ -491,19 +475,19 @@ export default {
          {field:'representante',name:'representante',label:'representante',align:'right'},
           {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
-            ingresocol:[
+      ingresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
       ],
-                  egresocol:[
+      egresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
       ],
-                  egrclcol:[
+      egrclcol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
@@ -519,7 +503,6 @@ export default {
     //   this.folios.push(i)
     // }
     // this.misremitentes()
-
     this.$axios.get(process.env.API+'/tramite').then(res=>{
       // console.log(res.data)
       // return false
@@ -536,38 +519,39 @@ export default {
       })
       this.tramite=this.tramites[0];
       this.requisitos=this.tramites[0].requisitos;
+      // this.requisitos=this.tramite.requisitos;
+      this.requisitos.forEach(element => {
+        element.estado=false;
+      });
       this.tramites2=this.tramites
     })
     this.resetdespacho();
   },
   methods:{
-                mas(){
-                this.demandados.push({ci:'',nombre:''});
-            },
-            menos(index){
-                if(index>=1)
-                this.demandados.splice(index, 1);
-                if(index==0)
-                this.demandados=[{ci:'',nombre:''}]
-            },
-            buscar(i,index){
-              this.$axios.get(process.env.API+'/demandado/'+i.ci).then(res=>{
-                console.log(res.data)
-                if(res.data.length>0){
-                this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
-                else{
-                this.demandados[index]={ci:i.ci,nombre:''};
-
-                }
-              })
-
-            },
+    mas(){
+        this.demandados.push({ci:'',nombre:''});
+    },
+    menos(index){
+        if(index>=1)
+        this.demandados.splice(index, 1);
+        if(index==0)
+        this.demandados=[{ci:'',nombre:''}]
+    },
+    buscar(i,index){
+      this.$axios.get(process.env.API+'/demandado/'+i.ci).then(res=>{
+        // console.log(res.data)
+        if(res.data.length>0){
+        this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
+        else{
+        this.demandados[index]={ci:i.ci,nombre:''};
+        }
+      })
+    },
     lrequisito(){
       this.requisitos=this.tramite.requisitos;
       this.requisitos.forEach(element => {
         element.estado=false;
       });
-
     },
     getImage(event){
       //Asignamos la imagen a  nuestra data
@@ -587,10 +571,10 @@ export default {
         this.dialog_add=false;
         this.ingreso={};
         this.misdatos();
-             this.dialog_gastos=false;
+        this.dialog_gastos=false;
       });
     },
-        regegreso(){
+    regegreso(){
       this.egreso.despacho_id=this.datodespacho.id;
       this.egreso.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
       this.egreso.hora=date.formatDate(Date.now(),'HH:mm');
@@ -607,7 +591,7 @@ export default {
 
       });
     },
-          regegrcliente(){
+    regegrcliente(){
       this.egrcl.despacho_id=this.datodespacho.id;
       this.egrcl.fecha=date.formatDate(Date.now(),'YYYY-MM-DD');
       this.egrcl.hora=date.formatDate(Date.now(),'HH:mm');
@@ -649,7 +633,7 @@ export default {
     },
     imprimir(){
             this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
-              let myWindow = window.open("", "Imprimir", "width=200,height=100");
+              let myWindow = window.open("", "Imprimir", "width=900,height=600");
               myWindow.document.write(res.data);
               myWindow.document.close();
               myWindow.focus();
@@ -662,7 +646,7 @@ export default {
     },
         impcliente(){
             this.$axios.post(process.env.API+'/impcliente/'+this.datodespacho.id).then(res=>{
-              let myWindow = window.open("", "Imprimir", "width=200,height=100");
+              let myWindow = window.open("", "Imprimir", "width=900,height=600");
               myWindow.document.write(res.data);
               myWindow.document.close();
               myWindow.focus();
@@ -1007,7 +991,7 @@ export default {
     misdatos(){
       this.$q.loading.show()
       this.$axios.get(process.env.API+'/cliente').then(res=>{
-        // console.log(res.data)
+        console.log(res.data)
         this.$q.loading.hide()
         // return false;
         this.clientes=res.data

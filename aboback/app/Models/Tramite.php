@@ -9,10 +9,11 @@ class Tramite extends Model
 {
     use HasFactory;
     protected $fillable=[
-    'nombre',
-    'tipo',
-    'valor',
-    'procedimiento',];
+        'nombre',
+        'tipo',
+        'valor',
+        'procedimiento',
+    ];
 
     public function requisitos(){
         return $this->hasMany(Requisito::class);
