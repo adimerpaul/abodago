@@ -695,7 +695,7 @@ export default {
       data.append('imagen', this.imagen);
       data.append('ci', this.cliente.ci);
       data.append('nombre', this.cliente.nombre);
-      data.append('tipo', 'EMPRESA');
+      data.append('tipo', 'PERSONA');
       // this.cliente.imagen=this.imagen
 
       this.$axios.post(process.env.API+'/cliente',data).then(res=>{

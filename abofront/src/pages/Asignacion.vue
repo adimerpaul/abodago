@@ -432,7 +432,7 @@ export default {
       usuarios:[],
       usuarios2:[],
       clientes:[],
-      cliente:{tipo:'PERSONA'},
+      cliente:{tipo:'EMPRESA'},
       infocliente:{},
       cliente2:'',
       mail:{},
@@ -706,7 +706,7 @@ export default {
         // this.institucion=''
         this.$refs.ima.value=''
         this.misdatos()
-        this.cliente={tipo:'PERSONA'}
+        this.cliente={tipo:'EMPRESA'}
         this.$q.notify({
           message:"Creado exitosamente",
           color:'green',
