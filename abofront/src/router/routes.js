@@ -6,6 +6,8 @@ import Demandado from "pages/Demandado";
 import Misrecepciones from "pages/Misrecepciones";
 import Precio from "pages/Precio";
 import Requisitos from "pages/Requisitos";
+import Micotizacion from "pages/Micotizacion";
+import Clientes from "pages/Clientes";
 
 const routes = [
   {
@@ -20,6 +22,8 @@ const routes = [
       { path: '/asignacion', component: Asignacion,meta: {requiresAuth: true,} },
       { path: '/precio', component: Precio,meta: {requiresAuth: true,} },
       { path: '/misrecepciones', component: Misrecepciones,meta: {requiresAuth: true,} },
+      { path: '/micotizacion', component: Micotizacion,meta: {requiresAuth: true,} },
+      { path: '/clientes', component: Clientes,meta: {requiresAuth: true,} },
     ]
   },
 

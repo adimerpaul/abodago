@@ -156,6 +156,7 @@
           <q-item
             clickable
             to="/demandado"
+            v-if="$store.getters['login/isLoggedIn']"
           >
             <q-item-section
               avatar
@@ -203,6 +204,23 @@
               <q-item-label>Cotizaciones</q-item-label>
               <q-item-label caption>
                 creacion de cotizaciones
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            v-if="$store.getters['login/isLoggedIn']"
+            clickable
+            to="/micotizacion"
+          >
+            <q-item-section avatar>
+              <q-icon name="recent_actors" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Mis cotizacion</q-item-label>
+              <q-item-label caption>
+                Mis cotizacion
               </q-item-label>
             </q-item-section>
           </q-item>

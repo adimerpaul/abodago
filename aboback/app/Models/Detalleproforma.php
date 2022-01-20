@@ -5,11 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Requisito extends Model
+class Detalleproforma extends Model
 {
     use HasFactory;
-    protected $fillable=[
-    "nombre",
-    'tramite_id'
-    ];
 }

@@ -37,7 +37,7 @@ class DespachoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//        return $request;
         $despacho=new Despacho;
         $despacho->fecha=$request->fecha;
         $despacho->hora=$request->hora;
@@ -52,11 +52,10 @@ class DespachoController extends Controller
         $despacho->tramite_id=$request->tramite_id;
         $despacho->cliente_id=$request->cliente_id;
         $despacho->save();
-
         foreach ($request->requisitos as $row) {
+            if ($row['estado'])
             DB::table('despacho_requisito')->insert(['requisito_id'=>$row['id'],'despacho_id'=>$despacho->id]);
         }
-
         foreach($request->demandados as $r){
             if ($r['ci']!=''){
                 $dd=Demandado::where('ci',$r['ci'])->get();
@@ -81,9 +80,10 @@ class DespachoController extends Controller
      * @param  \App\Models\Despacho  $despacho
      * @return \Illuminate\Http\Response
      */
-    public function show(Despacho $despacho)
+    public function show($cliente_id)
     {
-        //
+//        return $cliente_id;
+        return Despacho::where('cliente_id',$cliente_id)->with('requisitos')->with('tramite')->get();
     }
 
     /**

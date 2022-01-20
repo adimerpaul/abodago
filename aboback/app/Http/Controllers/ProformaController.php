@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Detalleproforma;
-use App\Models\Precio;
 use App\Models\Proforma;
 use Illuminate\Http\Request;
 
-class PrecioController extends Controller
+class ProformaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class PrecioController extends Controller
      */
     public function index()
     {
-        return Precio::orderBy('nombre')->get();
+        return Proforma::with('detalleproformas')->with('cliente')->get();
     }
 
     /**
@@ -38,60 +37,20 @@ class PrecioController extends Controller
      */
     public function store(Request $request)
     {
-        Precio::create($request->all());
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Precio  $precio
+     * @param  \App\Models\Proforma  $proforma
      * @return \Illuminate\Http\Response
      */
-    public function show(Precio $precio)
+    public function show(Proforma $proforma)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Precio  $precio
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Precio $precio)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Precio  $precio
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Precio $precio)
-    {
-        $precio->update($request->all());
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Precio  $precio
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Precio $precio)
-    {
-        $precio->delete();
-    }
-
-    public function impcosto(Request $request){
-//        return $request;
+        $cliente=Cliente::find($proforma->cliente_id);
+        $detalleproformas=Detalleproforma::where('proforma_id',$proforma->id)->get();
         $total=0;
-        $cliente=Cliente::find($request->cliente_id);
-
-
         $cadena="<html>
         <style>
         table, th, td {
@@ -134,7 +93,7 @@ class PrecioController extends Controller
           </tr>
           </table><br>
           <table> <tr><th>CONCEPTO</th> <th>MONTO Bs.</th></tr>";
-        foreach ($request->datos as $row) {
+        foreach ($detalleproformas as $row) {
             $total+=$row['precio'];
             $cadena.='<tr>';
             $cadena.='<td>'.$row['nombre'].'</td>';
@@ -145,23 +104,40 @@ class PrecioController extends Controller
         </table>
         </body>
         </html>";
-
-
-        $proforma=new Proforma();
-        $proforma->total=$total;
-        $proforma->fecha=date('Y-m-d');
-        $proforma->cliente_id=$request->cliente_id;
-        $proforma->save();
-        foreach ($request->datos as $row) {
-            $detalleproforma=new Detalleproforma();
-            $detalleproforma->nombre=$row['nombre'];
-            $detalleproforma->precio=$row['precio'];
-            $detalleproforma->proforma_id=$proforma->id;
-            $detalleproforma->save();
-        }
-
-
-        return $cadena;
+        return  $cadena;
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Proforma  $proforma
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Proforma $proforma)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Proforma  $proforma
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Proforma $proforma)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\Proforma  $proforma
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Proforma $proforma)
+    {
+        //
+    }
 }
