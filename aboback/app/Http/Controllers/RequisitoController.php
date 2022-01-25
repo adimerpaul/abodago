@@ -35,7 +35,7 @@ class RequisitoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Requisito::create($request->all());
     }
 
     /**
@@ -80,6 +80,6 @@ class RequisitoController extends Controller
      */
     public function destroy(Requisito $requisito)
     {
-        //
+        $requisito->delete();
     }
 }

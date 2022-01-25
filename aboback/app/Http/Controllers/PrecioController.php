@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Detalleproforma;
 use App\Models\Precio;
 use App\Models\Proforma;
+use App\Models\Tramite;
 use Illuminate\Http\Request;
 
 class PrecioController extends Controller
@@ -90,8 +91,8 @@ class PrecioController extends Controller
 //        return $request;
         $total=0;
         $cliente=Cliente::find($request->cliente_id);
-
-
+        $tramite=Tramite::where('id',$request->tramite_id)->with('requisitos')->first();
+//        return $tramite;
         $cadena="<html>
         <style>
         table, th, td {
@@ -143,10 +144,16 @@ class PrecioController extends Controller
         }
         $cadena.="<tr><td><b>TOTAL Bs.</b></td><td>$total</td></tr>
         </table>
+        <table> <tr><th>Requisitos</th></tr>";
+        foreach ($tramite->requisitos as $row) {
+            $cadena.='<tr>';
+            $cadena.='<td>'.$row['nombre'].'</td>';
+            $cadena.='</tr>';
+        }
+        $cadena.="
+        </table>
         </body>
         </html>";
-
-
         $proforma=new Proforma();
         $proforma->total=$total;
         $proforma->fecha=date('Y-m-d');

@@ -55,6 +55,8 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/precio',\App\Http\Controllers\PrecioController::class);
     Route::resource('/proforma',\App\Http\Controllers\ProformaController::class);
     Route::post('/impcosto',[\App\Http\Controllers\PrecioController::class,'impcosto']);
+    Route::resource('/requisito',\App\Http\Controllers\RequisitoController::class);
+
 
 });
 

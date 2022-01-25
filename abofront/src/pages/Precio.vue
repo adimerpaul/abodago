@@ -50,6 +50,7 @@
     <div class="row">
       <div class="col-12 q-pa-xs">
         <q-select outlined dense  label="Cliente/Empresa" :options="clientes" v-model="cliente"/>
+        <q-select outlined dense  label="Tramite" :options="tramites" v-model="tramite"/>
       </div>
       <div class="col-12">
         <q-table title="Mi cotizacion" dense  :rows="cotizacion" :columns="columns" :rows-per-page-options="[10,100,200,0]" :filter="filter">
@@ -82,7 +83,11 @@
       </div>
       <div class="col-12 flex flex-center">
         <q-btn :label="'Imprimir TOTAL: '+total+'Bs'" @click="imprimir" class="full-width" icon="print" color="accent"/>
+        <ul>
+          <li v-for="r in tramite.requisitos" :key="r.id">{{r.nombre}}</li>
+        </ul>
       </div>
+
     </div>
   </div>
 </div>
@@ -99,6 +104,8 @@ export default {
       cotizacion:[],
       cliente:{},
       clientes:[],
+      tramites:[],
+      tramite:{},
       columns:[
         {field:'nombre',name:'nombre',label:'Nombre',align:'left'},
         {field:'precio',name:'precio',label:'Precio',align:'right'},
@@ -125,7 +132,16 @@ export default {
           this.clientes.push(d)
         })
         this.cliente=this.clientes[0]
-        // this.$q.loading.hide()
+      })
+      this.$axios.get(process.env.API+'/tramite').then(res=>{
+        this.tramites=[]
+        res.data.forEach(r=>{
+          let d=r
+          // console.log(r)
+          d.label=r.nombre
+          this.tramites.push(d)
+        })
+        this.tramite=this.tramites[0]
       })
     },
     crear(){
@@ -162,7 +178,8 @@ export default {
 
       this.$axios.post(process.env.API+'/impcosto',{
         datos:this.cotizacion,
-        cliente_id:this.cliente.id
+        cliente_id:this.cliente.id,
+        tramite_id:this.tramite.id
       }).then(res=>{
         // console.log(res.data)
         // return false
