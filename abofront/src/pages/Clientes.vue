@@ -169,6 +169,7 @@
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
                     <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
+                    
                   </div>
                   <div class="col-8">
                     <div class="row">
@@ -260,6 +261,7 @@
                   <q-tr :props="props">
                     <q-td key="opcion" :props="props">
                       <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
+                      <q-btn dense round flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
                     </q-td>
                   </q-tr>
                 </template>
@@ -395,6 +397,28 @@
             </q-card-section>
           </q-card>
         </q-dialog>
+
+            <q-dialog v-model="dialog_falt" >
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">Requisitos Faltantes</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+            <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in reqfal" :key="i" class="full-width" />
+          
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+          <q-btn flat label="Actualizar" @click="updrequisito" />
+        </q-card-actions>
+      </q-card>
+        </q-dialog>
+
+
+
+
       </div>
     </div>
   </q-page>
@@ -423,6 +447,7 @@ export default {
       url:process.env.API,
       demandados:[{ci:'',nombre:''}],
       requisitos:[],
+      reqdespacho:{},
       tramite:{},
       despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
       tramites:[],
@@ -450,6 +475,8 @@ export default {
       tabegreso:[],
       tabegcl:[],
       gastos:[],
+      reqfal:[],
+      dialog_falt:false,
       boolmod:false,
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
@@ -514,7 +541,7 @@ export default {
     // }
     // this.misremitentes()
     this.$axios.get(process.env.API+'/tramite').then(res=>{
-      // console.log(res.data)
+      console.log(res.data)
       // return false
       res.data.forEach(r=>{
         // this.usuarios.push({
@@ -558,6 +585,7 @@ export default {
       })
     },
     lrequisito(){
+      this.requisitos=[];
       this.requisitos=this.tramite.requisitos;
       this.requisitos.forEach(element => {
         element.estado=false;
@@ -641,6 +669,35 @@ export default {
       });
       this.dialog_gastos=true;
     },
+    faltante(prop){
+      console.log(prop);
+        this.reqfal=[];
+        this.reqdespacho.despacho_id=prop.id;
+      this.$axios.post(process.env.API+'/reqfaltantes/',{despacho_id:prop.id,tramite_id:prop.tramite_id}).then(res=>{
+        this.reqfal=res.data;
+        console.log(res.data)
+        this.reqfal.forEach(element => {
+            element.estado=false
+        });
+        //return false
+          this.dialog_falt=false;
+        if(this.reqfal.length>0)
+          this.dialog_falt=true;
+      })
+    },
+    updrequisito(){
+      this.reqdespacho.requisitos=this.reqfal;
+      this.$axios.post(process.env.API+'/updrequisito/',this.reqdespacho).then(res=>{
+      this.dialog_falt=false;
+      this.dialog_despacho=false
+      this.$q.notify({
+          message:"Agregado",
+          color:'green',
+          icon:'done'
+        })
+      })
+        this.misdatos();
+    },
     imprimir(){
       this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
         let myWindow = window.open("", "Imprimir", "width=900,height=600");
@@ -670,7 +727,7 @@ export default {
 
     listdespacho(prop){
       // console.log(prop)
-      // this.cliente2=prop
+       this.cliente2=prop
       // // console.log(prop)
       //
       // this.infodespacho=[];

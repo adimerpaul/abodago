@@ -138,4 +138,6 @@ class ClienteController extends Controller
     public function regotro($id){
         return db::select("select fecha,hora,monto,'' as recibo, concepto,'EGCLIENTE' as tipo from egotros where despacho_id= $id");
     }
+
+
 }

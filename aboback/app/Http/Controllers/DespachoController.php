@@ -249,5 +249,18 @@ class DespachoController extends Controller
 
     }
 
+    public function reqfaltantes(Request $request){
+        return DB::SELECT("SELECT * from requisitos r2 where r2.tramite_id=$request->tramite_id and r2.id not in 
+        (SELECT r.id from despachos d, despacho_requisito dr, requisitos r  
+        where d.id=dr.despacho_id AND dr.requisito_id=r.id and
+        r.tramite_id=$request->tramite_id and d.id=$request->despacho_id)");
+    }
 
+    public function updrequisito(Request $request)
+    {
+        foreach ($request->requisitos as $row) {
+            if ($row['estado'])
+            DB::table('despacho_requisito')->insert(['requisito_id'=>$row['id'],'despacho_id'=>$request->despacho_id]);
+        }
+    }
 }
