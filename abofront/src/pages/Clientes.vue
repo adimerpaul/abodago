@@ -156,7 +156,7 @@
               <q-form @submit.prevent="registrarlog">
                 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
                 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito" v-model="tramite" @filter="filterFn" outlined >
+                  <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito()" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -168,8 +168,8 @@
                 <div class="row">
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
-                    <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in requisitos" :key="i" class="full-width" />
-                    
+                    <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in tramite.requisitos" :key="i" class="full-width" />
+
                   </div>
                   <div class="col-8">
                     <div class="row">
@@ -406,7 +406,7 @@
 
         <q-card-section class="q-pt-none">
             <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in reqfal" :key="i" class="full-width" />
-          
+
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -551,6 +551,9 @@ export default {
         //   label:r.unit.nombre+'-'+r.name
         // })
         let d=r
+        d.requisitos.forEach(re=>{
+          re.estado=false
+        })
         d.label=r.tipo+' '+r.nombre
         this.tramites.push(d)
       })
@@ -585,11 +588,21 @@ export default {
       })
     },
     lrequisito(){
-      this.requisitos=[];
-      this.requisitos=this.tramite.requisitos;
-      this.requisitos.forEach(element => {
-        element.estado=false;
-      });
+      //this.requisitos=[];
+      //this.requisitos=this.tramite.requisitos;
+      //this.requisitos.forEach(element => {
+      //  element.estado=false;
+      //});
+      console.log(this.tramite.requisitos)
+      // this.tramite.requisitos.forEach(r=>{
+      //   console.log(r)
+      // })
+      // // return false
+      // this.requisitos=[];
+      // this.requisitos=tramite.requisitos;
+      // this.requisitos.forEach(element => {
+      //   element.estado=false
+      // })
     },
     getImage(event){
       //Asignamos la imagen a  nuestra data
@@ -829,7 +842,7 @@ export default {
       this.despacho.cliente_id=this.cliente2.id
       // console.log(this.requisitos)
       // return false
-      this.despacho.requisitos=this.requisitos
+      this.despacho.requisitos=this.tramite.requisitos
       this.despacho.demandados=this.demandados
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/despacho',this.despacho).then(res=>{
