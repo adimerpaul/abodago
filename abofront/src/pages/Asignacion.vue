@@ -497,15 +497,8 @@ export default {
         {field:'hora',name:'hora',label:'HORA',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
         {field:'tramite',name:'tramite',label:'tramite',align:'right'},
-        {field:'juzgado',name:'juzgado',label:'JUZGADO',align:'right'},
-         {field:'webid',name:'webid',label:'WEBID',align:'left'},
-         {field:'nurej',name:'nurej',label:'NUREJ',align:'left'},
-         {field:'proceso',name:'proceso',label:'PROCESO',align:'left'},
-         {field:'ci',name:'ci',label:'ci',align:'right'},
-         {field:'demandante',name:'demandante',label:'DEMANDANTE',align:'right'},
-         {field:'representante',name:'representante',label:'representante',align:'right'},
         {field:'requisitos',name:'requisitos',label:'requisitos',align:'right'},
-          {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
+        {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
       ingresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
