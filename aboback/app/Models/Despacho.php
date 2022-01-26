@@ -13,6 +13,7 @@ class Despacho extends Model
         "hora",
         "tipo",
         "juzgado",
+        "juez",
         "webid",
         "nurej",
         "proceso",

@@ -15,8 +15,8 @@ class CreateDemandadosTable extends Migration
     {
         Schema::create('demandados', function (Blueprint $table) {
             $table->id();
-            $table->string('ci')->unique();
-            $table->string('nombre');
+            $table->string('ci')->nullable();
+            $table->string('nombre')->nullable();
             $table->timestamps();
         });
     }

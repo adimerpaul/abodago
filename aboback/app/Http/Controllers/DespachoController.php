@@ -43,6 +43,7 @@ class DespachoController extends Controller
         $despacho->hora=$request->hora;
         $despacho->tipo=$request->tipo;
         $despacho->juzgado=strtoupper($request->juzgado);
+        $despacho->juez=strtoupper($request->juez);
         $despacho->webid=$request->webid;
         $despacho->nurej=$request->nurej;
         $despacho->proceso=strtoupper($request->proceso);
@@ -250,8 +251,8 @@ class DespachoController extends Controller
     }
 
     public function reqfaltantes(Request $request){
-        return DB::SELECT("SELECT * from requisitos r2 where r2.tramite_id=$request->tramite_id and r2.id not in 
-        (SELECT r.id from despachos d, despacho_requisito dr, requisitos r  
+        return DB::SELECT("SELECT * from requisitos r2 where r2.tramite_id=$request->tramite_id and r2.id not in
+        (SELECT r.id from despachos d, despacho_requisito dr, requisitos r
         where d.id=dr.despacho_id AND dr.requisito_id=r.id and
         r.tramite_id=$request->tramite_id and d.id=$request->despacho_id)");
     }

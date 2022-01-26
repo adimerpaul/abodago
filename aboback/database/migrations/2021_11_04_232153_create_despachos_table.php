@@ -19,6 +19,7 @@ class CreateDespachosTable extends Migration
             $table->time("hora");
             $table->string("tipo");
             $table->string("juzgado")->nullable();
+            $table->string("juez")->nullable();
             $table->string("webid")->nullable();
             $table->string("nurej")->nullable();
             $table->string("proceso")->nullable();
