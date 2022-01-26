@@ -178,6 +178,7 @@
                 </div>
                 <div v-if="tramite.tipo!='TRAMITE'">
                 <q-input label="Juzgado" outlined dense v-model="despacho.juzgado"/>
+                <q-input label="Juez" outlined dense v-model="despacho.juez"/>
                 <div class="row">
                   <div class="col-6"><q-input dense label="NuRej" outlined  v-model="despacho.nurej"/></div>
                   <div class="col-6"><q-input dense label="WebId" outlined  v-model="despacho.webid"/></div>
@@ -197,7 +198,7 @@
                   <th>ID</th>
                   <th>CI</th>
                   <th>NOMBRE</th>
-                  <th>OPCION</th>
+                  <th>OPCIONES</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -208,7 +209,6 @@
                     <td>
                          <q-btn dense color="green" @click="mas" icon="add"/>
                          <q-btn dense color="red" icon="remove" @click="menos(index)"/>
-
                     </td>
                 </tr>
                 </tbody>
@@ -260,8 +260,9 @@
             <template v-slot:body-cell-opcion="props">
               <q-tr :props="props">
               <q-td key="opcion" :props="props">
-                <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
-                <q-btn dense round flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
+                <q-btn dense  size="xs" label="pagos" flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
+                <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
+                <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
               </q-td>
               </q-tr>
              </template>
@@ -694,17 +695,45 @@ export default {
       });
              this.dialog_gastos=true;
     },
+    imprimir2(despacho){
+          console.log(despacho)
+        // this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
+        //   let myWindow = window.open("", "Imprimir", "width=900,height=600");
+        //   myWindow.document.write(res.data);
+        //   myWindow.document.close();
+        //   myWindow.focus();
+        //   setTimeout(function(){
+        //     myWindow.print();
+        //     myWindow.close();
+        //   },500);
+        // })
+
+        let myWindow = window.open("", "Imprimir", "width=900,height=600");
+        myWindow.document.write("" +
+          "<table>" +
+          "<tr>" +
+          "<td><b>JUZGADO</b></td>" +
+          "<td>"+despacho.juzgado+"</td>" +
+          "</tr>"+
+          "</table>");
+        myWindow.document.close();
+        myWindow.focus();
+        // setTimeout(function(){
+          myWindow.print();
+          myWindow.close();
+        // },500);
+    },
     imprimir(){
-            this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
-              let myWindow = window.open("", "Imprimir", "width=900,height=600");
-              myWindow.document.write(res.data);
-              myWindow.document.close();
-              myWindow.focus();
-              setTimeout(function(){
-                myWindow.print();
-                myWindow.close();
-              },500);
-            })
+      this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
+        let myWindow = window.open("", "Imprimir", "width=900,height=600");
+        myWindow.document.write(res.data);
+        myWindow.document.close();
+        myWindow.focus();
+        setTimeout(function(){
+          myWindow.print();
+          myWindow.close();
+        },500);
+      })
 
     },
         impcliente(){

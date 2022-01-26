@@ -19,6 +19,7 @@ class DespachoSeeder extends Seeder
             "hora"=>now(),
             "tipo"=>"TRAMITE",
             "juzgado"=>"PUBLICO CIVIL Y COMERCIAL 11",
+            "juez"=>"PEPITO",
             "webid"=>"d0aa9",
             "nurej"=>"4014383",
             "proceso"=>"EJECUTIVO",
