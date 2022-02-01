@@ -61,15 +61,13 @@ class DespachoController extends Controller
             if ($r['ci']!=''){
                 $dd=Demandado::where('ci',$r['ci'])->get();
                 if($dd->count()==0){
-                    $dem=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
-                    $demandado=$dem;
+                    $demandado=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
                 }
                 else{
-                    Demandado::where('ci',$r['ci'])
-                        ->update(['nombre'=>$r['nombre']]);
-                    $demandado=$dd[0];
+                    
+                    $demandado=DB::table('demandados')->where('ci',$r['ci'])->update(['nombre'=>$r['nombre']]);
                 }
-                DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$demandado['id']]);
+                DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$dd[0]->id]);
             }
         }
 
@@ -84,7 +82,7 @@ class DespachoController extends Controller
     public function show($cliente_id)
     {
 //        return $cliente_id;
-        return Despacho::where('cliente_id',$cliente_id)->with('requisitos')->with('tramite')->get();
+        return Despacho::where('cliente_id',$cliente_id)->with('requisitos')->with('tramite')->with('demandados')->get();
     }
 
     /**
