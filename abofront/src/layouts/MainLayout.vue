@@ -127,9 +127,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Empresas</q-item-label>
+              <q-item-label>Personas Juridas</q-item-label>
               <q-item-label caption>
-                Empresas
+                Juricas
               </q-item-label>
             </q-item-section>
           </q-item>
@@ -146,9 +146,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Clientes</q-item-label>
+              <q-item-label>Clientes Naturales</q-item-label>
               <q-item-label caption>
-                Clientes
+                Naturales
               </q-item-label>
             </q-item-section>
           </q-item>
