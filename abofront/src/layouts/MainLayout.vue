@@ -127,9 +127,9 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Personas Juridas</q-item-label>
+              <q-item-label>Personas Juridicas</q-item-label>
               <q-item-label caption>
-                Juricas
+                Juridicas
               </q-item-label>
             </q-item-section>
           </q-item>

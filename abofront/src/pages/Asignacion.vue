@@ -634,8 +634,9 @@ export default {
         })
         this.dialog_add=false;
         this.ingreso={};
-        this.misdatos();
-        this.dialog_gastos=false;
+        this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+              this.tabingreso=res.data;
+      });
       });
     },
     regegreso(){
@@ -650,8 +651,9 @@ export default {
         })
         this.dialog_remove=false;
         this.egreso={};
-        this.misdatos();
-             this.dialog_gastos=false;
+            this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
+              this.tabegreso=res.data;
+      });
 
       });
     },
@@ -667,8 +669,9 @@ export default {
         })
         this.dialog_remcl=false;
         this.egreso={};
-        this.misdatos();
-             this.dialog_gastos=false;
+                  this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
+              this.tabegcl=res.data;
+      });
       });
     },
     addRow(prop){
