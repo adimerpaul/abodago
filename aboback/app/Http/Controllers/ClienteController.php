@@ -52,6 +52,7 @@ class ClienteController extends Controller
         $cliente= new Cliente();
         $cliente->ci=$request->ci;
         $cliente->nombre= strtoupper( $request->nombre);
+        $cliente->telefono=!isset($request->telefono)?NULL:$request->telefono;
         $cliente->tipo=$request->tipo;
         $cliente->imagen=$nombreArchivo;
         $cliente->save();
@@ -111,6 +112,7 @@ class ClienteController extends Controller
         $cliente=Cliente::find($id);
         $cliente->ci=$request->ci;
         $cliente->nombre= strtoupper( $request->nombre);
+        $cliente->telefono=!isset($request->telefono)?NULL:$request->telefono;
         $cliente->tipo=$request->tipo;
         $cliente->save();
 

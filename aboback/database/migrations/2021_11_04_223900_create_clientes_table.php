@@ -17,6 +17,7 @@ class CreateClientesTable extends Migration
             $table->id();
             $table->string('ci')->default('')->nullable();
             $table->string('nombre');
+            $table->string('telefono')->nullable();
             $table->string('tipo')->default("PERSONA");
             $table->string('imagen')->default("")->nullable();
             $table->timestamps();

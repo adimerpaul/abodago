@@ -10,6 +10,9 @@
             <div class="col-12 q-pa-xs col-sm-3">
               <q-input dense outlined label="Nombre completo" v-model="cliente.nombre" required/>
             </div>
+            <div class="col-12 q-pa-xs col-sm-3">
+              <q-input dense outlined label="Telefono" v-model="cliente.telefono" />
+            </div>
             <!--            <div class="col-12 q-pa-xs col-sm-2">-->
             <!--              <q-select dense outlined label="Tipo" v-model="cliente.tipo" :options="['PERSONA','EMPRESA']"/>-->
             <!--            </div>-->
@@ -41,6 +44,11 @@
               <q-td key="nombre" :props="props" @click="listdespacho(props.row)">
                 <!--            <q-badge color="green">-->
                 {{ props.row.nombre }}
+                <!--            </q-badge>-->
+              </q-td>
+              <q-td key="telefono" :props="props" @click="listdespacho(props.row)">
+                <!--            <q-badge color="green">-->
+                {{ props.row.telefono }}
                 <!--            </q-badge>-->
               </q-td>
               <q-td key="tipo" :props="props">
@@ -542,6 +550,7 @@ export default {
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
+        {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
         {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
         // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
