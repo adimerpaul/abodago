@@ -10,9 +10,13 @@ class Agenda extends Model
     use HasFactory;
     protected $fillable=[
         'etapa',
+        'estado',
         'actividad',
+        'proximopaso',
         'fechaini',
+        'horaini',
         'fechafin',
+        'horafin',
         'user_id',
         'despacho_id',
     ];

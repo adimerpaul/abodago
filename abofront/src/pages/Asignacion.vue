@@ -300,8 +300,18 @@
                       </q-tab-panel>
 
                       <q-tab-panel name="agenda">
-                        <div class="text-h6">Alarms</div>
-                        lorem
+<!--                        <div class="text-h6">Alarms</div>-->
+<!--                        lorem-->
+                        <q-table :columns="columnsagenda" dense>
+                          <template v-slot:top-right>
+                            <q-btn label="Crear agenda" icon="add_circle" color="positive"/>
+                            <q-input dense outlined v-model="filteragenda" placeholder="Buscar.." >
+                              <template v-slot:append>
+                                <q-icon name="search"/>
+                              </template>
+                            </q-input>
+                          </template>
+                        </q-table>
                       </q-tab-panel>
 
                       <q-tab-panel name="movies">
@@ -522,9 +532,18 @@ import {date} from 'quasar'
 export default {
   data(){
     return {
+      filteragenda:'',
       tab:'agenda',
       imagen : null,
       miaccion:'',
+      columnsagenda:[
+        {label:'fecha',name:'fecha',field:'fecha'},
+        {label:'etapa',name:'etapa',field:'etapa'},
+        {label:'actividad',name:'actividad',field:'actividad'},
+        {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
+        {label:'usuario',name:'usuario',field:'usuario'},
+        {label:'opciones',name:'opciones',field:'opciones'},
+      ],
       filter:'',
       usuario:'',
       dialogcliente:false,

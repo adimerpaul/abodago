@@ -44,7 +44,18 @@ class AgendaController extends Controller
     }
     public function store(Request $request)
     {
-        //
+        $agenda=new Agenda();
+        $agenda->etapa=$request->etapa;
+        $agenda->estado='EN ESPERA';
+        $agenda->actividad=$request->actividad;
+        $agenda->proximopaso=$request->proximopaso;
+        $agenda->fechaini=date('Y-m-d');
+        $agenda->horaini=date('H:i:s');
+        $agenda->fechafin=$request->fechafin;
+        $agenda->horafin=$request->horafin;
+        $agenda->user_id=$request->user()->id;
+        $agenda->despacho_id=$request->despacho_id;
+
     }
 
     /**
@@ -53,9 +64,9 @@ class AgendaController extends Controller
      * @param  \App\Models\Agenda  $agenda
      * @return \Illuminate\Http\Response
      */
-    public function show(Agenda $agenda)
+    public function show($despacho_id)
     {
-        //
+        Agenda::where('despacho_id',$despacho_id)->get();
     }
 
     /**
