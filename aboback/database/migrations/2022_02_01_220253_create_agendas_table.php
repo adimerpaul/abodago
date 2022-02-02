@@ -16,9 +16,13 @@ class CreateAgendasTable extends Migration
         Schema::create('agendas', function (Blueprint $table) {
             $table->id();
             $table->string('etapa');
+            $table->string('estado')->default('ACTIVO');
             $table->string('actividad');
+            $table->string('proximopaso');
             $table->date('fechaini');
+            $table->time('horaini');
             $table->date('fechafin');
+            $table->time('horafin');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('despacho_id');

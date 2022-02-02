@@ -228,7 +228,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="dialogdatos">
+        <q-dialog v-model="dialogdatos" full-width>
           <q-card >
             <q-card-section>
               <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
@@ -236,9 +236,9 @@
             <q-card-section class="q-pt-none">
 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
+                <div>Tramite / Proceso: {{cliente3.tramite.nombre}}</div>
                 <q-input dense label="Tramite / Proceso" v-model="cliente3.tramite.nombre" outlined />
 
-<!--                <pre>{{tramite}}</pre>-->
                   <div class="col-12">
                 <div class="row">
                   <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="cliente3.fecha"/></div>
@@ -259,23 +259,57 @@
                 <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
                 <div>
                 <q-input label="representante" outlined dense v-model="cliente3.representante"/>
-                <div class="text-h6">DEMANDADOS</div>
-                <table style="width:100%;  border: 1px solid black;" >
-                <thead>
-                  <tr>
-                  <th>ID</th>
-                  <th>CI</th>
-                  <th>NOMBRE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(i,index) in cliente3.demandados" :key="index">
-                    <th scope="row">{{index+1}}</th>
-                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>
-                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
-                </tr>
-                </tbody>
-                </table>
+<!--                <div class="text-h6">DEMANDADOS</div>-->
+<!--                <table style="width:100%;  border: 1px solid black;" >-->
+<!--                <thead>-->
+<!--                  <tr>-->
+<!--                  <th>ID</th>-->
+<!--                  <th>CI</th>-->
+<!--                  <th>NOMBRE</th>-->
+<!--                  </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr v-for="(i,index) in cliente3.demandados" :key="index">-->
+<!--                    <th scope="row">{{index+1}}</th>-->
+<!--                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>-->
+<!--                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--                </table>-->
+                  <q-card>
+                    <q-tabs
+                      v-model="tab"
+                      dense
+                      class="text-grey"
+                      active-color="primary"
+                      indicator-color="primary"
+                      align="justify"
+                      narrow-indicator
+                    >
+                      <q-tab name="datos" label="Datos" />
+                      <q-tab name="agenda" label="Agenda" />
+                      <q-tab name="movies" label="Movies" />
+                    </q-tabs>
+
+                    <q-separator />
+
+                    <q-tab-panels v-model="tab" animated>
+                      <q-tab-panel name="datos">
+                        <div class="text-h6">Mails</div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      </q-tab-panel>
+
+                      <q-tab-panel name="agenda">
+                        <div class="text-h6">Alarms</div>
+                        lorem
+                      </q-tab-panel>
+
+                      <q-tab-panel name="movies">
+                        <div class="text-h6">Movies</div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      </q-tab-panel>
+                    </q-tab-panels>
+                  </q-card>
                 </div>
                 </div>
             </q-card-section>
@@ -488,6 +522,7 @@ import {date} from 'quasar'
 export default {
   data(){
     return {
+      tab:'agenda',
       imagen : null,
       miaccion:'',
       filter:'',
