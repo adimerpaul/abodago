@@ -180,7 +180,7 @@ export default {
         datos:this.cotizacion,
         cliente_id:this.cliente.id,
         tramite_id:this.tramite.id,
-        total:this.total()
+        total:this.total
       }).then(res=>{
         // console.log(res.data)
         // return false

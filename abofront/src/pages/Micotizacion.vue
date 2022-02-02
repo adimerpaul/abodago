@@ -42,6 +42,7 @@ export default {
       columns:[
         {label:'cliente',field:'cliente',name:'cliente'},
         {label:'fecha',field:'fecha',name:'fecha'},
+        {label:'tramite',field:row=>row.tramite.nombre,name:'tramite'},
         {label:'Detalle',field:'detalleproformas',name:'detalleproformas'},
         {label:'total',field:'total',name:'total'},
         {label:'opciones',field:'opciones',name:'opciones'},

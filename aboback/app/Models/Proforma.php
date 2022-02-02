@@ -24,6 +24,6 @@ class Proforma extends Model
     }
 
     public function tramite(){
-        return $this->belongsTo(Tramite::class);
+        return $this->belongsTo(Tramite::class)->with('requisitos');
     }
 }

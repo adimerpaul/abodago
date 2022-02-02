@@ -16,7 +16,7 @@ class ProformaController extends Controller
      */
     public function index()
     {
-        return Proforma::with('detalleproformas')->with('cliente')->get();
+        return Proforma::with('detalleproformas')->with('cliente')->with('tramite')->get();
     }
 
     /**
