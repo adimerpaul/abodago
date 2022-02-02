@@ -10,6 +10,9 @@
             <div class="col-12 q-pa-xs col-sm-3">
               <q-input dense outlined label="Nombre completo" v-model="cliente.nombre" required/>
             </div>
+            <div class="col-12 q-pa-xs col-sm-3">
+              <q-input dense outlined label="Telefono" v-model="cliente.telefono" />
+            </div>
 <!--            <div class="col-12 q-pa-xs col-sm-2">-->
 <!--              <q-select dense outlined label="Tipo" v-model="cliente.tipo" :options="['PERSONA','EMPRESA']"/>-->
 <!--            </div>-->
@@ -225,7 +228,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog full-width v-model="dialogdatos">
+        <q-dialog v-model="dialogdatos">
           <q-card >
             <q-card-section>
               <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
@@ -233,29 +236,29 @@
             <q-card-section class="q-pt-none">
 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-input dense label="Seleccionar Tramite / Proceso" v-model="cliente2.tramite.nombre" outlined />
+                <q-input dense label="Tramite / Proceso" v-model="cliente3.tramite.nombre" outlined />
 
 <!--                <pre>{{tramite}}</pre>-->
                   <div class="col-12">
                 <div class="row">
-                  <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="cliente2.fecha"/></div>
-                  <div class="col-6"><q-input dense type="time" label="Hora" outlined  v-model="cliente2.hora"/></div>
+                  <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="cliente3.fecha"/></div>
+                  <div class="col-6"><q-input dense label="Hora" outlined  v-model="cliente3.hora"/></div>
                 </div>
-                <div v-if="cliente2.tramite.tipo!='TRAMITE'">
-                <q-input label="Juzgado" outlined dense v-model="cliente2.juzgado"/>
-                <q-input label="Juez" outlined dense v-model="cliente2.juez"/>
+                <div >
+                <q-input label="Juzgado" outlined dense v-model="cliente3.juzgado"/>
+                <q-input label="Juez" outlined dense v-model="cliente3.juez"/>
                 <div class="row">
-                  <div class="col-6"><q-input dense label="NuRej" outlined  v-model="cliente2.nurej"/></div>
-                  <div class="col-6"><q-input dense label="WebId" outlined  v-model="cliente2.webid"/></div>
+                  <div class="col-6"><q-input dense label="NuRej" outlined  v-model="cliente3.nurej"/></div>
+                  <div class="col-6"><q-input dense label="WebId" outlined  v-model="cliente3.webid"/></div>
 
                 </div>
 
-                <q-input label="Proceso" outlined dense v-model="cliente2.proceso"/>
+                <q-input label="Proceso" outlined dense v-model="cliente3.proceso"/>
                 </div>
-                <q-input label="ci" outlined dense v-model="cliente2.ci"/>
-                <q-input label="demandante" outlined dense v-model="cliente2.demandante"/>
-                <div v-if="tramite.tipo!='TRAMITE'">
-                <q-input label="representante" outlined dense v-model="cliente2.representante"/>
+                <q-input label="ci" outlined dense v-model="cliente3.ci"/>
+                <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
+                <div>
+                <q-input label="representante" outlined dense v-model="cliente3.representante"/>
                 <div class="text-h6">DEMANDADOS</div>
                 <table style="width:100%;  border: 1px solid black;" >
                 <thead>
@@ -263,18 +266,13 @@
                   <th>ID</th>
                   <th>CI</th>
                   <th>NOMBRE</th>
-                  <th>OPCIONES</th>
                   </tr>
                 </thead>
                 <tbody>
-                <tr v-for="(i,index) in cliente2.demandados" :key="index">
+                <tr v-for="(i,index) in cliente3.demandados" :key="index">
                     <th scope="row">{{index+1}}</th>
-                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" @keyup="buscar(i,index)"></td>
+                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>
                     <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
-                    <td>
-                         <q-btn dense color="green" @click="mas" icon="add"/>
-                         <q-btn dense color="red" icon="remove" @click="menos(index)"/>
-                    </td>
                 </tr>
                 </tbody>
                 </table>
@@ -286,7 +284,6 @@
             </q-card-section>
           </q-card>
         </q-dialog>
-
 
         <q-dialog full-width v-model="dialog_despacho">
           <q-card >
@@ -325,6 +322,7 @@
               <q-td key="opcion" :props="props">
                 <q-btn dense  size="xs" label="pagos" flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
                 <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
+                <q-btn dense  size="xs" label="dato" flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
                 <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
               </q-td>
               </q-tr>
@@ -522,6 +520,7 @@ export default {
       cliente:{tipo:'EMPRESA'},
       infocliente:{},
       cliente2:'',
+      cliente3:{},
       mail:{},
       remitentes:[],
       remitentes2:[],
@@ -761,6 +760,11 @@ export default {
               this.tabegcl=res.data;
       });
              this.dialog_gastos=true;
+    },
+        detalle(prop){
+      console.log(prop)
+      this.cliente3=prop
+      this.dialogdatos=true;
     },
     imprimir2(despacho){
           console.log(despacho)

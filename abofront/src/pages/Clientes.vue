@@ -234,7 +234,7 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog full-width v-model="dialogdatos">
+        <q-dialog v-model="dialogdatos">
           <q-card >
             <q-card-section>
               <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
@@ -326,9 +326,10 @@
                 <template v-slot:body-cell-opcion="props">
                   <q-tr :props="props">
                     <q-td key="opcion" :props="props">
-                      <q-btn dense round flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
-                      <q-btn dense round flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
-                      <q-btn dense round flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
+                      <q-btn dense size="xs" flat label="pagos"  color="green" @click="listRow(props.row)" icon="list"></q-btn>
+                      <q-btn dense size="xs" flat label="actualizar" color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
+                      <q-btn dense size="xs" flat label="dato"  color="accent" @click="detalle(props.row)" icon="description"></q-btn>
+                      <q-btn dense size="xs" flat label="imprimir"  color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
                     </q-td>
                   </q-tr>
                 </template>
@@ -1086,6 +1087,34 @@ export default {
       this.remitente=props.row.remitente
       this.cargo=props.row.cargo
       this.institucion=props.row.institucion
+    },
+        imprimir2(despacho){
+          console.log(despacho)
+        // this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
+        //   let myWindow = window.open("", "Imprimir", "width=900,height=600");
+        //   myWindow.document.write(res.data);
+        //   myWindow.document.close();
+        //   myWindow.focus();
+        //   setTimeout(function(){
+        //     myWindow.print();
+        //     myWindow.close();
+        //   },500);
+        // })
+
+        let myWindow = window.open("", "Imprimir", "width=900,height=600");
+        myWindow.document.write("" +
+          "<table>" +
+          "<tr>" +
+          "<td><b>JUZGADO</b></td>" +
+          "<td>"+despacho.juzgado+"</td>" +
+          "</tr>"+
+          "</table>");
+        myWindow.document.close();
+        myWindow.focus();
+        // setTimeout(function(){
+          myWindow.print();
+          myWindow.close();
+        // },500);
     },
     // imprimir(){
     //   let cm=this;
