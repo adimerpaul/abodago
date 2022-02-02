@@ -8,13 +8,14 @@ import Precio from "pages/Precio";
 import Requisitos from "pages/Requisitos";
 import Micotizacion from "pages/Micotizacion";
 import Clientes from "pages/Clientes";
+import Miagenda from "pages/Miagenda";
 
 const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', component: Login },
+      { path: '/login', component: Login },
       { path: '/recepcion', component: Recepcion,meta: {requiresAuth: true,} },
       { path: '/user', component: User,meta: {requiresAuth: true,} },
       { path: '/requisitos', component: Requisitos,meta: {requiresAuth: true,} },
@@ -24,6 +25,7 @@ const routes = [
       { path: '/misrecepciones', component: Misrecepciones,meta: {requiresAuth: true,} },
       { path: '/micotizacion', component: Micotizacion,meta: {requiresAuth: true,} },
       { path: '/clientes', component: Clientes,meta: {requiresAuth: true,} },
+      { path: '', component: Miagenda,meta: {requiresAuth: true,} },
     ]
   },
 

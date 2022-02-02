@@ -148,7 +148,7 @@ export default {
   },
   created() {
     if (this.$store.getters["login/isLoggedIn"]){
-      this.$router.push('/asignacion')
+      this.$router.push('/miagenda')
     }
 
     this.$q.loading.show()

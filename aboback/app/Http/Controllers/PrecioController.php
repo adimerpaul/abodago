@@ -89,6 +89,20 @@ class PrecioController extends Controller
 
     public function impcosto(Request $request){
 //        return $request;
+        $proforma=new Proforma;
+        $proforma->fecha=date('Y-m-d');
+        $proforma->cliente_id=$request->cliente_id;
+        $proforma->tramite_id=$request->tramite_id;
+        $proforma->total->$request->total;
+        $proforma->save();
+        foreach ($request->datos as $r) {
+            $detprof=new Detalleproforma;
+            $detprof->nombre=$r['nombre'];
+            $detprof->precio=$r['precio'];
+            $detprof->proforma_id=$proforma->id;
+            $detprof->save();
+        }
+        
         $total=0;
         $cliente=Cliente::find($request->cliente_id);
         $tramite=Tramite::where('id',$request->tramite_id)->with('requisitos')->first();

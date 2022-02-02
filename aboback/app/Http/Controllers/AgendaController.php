@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Agenda;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AgendaController extends Controller
 {
@@ -27,8 +28,9 @@ class AgendaController extends Controller
         //
     }
 
-    public function list($id){
-        return Agenda::where('user_id',$id)->get();
+    public function listagenda(Request $request)
+    {
+        return Agenda::where('user_id', $request->user()->id)->where('estado', 'ACTIVO')->with('usuario')->with('despacho')->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -36,6 +38,10 @@ class AgendaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    public function etapas()
+    {
+        return DB::SELECT('SELECT etapa from agendas group by etapa');
+    }
     public function store(Request $request)
     {
         //

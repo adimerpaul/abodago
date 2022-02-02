@@ -42,7 +42,7 @@
           <q-item
             clickable
             exact
-            to="/"
+            to="/login"
             v-if="!$store.getters['login/isLoggedIn']"
           >
             <q-item-section
@@ -55,6 +55,24 @@
               <q-item-label>Ingresar</q-item-label>
               <q-item-label caption>
                 Ingreso al sistema
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
+            clickable
+            to="/"
+          >
+            <q-item-section
+              avatar
+            >
+              <q-icon name="event" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Agenda</q-item-label>
+              <q-item-label caption>
+                Actividades en Fecha
               </q-item-label>
             </q-item-section>
           </q-item>

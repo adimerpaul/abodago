@@ -16,4 +16,13 @@ class Agenda extends Model
         'user_id',
         'despacho_id',
     ];
+
+    public function usuario(){
+        return $this->belongsTo(User::class);
+    }
+
+    public function despacho(){
+        return $this->belongsTo(Despacho::class);
+    }
 }
+

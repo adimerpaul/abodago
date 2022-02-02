@@ -12,4 +12,5 @@ class Precio extends Model
         'nombre',
         'precio',
     ];
+    
 }

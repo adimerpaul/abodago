@@ -19,6 +19,8 @@ class CreateProformasTable extends Migration
             $table->date("fecha");
             $table->unsignedBigInteger("cliente_id");
             $table->foreign("cliente_id")->references("id")->on("clientes");
+            $table->unsignedBigInteger("tramite_id");
+            $table->foreign("tramite_id")->references("id")->on("tramites");
             $table->timestamps();
         });
     }
