@@ -344,8 +344,20 @@
                       <q-tab-panel name="cotizacion">
                         <div class="text-h6">Cotizacion</div>
                         <div class="row">
+                          <div class="col-6">
                           <div class="col-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
-                          <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
+                            <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
+                          </div>
+                          <div class="col-6">
+                            <div> PROFORMA</div>
+                            tramite: {{cliente3.proforma.tramite.nombre}}<br>
+                            Total: {{cliente3.proforma.total}} <br>
+                            fecha: {{cliente3.proforma.fecha}} <br>
+                            <div> DETALLE</div>
+                            <div v-for="(v,index) in cliente3.proforma.detalleproformas" :key="index">
+                              {{v.nombre}} {{v.precio}}
+                            </div>
+                          </div>
                         </div>
                       </q-tab-panel>
                     </q-tab-panels>

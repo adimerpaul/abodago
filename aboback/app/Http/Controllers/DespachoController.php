@@ -86,7 +86,7 @@ class DespachoController extends Controller
     public function show($cliente_id)
     {
 //        return $cliente_id;
-        return Despacho::where('cliente_id',$cliente_id)->with('requisitos')->with('tramite')->with('demandados')->get();
+        return Despacho::where('cliente_id',$cliente_id)->with('requisitos')->with('tramite')->with('demandados')->with('proforma')->get();
     }
 
     /**
