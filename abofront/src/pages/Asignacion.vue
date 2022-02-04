@@ -1134,6 +1134,7 @@ export default {
           color:'green',
           icon:'done'
         })
+        this.listdespacho(this.cliente2)
       }).catch(err=>{
         this.$q.notify({
           message:err.response.data.message,

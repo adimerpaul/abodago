@@ -62,6 +62,7 @@ class DespachoController extends Controller
                 $dd=Demandado::where('ci',$r['ci'])->get();
                 if($dd->count()==0){
                     $demandado=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
+                    $dd=Demandado::where('ci',$r['ci'])->get();
                 }
                 else{
                     $demandado=DB::table('demandados')->where('ci',$r['ci'])->update(['nombre'=>$r['nombre']]);
