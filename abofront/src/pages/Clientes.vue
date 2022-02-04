@@ -46,11 +46,6 @@
                 {{ props.row.nombre }}
                 <!--            </q-badge>-->
               </q-td>
-              <q-td key="telefono" :props="props" @click="listdespacho(props.row)">
-                <!--            <q-badge color="green">-->
-                {{ props.row.telefono }}
-                <!--            </q-badge>-->
-              </q-td>
               <q-td key="tipo" :props="props">
                 <q-badge @click="listdespacho(props.row)" :color="props.row.tipo=='EMPRESA'?'purple':'teal'">
                   {{ props.row.tipo }}
@@ -121,7 +116,7 @@
                 <!--                              {{ props.row.estado }}-->
                 <!--            </q-badge>-->
                 <q-btn-group >
-                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />
+                  <!--                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
                   <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
                   <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
                   <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
@@ -164,7 +159,7 @@
               <q-form @submit.prevent="registrarlog">
                 <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
                 <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                  <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito()" v-model="tramite" @filter="filterFn" outlined >
+                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito()" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -173,11 +168,11 @@
                     </q-item>
                   </template>
                 </q-select>
+                <!--                <pre>{{tramite}}</pre>-->
                 <div class="row">
                   <div class="col-4">
                     <div class="text-h6">REQUISITOS</div>
                     <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in tramite.requisitos" :key="i" class="full-width" />
-
                   </div>
                   <div class="col-8">
                     <div class="row">
@@ -206,7 +201,7 @@
                           <th>ID</th>
                           <th>CI</th>
                           <th>NOMBRE</th>
-                          <th>OPCION</th>
+                          <th>OPCIONES</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -217,7 +212,6 @@
                           <td>
                             <q-btn dense color="green" @click="mas" icon="add"/>
                             <q-btn dense color="red" icon="remove" @click="menos(index)"/>
-
                           </td>
                         </tr>
                         </tbody>
@@ -234,56 +228,127 @@
           </q-card>
         </q-dialog>
 
-        <q-dialog v-model="dialogdatos">
+        <q-dialog v-model="dialogdatos" full-width>
           <q-card >
             <q-card-section>
               <div class="text-h6"> <q-icon name="code"/> {{cliente2.nombre}} </div>
             </q-card-section>
             <q-card-section class="q-pt-none">
-<!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
-<!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
-                <q-input dense label="Tramite / Proceso" v-model="cliente3.tramite.nombre" outlined />
+              <!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
+              <!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
+              <div>Tramite / Proceso: {{cliente3.tramite.nombre}}</div>
+              <q-input dense label="Tramite / Proceso" v-model="cliente3.tramite.nombre" outlined />
 
-<!--                <pre>{{tramite}}</pre>-->
-                  <div class="col-12">
+              <div class="col-12">
                 <div class="row">
                   <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="cliente3.fecha"/></div>
                   <div class="col-6"><q-input dense label="Hora" outlined  v-model="cliente3.hora"/></div>
                 </div>
                 <div >
-                <q-input label="Juzgado" outlined dense v-model="cliente3.juzgado"/>
-                <q-input label="Juez" outlined dense v-model="cliente3.juez"/>
-                <div class="row">
-                  <div class="col-6"><q-input dense label="NuRej" outlined  v-model="cliente3.nurej"/></div>
-                  <div class="col-6"><q-input dense label="WebId" outlined  v-model="cliente3.webid"/></div>
+                  <q-input label="Juzgado" outlined dense v-model="cliente3.juzgado"/>
+                  <q-input label="Juez" outlined dense v-model="cliente3.juez"/>
+                  <div class="row">
+                    <div class="col-6"><q-input dense label="NuRej" outlined  v-model="cliente3.nurej"/></div>
+                    <div class="col-6"><q-input dense label="WebId" outlined  v-model="cliente3.webid"/></div>
 
-                </div>
+                  </div>
 
-                <q-input label="Proceso" outlined dense v-model="cliente3.proceso"/>
+                  <q-input label="Proceso" outlined dense v-model="cliente3.proceso"/>
                 </div>
                 <q-input label="ci" outlined dense v-model="cliente3.ci"/>
                 <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
                 <div>
-                <q-input label="representante" outlined dense v-model="cliente3.representante"/>
-                <div class="text-h6">DEMANDADOS</div>
-                <table style="width:100%;  border: 1px solid black;" >
-                <thead>
-                  <tr>
-                  <th>ID</th>
-                  <th>CI</th>
-                  <th>NOMBRE</th>
-                  </tr>
-                </thead>
-                <tbody>
-                <tr v-for="(i,index) in cliente3.demandados" :key="index">
-                    <th scope="row">{{index+1}}</th>
-                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>
-                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
-                </tr>
-                </tbody>
-                </table>
+                  <q-input label="representante" outlined dense v-model="cliente3.representante"/>
+                  <!--                <div class="text-h6">DEMANDADOS</div>-->
+                  <!--                <table style="width:100%;  border: 1px solid black;" >-->
+                  <!--                <thead>-->
+                  <!--                  <tr>-->
+                  <!--                  <th>ID</th>-->
+                  <!--                  <th>CI</th>-->
+                  <!--                  <th>NOMBRE</th>-->
+                  <!--                  </tr>-->
+                  <!--                </thead>-->
+                  <!--                <tbody>-->
+                  <!--                <tr v-for="(i,index) in cliente3.demandados" :key="index">-->
+                  <!--                    <th scope="row">{{index+1}}</th>-->
+                  <!--                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>-->
+                  <!--                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>-->
+                  <!--                </tr>-->
+                  <!--                </tbody>-->
+                  <!--                </table>-->
+                  <q-card>
+                    <q-tabs
+                      v-model="tab"
+                      dense
+                      class="text-grey"
+                      active-color="primary"
+                      indicator-color="primary"
+                      align="justify"
+                      narrow-indicator
+                    >
+                      <q-tab name="requisitos" label="Requisitos" />
+                      <q-tab name="agenda" label="Agenda" />
+                      <q-tab name="movies" label="Cotizacion" />
+                    </q-tabs>
+
+                    <q-separator />
+
+                    <q-tab-panels v-model="tab" animated>
+                      <q-tab-panel name="requisitos">
+                        <div class="text-h6">Mails</div>
+                        <!--                        <pre>{{despacho}}</pre>-->
+                        <q-list dense bordered padding class="rounded-borders">
+                          <q-item clickable v-ripple v-for="r in despacho.requisitos" :key="r.id">
+                            <q-item-section >
+                              {{ r.nombre }}
+                            </q-item-section>
+                          </q-item>
+                        </q-list>
+                      </q-tab-panel>
+
+                      <q-tab-panel name="agenda">
+                        <!--                        <div class="text-h6">Alarms</div>-->
+                        <!--                        lorem-->
+                        <q-table :columns="columnsagenda" dense :rows="agendas" :filter="filteragenda">
+                          <template v-slot:body-cell-etapa="props">
+                            <q-td :props="props">
+                              {{props.row.etapa.numero}}. {{props.row.etapa.nombre}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-usuario="props">
+                            <q-td :props="props">
+                              {{props.row.user.name}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-fechafin="props">
+                            <q-td :props="props">
+                              {{props.row.fechafin}} {{props.row.horafin}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-estado="props">
+                            <q-td :props="props">
+                              <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>
+                            </q-td>
+                          </template>
+                          <template v-slot:top-right>
+                            <q-btn label="Crear agenda" @click="nuevaagenda" icon="add_circle" color="positive"/>
+                            <q-input dense outlined v-model="filteragenda" placeholder="Buscar.." >
+                              <template v-slot:append>
+                                <q-icon name="search"/>
+                              </template>
+                            </q-input>
+                          </template>
+                        </q-table>
+                      </q-tab-panel>
+
+                      <q-tab-panel name="movies">
+                        <div class="text-h6">Movies</div>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      </q-tab-panel>
+                    </q-tab-panels>
+                  </q-card>
                 </div>
-                </div>
+              </div>
             </q-card-section>
             <q-card-section align="right">
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
@@ -324,14 +389,25 @@
                   </q-td>
                 </template>
                 <template v-slot:body-cell-opcion="props">
-                  <q-tr :props="props">
-                    <q-td key="opcion" :props="props">
-                      <q-btn dense size="xs" flat label="pagos"  color="green" @click="listRow(props.row)" icon="list"></q-btn>
-                      <q-btn dense size="xs" flat label="actualizar" color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
-                      <q-btn dense size="xs" flat label="dato"  color="accent" @click="detalle(props.row)" icon="description"></q-btn>
-                      <q-btn dense size="xs" flat label="imprimir"  color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
-                    </q-td>
-                  </q-tr>
+                  <!--              <q-tr :props="props">-->
+                  <q-td key="opcion" :props="props">
+                    <q-btn dense  size="xs" label="pagos" flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
+                    <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
+                    <q-btn dense  size="xs" label="dato" flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
+                    <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
+                  </q-td>
+                  <!--              </q-tr>-->
+                </template>
+                <!--               <template v-slot:top-left>-->
+                <!--                 <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
+                <!--               </template>-->
+                <template v-slot:top-right>
+                  <q-btn label="agregar" @click="aceptar(cliente2)" color="positive"  icon="add_circle" />
+                  <!--                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">-->
+                  <!--                   <template v-slot:append>-->
+                  <!--                     <q-icon name="search" />-->
+                  <!--                   </template>-->
+                  <!--                 </q-input>-->
                 </template>
               </q-table>
             </q-card-section>
@@ -465,30 +541,62 @@
             </q-card-section>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="dialog_falt" >
+          <q-card style="min-width: 350px">
+            <q-card-section>
+              <div class="text-h6">Requisitos Faltantes</div>
+            </q-card-section>
 
-            <q-dialog v-model="dialog_falt" >
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Requisitos Faltantes</div>
-        </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in reqfal" :key="i" class="full-width" />
 
-        <q-card-section class="q-pt-none">
-            <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in reqfal" :key="i" class="full-width" />
+            </q-card-section>
 
-        </q-card-section>
-
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Actualizar" @click="updrequisito" />
-        </q-card-actions>
-      </q-card>
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancel" v-close-popup />
+              <q-btn flat label="Actualizar" @click="updrequisito" />
+            </q-card-actions>
+          </q-card>
         </q-dialog>
-
-
-
-
       </div>
     </div>
+    <q-dialog v-model="modalagenda" full-width>
+      <q-card >
+        <q-card-section>
+          <div class="text-h6">Crear agenda</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-form >
+            <!--            {{agenda}}-->
+            <q-form @submit="crearagenda">
+              <div class="row">
+                <div class="col-4">
+                  <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
+                </div>
+                <div class="col-4">
+                  <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" />
+                </div>
+                <div class="col-4">
+                  <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time"/>
+                </div>
+                <div class="col-5">
+                  <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" />
+                </div>
+                <div class="col-5">
+                  <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" />
+                </div>
+                <div class="col-2 flex flex-center">
+                  <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
+                </div>
+              </div>
+            </q-form>
+          </q-form>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="cancelar" color="negative" icon="delete" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -499,11 +607,29 @@ import {date} from 'quasar'
 export default {
   data(){
     return {
+      filteragenda:'',
+      etapas:[],
+      etapa:{},
+      agendas:[],
+      agenda:{},
+      modalagenda:false,
+      tab:'agenda',
       imagen : null,
       miaccion:'',
+      columnsagenda:[
+        {label:'fecha',name:'fechaini',field:'fechaini'},
+        {label:'etapa',name:'etapa',field:'etapa'},
+        {label:'actividad',name:'actividad',field:'actividad'},
+        {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
+        {label:'usuario',name:'usuario',field:'usuario'},
+        {label:'fecha proximo',name:'fechafin',field:'fechafin'},
+        {label:'estado',name:'estado',field:'estado'},
+        // {label:'opciones',name:'opciones',field:'opciones'},
+      ],
       filter:'',
       usuario:'',
       dialogcliente:false,
+      dialogdatos:false,
       dialogarchivo:false,
       dialog_despacho:false,
       dialog_add:false,
@@ -512,11 +638,12 @@ export default {
       dialog_gastos:false,
       dialog_remcl:false,
       dialog_modimg:false,
-      dialogdatos:false,
       url:process.env.API,
+      reqdespacho:{},
+      reqfal:[],
+      dialog_falt:false,
       demandados:[{ci:'',nombre:''}],
       requisitos:[],
-      reqdespacho:{},
       tramite:{},
       despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
       tramites:[],
@@ -526,7 +653,7 @@ export default {
       usuarios:[],
       usuarios2:[],
       clientes:[],
-      cliente:{tipo:'PERSONA'},
+      cliente:{tipo:'EMPRESA'},
       infocliente:{},
       cliente2:'',
       cliente3:{},
@@ -545,13 +672,10 @@ export default {
       tabegreso:[],
       tabegcl:[],
       gastos:[],
-      reqfal:[],
-      dialog_falt:false,
       boolmod:false,
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
-        {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
         {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
         // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
@@ -597,7 +721,7 @@ export default {
     }
   },
   created() {
-
+    this.misetapas()
     // console.log()
     this.misdatos(process.env.API)
     // for (let i=1;i<=1000;i++){
@@ -605,7 +729,7 @@ export default {
     // }
     // this.misremitentes()
     this.$axios.get(process.env.API+'/tramite').then(res=>{
-      console.log(res.data)
+      // console.log(res.data)
       // return false
       res.data.forEach(r=>{
         // this.usuarios.push({
@@ -632,6 +756,64 @@ export default {
     this.resetdespacho();
   },
   methods:{
+    nuevaagenda(){
+      this.modalagenda=true
+      this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')
+      this.agenda.horafin=date.formatDate(new Date(),'HH:mm:00')
+    },
+    misetapas(){
+      this.$axios.get(process.env.API+'/etapa').then(res=>{
+        this.etapas=[]
+        res.data.forEach(r=>{
+          let d=r
+          d.label=r.numero+'.'+r.nombre
+          this.etapas.push(d)
+        })
+        this.etapa=this.etapas[0]
+      })
+    },
+    faltante(prop){
+      console.log(prop);
+      this.reqfal=[];
+      this.reqdespacho.despacho_id=prop.id;
+      this.$axios.post(process.env.API+'/reqfaltantes/',{despacho_id:prop.id,tramite_id:prop.tramite_id}).then(res=>{
+        this.reqfal=res.data;
+        console.log(res.data)
+        this.reqfal.forEach(element => {
+          element.estado=false
+        });
+        //return false
+        this.dialog_falt=false;
+        if(this.reqfal.length>0)
+          this.dialog_falt=true;
+      })
+    },
+    crearagenda(){
+      this.$q.loading.show()
+      this.agenda.despacho_id=this.despacho.id
+      this.agenda.etapa_id=this.etapa.id
+      this.$axios.post(process.env.API+'/agenda',this.agenda).then(res=>{
+        // console.log(res.data)
+        this.agenda={}
+        this.modalagenda=false
+        this.misagendas(this.despacho.id)
+        // this.$q.loading.hide()
+
+      })
+    },
+    updrequisito(){
+      this.reqdespacho.requisitos=this.reqfal;
+      this.$axios.post(process.env.API+'/updrequisito/',this.reqdespacho).then(res=>{
+        this.dialog_falt=false;
+        this.dialog_despacho=false
+        this.$q.notify({
+          message:"Agregado",
+          color:'green',
+          icon:'done'
+        })
+      })
+      this.misdatos();
+    },
     mas(){
       this.demandados.push({ci:'',nombre:''});
     },
@@ -652,11 +834,6 @@ export default {
       })
     },
     lrequisito(){
-      //this.requisitos=[];
-      //this.requisitos=this.tramite.requisitos;
-      //this.requisitos.forEach(element => {
-      //  element.estado=false;
-      //});
       console.log(this.tramite.requisitos)
       // this.tramite.requisitos.forEach(r=>{
       //   console.log(r)
@@ -685,9 +862,9 @@ export default {
         })
         this.dialog_add=false;
         this.ingreso={};
-              this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
-        this.tabingreso=res.data;
-      });
+        this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+          this.tabingreso=res.data;
+        });
       });
     },
     regegreso(){
@@ -702,9 +879,10 @@ export default {
         })
         this.dialog_remove=false;
         this.egreso={};
-              this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
-        this.tabegreso=res.data;
-      });
+        this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
+          this.tabegreso=res.data;
+        });
+
       });
     },
     regegrcliente(){
@@ -719,9 +897,9 @@ export default {
         })
         this.dialog_remcl=false;
         this.egreso={};
-              this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
-        this.tabegcl=res.data;
-      });
+        this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
+          this.tabegcl=res.data;
+        });
       });
     },
     addRow(prop){
@@ -748,39 +926,66 @@ export default {
       });
       this.dialog_gastos=true;
     },
-    faltante(prop){
-      console.log(prop);
-        this.reqfal=[];
-        this.reqdespacho.despacho_id=prop.id;
-      this.$axios.post(process.env.API+'/reqfaltantes/',{despacho_id:prop.id,tramite_id:prop.tramite_id}).then(res=>{
-        this.reqfal=res.data;
-        console.log(res.data)
-        this.reqfal.forEach(element => {
-            element.estado=false
-        });
-        //return false
-          this.dialog_falt=false;
-        if(this.reqfal.length>0)
-          this.dialog_falt=true;
-      })
-    },
     detalle(prop){
-      console.log(prop)
+      this.despacho=prop
+      // console.log(prop)
+      this.misagendas(this.despacho.id)
+      // console.log(prop)
       this.cliente3=prop
       this.dialogdatos=true;
     },
-    updrequisito(){
-      this.reqdespacho.requisitos=this.reqfal;
-      this.$axios.post(process.env.API+'/updrequisito/',this.reqdespacho).then(res=>{
-      this.dialog_falt=false;
-      this.dialog_despacho=false
-      this.$q.notify({
-          message:"Agregado",
-          color:'green',
-          icon:'done'
-        })
+    misagendas(id){
+      this.$q.loading.show()
+      this.$axios.get(process.env.API+'/agenda/'+id).then(res=>{
+        // this.tabegcl=res.data;
+        this.agendas=res.data
+        this.$q.loading.hide()
+        // console.log(res.data)
+      });
+    },
+    imprimir2(despacho){
+      console.log(despacho)
+      // this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
+      //   let myWindow = window.open("", "Imprimir", "width=900,height=600");
+      //   myWindow.document.write(res.data);
+      //   myWindow.document.close();
+      //   myWindow.focus();
+      //   setTimeout(function(){
+      //     myWindow.print();
+      //     myWindow.close();
+      //   },500);
+      // })
+      let demandados="";
+      despacho.demandados.forEach(d=>{
+        // console.log(d)
+        demandados+=d.nombre+","
       })
-        this.misdatos();
+      let myWindow = window.open("", "Imprimir", "width=900,height=600");
+      myWindow.document.write("" +
+        "<table style='width: 100%;font-size: 28px;padding-left: 50px;padding: 10px;padding-right: 50px;border: 5px solid black;border-radius: 20px'>" +
+        "<tr >" +
+        "<td colspan='2'><b>JUZGADO:</b> "+despacho.juzgado+"</td>" +
+        "</tr>"+
+        "<tr>" +
+        "<td><b>NURREJ:</b> "+despacho.nurej+"</td>" +
+        "<td><b>WEB-ID:</b> "+despacho.webid+"</td>" +
+        "</tr>"+
+        "<tr >" +
+        "<td colspan='2'><b>DEMANDANTE:</b> "+despacho.demandante+"</td>" +
+        "</tr>"+
+        "<tr >" +
+        "<td colspan='2'><b>DEMANDADOS:</b> "+demandados+"</td>" +
+        "</tr>"+
+        "<tr >" +
+        "<td colspan='2'><b>JUEZ:</b> "+despacho.juez+"</td>" +
+        "</tr>"+
+        "</table>");
+      myWindow.document.close();
+      myWindow.focus();
+      // setTimeout(function(){
+      myWindow.print();
+      myWindow.close();
+      // },500);
     },
     imprimir(){
       this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
@@ -811,14 +1016,15 @@ export default {
 
     listdespacho(prop){
       // console.log(prop)
-       this.cliente2=prop
+      this.cliente2=prop
       // // console.log(prop)
       //
       // this.infodespacho=[];
 
       this.$q.loading.show()
+      // this.dialog_despacho=true
       this.$axios.get(process.env.API+'/despacho/'+prop.id).then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
         this.infodespacho=res.data
         this.$q.loading.hide()
         this.dialog_despacho=true
@@ -836,7 +1042,7 @@ export default {
       data.append('imagen', this.imagen);
       data.append('ci', this.cliente.ci);
       data.append('nombre', this.cliente.nombre);
-      data.append('tipo', 'PERSONA');
+      data.append('tipo', 'EMPRESA');
       // this.cliente.imagen=this.imagen
 
       this.$axios.post(process.env.API+'/cliente',data).then(res=>{
@@ -847,7 +1053,7 @@ export default {
         // this.institucion=''
         this.$refs.ima.value=''
         this.misdatos()
-        this.cliente={tipo:'PERSONA'}
+        this.cliente={tipo:'EMPRESA'}
         this.$q.notify({
           message:"Creado exitosamente",
           color:'green',
@@ -1088,34 +1294,6 @@ export default {
       this.cargo=props.row.cargo
       this.institucion=props.row.institucion
     },
-        imprimir2(despacho){
-          console.log(despacho)
-        // this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
-        //   let myWindow = window.open("", "Imprimir", "width=900,height=600");
-        //   myWindow.document.write(res.data);
-        //   myWindow.document.close();
-        //   myWindow.focus();
-        //   setTimeout(function(){
-        //     myWindow.print();
-        //     myWindow.close();
-        //   },500);
-        // })
-
-        let myWindow = window.open("", "Imprimir", "width=900,height=600");
-        myWindow.document.write("" +
-          "<table>" +
-          "<tr>" +
-          "<td><b>JUZGADO</b></td>" +
-          "<td>"+despacho.juzgado+"</td>" +
-          "</tr>"+
-          "</table>");
-        myWindow.document.close();
-        myWindow.focus();
-        // setTimeout(function(){
-          myWindow.print();
-          myWindow.close();
-        // },500);
-    },
     // imprimir(){
     //   let cm=this;
     //   function header(fecha){
@@ -1251,12 +1429,12 @@ export default {
       })
     },
     resetdespacho(){
-      this.despacho.webid=' ';
-      this.despacho.nurej=' ';
-      this.despacho.proceso=' ';
-      this.despacho.ci=' ';
-      this.despacho.demandante=' ';
-      this.despacho.representate=' ';
+      this.despacho.webid='';
+      this.despacho.nurej='';
+      this.despacho.proceso='';
+      this.despacho.ci='';
+      this.despacho.demandante='';
+      this.despacho.representate='';
       this.demandados=[{ci:'',nombre:''}];
     },
     guardar(){

@@ -116,7 +116,7 @@
 <!--                              {{ props.row.estado }}-->
                 <!--            </q-badge>-->
                 <q-btn-group >
-                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />
+<!--                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
                   <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
                   <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
                   <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
@@ -286,17 +286,24 @@
                       align="justify"
                       narrow-indicator
                     >
-                      <q-tab name="datos" label="Datos" />
+                      <q-tab name="requisitos" label="Requisitos" />
                       <q-tab name="agenda" label="Agenda" />
-                      <q-tab name="movies" label="Movies" />
+                      <q-tab name="movies" label="Cotizacion" />
                     </q-tabs>
 
                     <q-separator />
 
                     <q-tab-panels v-model="tab" animated>
-                      <q-tab-panel name="datos">
+                      <q-tab-panel name="requisitos">
                         <div class="text-h6">Mails</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+<!--                        <pre>{{despacho}}</pre>-->
+                        <q-list dense bordered padding class="rounded-borders">
+                          <q-item clickable v-ripple v-for="r in despacho.requisitos" :key="r.id">
+                            <q-item-section >
+                              {{ r.nombre }}
+                            </q-item-section>
+                          </q-item>
+                        </q-list>
                       </q-tab-panel>
 
                       <q-tab-panel name="agenda">
@@ -305,7 +312,7 @@
                         <q-table :columns="columnsagenda" dense :rows="agendas" :filter="filteragenda">
                           <template v-slot:body-cell-etapa="props">
                             <q-td :props="props">
-                              {{props.row.etapa.nombre}}
+                              {{props.row.etapa.numero}}. {{props.row.etapa.nombre}}
                             </q-td>
                           </template>
                           <template v-slot:body-cell-usuario="props">
@@ -391,6 +398,17 @@
               </q-td>
 <!--              </q-tr>-->
              </template>
+<!--               <template v-slot:top-left>-->
+<!--                 <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
+<!--               </template>-->
+               <template v-slot:top-right>
+                 <q-btn label="agregar" @click="aceptar(cliente2)" color="positive"  icon="add_circle" />
+<!--                 <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">-->
+<!--                   <template v-slot:append>-->
+<!--                     <q-icon name="search" />-->
+<!--                   </template>-->
+<!--                 </q-input>-->
+               </template>
              </q-table>
             </q-card-section>
             <q-card-section align="right">
@@ -778,8 +796,9 @@ export default {
         // console.log(res.data)
         this.agenda={}
         this.modalagenda=false
-        this.$q.loading.hide()
         this.misagendas(this.despacho.id)
+        // this.$q.loading.hide()
+
       })
     },
     updrequisito(){
@@ -909,15 +928,18 @@ export default {
     },
     detalle(prop){
       this.despacho=prop
+      // console.log(prop)
       this.misagendas(this.despacho.id)
       // console.log(prop)
       this.cliente3=prop
       this.dialogdatos=true;
     },
     misagendas(id){
+      this.$q.loading.show()
       this.$axios.get(process.env.API+'/agenda/'+id).then(res=>{
         // this.tabegcl=res.data;
         this.agendas=res.data
+        this.$q.loading.hide()
         // console.log(res.data)
       });
     },
@@ -1000,6 +1022,7 @@ export default {
       // this.infodespacho=[];
 
       this.$q.loading.show()
+      // this.dialog_despacho=true
       this.$axios.get(process.env.API+'/despacho/'+prop.id).then(res=>{
         // console.log(res.data)
         this.infodespacho=res.data
