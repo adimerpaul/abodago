@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Etapa extends Model
 {
     use HasFactory;
+    
+    protected $fillable=[
+        'numero',
+        'nombre',
+    ];
 }

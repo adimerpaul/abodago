@@ -13,9 +13,7 @@
           <template v-slot:body-cell-opciones="props">
             <q-tr :props="props">
               <q-td key="opciones" :props="props">
-                <q-btn-group >
-                  <q-btn dense label="agregar" color="positive"  icon="add_circle" size="xs" />
-                </q-btn-group >
+                  <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="props.row.estado=='EN ESPERA'" @click="actualiza(props.row)"/>
               </q-td>
             </q-tr>
           </template>
@@ -41,26 +39,47 @@ export default {
       filter:'',
       usuario:'',
       dialog_gastos:false,
-      url:process.env.API,
-      tramite:{},
       agenda:[],
-      despacho:{fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')},
-      tramites:[],
       columns:[
-        {field:'fecha',name:'fecha',label:'Fecha',align:'right'},
-        {field:'etapa',name:'etapa',label:'etapa',align:'right'},
-        {field:'actividad',name:'actividad',label:'actividad',align:'right'},
-        {field:'estado',name:'estado',label:'estado',align:'right'},
-        {field:'opciones',name:'opciones',label:'OPCIONES',align:'right'},
+        {field:'fechaini',name:'fecha',label:'FECHA INICIO',align:'center'},
+        {field:row=>row.etapa.nombre,name:'etapa',label:'ETAPA',align:'center'},
+        {field:'actividad',name:'actividad',label:'ACTIVIDAD',align:'center'},
+        {field:'fechafin',name:'fecha',label:'FECHA FIN',align:'center'},
+        {field:'proximopaso',name:'proximopaso',label:'PROXIMO PASO',align:'center'},
+        {field:'estado',name:'estado',label:'ESTADO',align:'center'},
+        {field:'opciones',name:'opciones',label:'OPCIONES',align:'center'},
       ],
 
     }
   },
   created() {
 
-    this.misdatos(process.env.API)
+    this.misdatos()
   },
   methods:{
+    actualiza(agenda){
+      this.$q.dialog({
+        title: 'Fin de Actividad',
+        message: 'Esta Seguro de Finalizar?',
+        cancel: true,
+      }).onOk(() => {
+        // console.log('>>>> OK')
+      this.$axios.post(process.env.API+'/finalizar',agenda).then(res=>{
+          this.$q.notify({
+            message: 'Actualizado',
+            caption: 'Agenda Actualizada',
+            color: 'green',
+            icon:'done'
+          });
+          this.misdatos()
+      })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+ 
+    },
     filterFn (val, update) {
       if (val === '') {
         update(() => {
@@ -80,6 +99,7 @@ export default {
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda').then(res=>{
+        console.log(res.data)
         this.$q.loading.hide()
         this.agenda=res.data
 

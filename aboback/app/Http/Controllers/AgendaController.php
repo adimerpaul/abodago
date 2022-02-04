@@ -30,7 +30,7 @@ class AgendaController extends Controller
 
     public function listagenda(Request $request)
     {
-        return Agenda::where('user_id', $request->user()->id)->where('estado', 'ACTIVO')->with('usuario')->with('despacho')->get();
+        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -71,6 +71,12 @@ class AgendaController extends Controller
         return Agenda::with('user')->with('etapa')->where('despacho_id',$despacho_id)->get();
     }
 
+    public function finalizar(Request $request){
+        $agenda=Agenda::find($request->id);
+        $agenda->estado='TERMINADO';
+        $agenda->save();
+        
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -92,6 +98,7 @@ class AgendaController extends Controller
     public function update(Request $request, Agenda $agenda)
     {
         //
+
     }
 
     /**
