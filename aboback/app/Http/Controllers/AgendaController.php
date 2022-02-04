@@ -30,7 +30,7 @@ class AgendaController extends Controller
 
     public function listagenda(Request $request)
     {
-        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->get();
+        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->orderBy('fechaini','desc')->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -75,7 +75,7 @@ class AgendaController extends Controller
         $agenda=Agenda::find($request->id);
         $agenda->estado='TERMINADO';
         $agenda->save();
-        
+
     }
     /**
      * Show the form for editing the specified resource.
