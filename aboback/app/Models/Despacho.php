@@ -33,4 +33,8 @@ class Despacho extends Model
     public function tramite(){
         return $this->belongsTo(Tramite::class);
     }
+
+    public function cliente(){
+        return $this->belongsTo(Cliente::class);
+    }
 }

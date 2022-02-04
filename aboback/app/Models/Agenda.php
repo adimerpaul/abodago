@@ -29,7 +29,7 @@ class Agenda extends Model
     }
 
     public function despacho(){
-        return $this->belongsTo(Despacho::class);
+        return $this->belongsTo(Despacho::class)->with('cliente')->with('tramite');
     }
 }
 

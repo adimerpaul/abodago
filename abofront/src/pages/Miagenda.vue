@@ -21,12 +21,47 @@
             <q-tr :props="props">
               <q-td key="opciones" :props="props">
                   <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="props.row.estado=='EN ESPERA'" @click="actualiza(props.row)"/>
+                  <q-btn dense label="Datos" color="info"  icon="list" size="xs" @click="verdato(props.row)"/>
               </q-td>
             </q-tr>
           </template>
         </q-table>
 
+        <q-dialog v-model="dialogdatos">
+          <q-card >
+            <q-card-section>
+              <div class="text-h6"> <q-icon name="code"/> {{despacho.cliente.nombre}} </div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input dense label="Tramite / Proceso" v-model="despacho.tramite.nombre" outlined />
+                  <div class="col-12">
+                <div class="row">
+                  <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
+                  <div class="col-6"><q-input dense label="Hora" outlined  v-model="despacho.hora"/></div>
+                </div>
+                <div >
+                <q-input label="Juzgado" outlined dense v-model="despacho.juzgado"/>
+                <q-input label="Juez" outlined dense v-model="despacho.juez"/>
+                <div class="row">
+                  <div class="col-6"><q-input dense label="NuRej" outlined  v-model="despacho.nurej"/></div>
+                  <div class="col-6"><q-input dense label="WebId" outlined  v-model="despacho.webid"/></div>
 
+                </div>
+
+                <q-input label="Proceso" outlined dense v-model="despacho.proceso"/>
+                </div>
+                <q-input label="ci" outlined dense v-model="despacho.ci"/>
+                <q-input label="demandante" outlined dense v-model="despacho.demandante"/>
+                <div>
+                <q-input label="representante" outlined dense v-model="despacho.representante"/>
+                </div>
+                </div>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
 
 
 
@@ -46,6 +81,8 @@ export default {
       filter:'',
       usuario:'',
       dialog_gastos:false,
+      dialogdatos:false,
+      despacho:{},
       agenda:[],
       columns:[
         {field:'fechaini',name:'fecha',label:'FECHA INICIO',align:'center'},
@@ -64,6 +101,11 @@ export default {
     this.misdatos()
   },
   methods:{
+    verdato(dato){
+      console.log(dato)
+      this.despacho=dato.despacho
+      this.dialogdatos=true
+    },
     actualiza(agenda){
       this.$q.dialog({
         title: 'Fin de Actividad',
@@ -87,6 +129,7 @@ export default {
       })
  
     },
+
     filterFn (val, update) {
       if (val === '') {
         update(() => {
@@ -109,6 +152,7 @@ export default {
         console.log(res.data)
         this.$q.loading.hide()
         this.agenda=res.data
+        this.mensaje()
 
       }).catch(err=>{
         this.$q.notify({
@@ -118,6 +162,21 @@ export default {
         })
         this.$q.loading.hide()
       })
+    },
+    mensaje(){
+        console.log(this.agenda)
+      this.agenda.forEach(element => {
+        console.log(element)
+        if(element.estado=='EN ESPERA')
+        {
+          this.$q.notify({
+            message: 'Pendiente',
+            caption: ''+element.etapa.nombre+' '+element.actividad,
+            color: 'accent',
+            icon:'done'
+          });
+        }
+      });
     },
   },
   computed:{
