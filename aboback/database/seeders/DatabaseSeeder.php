@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             ClienteSeeder::class,
             DespachoSeeder::class,
             PrecioSeeder::class,
+            EtapaSeeder::class,
         ]);
     }
 }

@@ -9,7 +9,7 @@ class Agenda extends Model
 {
     use HasFactory;
     protected $fillable=[
-        'etapa',
+        'etapa_id',
         'estado',
         'actividad',
         'proximopaso',
@@ -21,8 +21,11 @@ class Agenda extends Model
         'despacho_id',
     ];
 
-    public function usuario(){
+    public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function etapa(){
+        return $this->belongsTo(Etapa::class);
     }
 
     public function despacho(){

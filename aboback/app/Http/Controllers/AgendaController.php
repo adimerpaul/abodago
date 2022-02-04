@@ -44,8 +44,9 @@ class AgendaController extends Controller
     }
     public function store(Request $request)
     {
+//        return $request;
         $agenda=new Agenda();
-        $agenda->etapa=$request->etapa;
+        $agenda->etapa_id=$request->etapa_id;
         $agenda->estado='EN ESPERA';
         $agenda->actividad=$request->actividad;
         $agenda->proximopaso=$request->proximopaso;
@@ -55,7 +56,8 @@ class AgendaController extends Controller
         $agenda->horafin=$request->horafin;
         $agenda->user_id=$request->user()->id;
         $agenda->despacho_id=$request->despacho_id;
-
+        $agenda->save();
+        return $agenda;
     }
 
     /**
@@ -66,7 +68,7 @@ class AgendaController extends Controller
      */
     public function show($despacho_id)
     {
-        Agenda::where('despacho_id',$despacho_id)->get();
+        return Agenda::with('user')->with('etapa')->where('despacho_id',$despacho_id)->get();
     }
 
     /**

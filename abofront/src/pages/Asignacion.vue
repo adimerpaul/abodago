@@ -302,9 +302,29 @@
                       <q-tab-panel name="agenda">
 <!--                        <div class="text-h6">Alarms</div>-->
 <!--                        lorem-->
-                        <q-table :columns="columnsagenda" dense>
+                        <q-table :columns="columnsagenda" dense :rows="agendas" :filter="filteragenda">
+                          <template v-slot:body-cell-etapa="props">
+                            <q-td :props="props">
+                              {{props.row.etapa.nombre}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-usuario="props">
+                            <q-td :props="props">
+                              {{props.row.user.name}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-fechafin="props">
+                            <q-td :props="props">
+                              {{props.row.fechafin}} {{props.row.horafin}}
+                            </q-td>
+                          </template>
+                          <template v-slot:body-cell-estado="props">
+                            <q-td :props="props">
+                              <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>
+                            </q-td>
+                          </template>
                           <template v-slot:top-right>
-                            <q-btn label="Crear agenda" icon="add_circle" color="positive"/>
+                            <q-btn label="Crear agenda" @click="nuevaagenda" icon="add_circle" color="positive"/>
                             <q-input dense outlined v-model="filteragenda" placeholder="Buscar.." >
                               <template v-slot:append>
                                 <q-icon name="search"/>
@@ -522,6 +542,43 @@
         </q-dialog>
       </div>
     </div>
+    <q-dialog v-model="modalagenda" full-width>
+      <q-card >
+        <q-card-section>
+          <div class="text-h6">Crear agenda</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-form >
+<!--            {{agenda}}-->
+            <q-form @submit="crearagenda">
+            <div class="row">
+              <div class="col-4">
+                <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
+              </div>
+              <div class="col-4">
+                <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" />
+              </div>
+              <div class="col-4">
+                <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time"/>
+              </div>
+              <div class="col-5">
+                <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" />
+              </div>
+              <div class="col-5">
+                <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" />
+              </div>
+              <div class="col-2 flex flex-center">
+                <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
+              </div>
+            </div>
+            </q-form>
+          </q-form>
+        </q-card-section>
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="cancelar" color="negative" icon="delete" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -533,16 +590,23 @@ export default {
   data(){
     return {
       filteragenda:'',
+      etapas:[],
+      etapa:{},
+      agendas:[],
+      agenda:{},
+      modalagenda:false,
       tab:'agenda',
       imagen : null,
       miaccion:'',
       columnsagenda:[
-        {label:'fecha',name:'fecha',field:'fecha'},
+        {label:'fecha',name:'fechaini',field:'fechaini'},
         {label:'etapa',name:'etapa',field:'etapa'},
         {label:'actividad',name:'actividad',field:'actividad'},
         {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
         {label:'usuario',name:'usuario',field:'usuario'},
-        {label:'opciones',name:'opciones',field:'opciones'},
+        {label:'fecha proximo',name:'fechafin',field:'fechafin'},
+        {label:'estado',name:'estado',field:'estado'},
+        // {label:'opciones',name:'opciones',field:'opciones'},
       ],
       filter:'',
       usuario:'',
@@ -639,7 +703,7 @@ export default {
     }
   },
   created() {
-
+    this.misetapas()
     // console.log()
     this.misdatos(process.env.API)
     // for (let i=1;i<=1000;i++){
@@ -674,6 +738,22 @@ export default {
     this.resetdespacho();
   },
   methods:{
+    nuevaagenda(){
+      this.modalagenda=true
+      this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')
+      this.agenda.horafin=date.formatDate(new Date(),'HH:mm:00')
+    },
+    misetapas(){
+      this.$axios.get(process.env.API+'/etapa').then(res=>{
+        this.etapas=[]
+        res.data.forEach(r=>{
+          let d=r
+          d.label=r.numero+'.'+r.nombre
+          this.etapas.push(d)
+        })
+        this.etapa=this.etapas[0]
+      })
+    },
         faltante(prop){
       console.log(prop);
         this.reqfal=[];
@@ -688,6 +768,18 @@ export default {
           this.dialog_falt=false;
         if(this.reqfal.length>0)
           this.dialog_falt=true;
+      })
+    },
+    crearagenda(){
+      this.$q.loading.show()
+      this.agenda.despacho_id=this.despacho.id
+      this.agenda.etapa_id=this.etapa.id
+      this.$axios.post(process.env.API+'/agenda',this.agenda).then(res=>{
+        // console.log(res.data)
+        this.agenda={}
+        this.modalagenda=false
+        this.$q.loading.hide()
+        this.misagendas(this.despacho.id)
       })
     },
     updrequisito(){
@@ -815,10 +907,19 @@ export default {
       });
              this.dialog_gastos=true;
     },
-        detalle(prop){
-      console.log(prop)
+    detalle(prop){
+      this.despacho=prop
+      this.misagendas(this.despacho.id)
+      // console.log(prop)
       this.cliente3=prop
       this.dialogdatos=true;
+    },
+    misagendas(id){
+      this.$axios.get(process.env.API+'/agenda/'+id).then(res=>{
+        // this.tabegcl=res.data;
+        this.agendas=res.data
+        // console.log(res.data)
+      });
     },
     imprimir2(despacho){
           console.log(despacho)
@@ -876,7 +977,7 @@ export default {
     },
 
     listdespacho(prop){
-       console.log(prop)
+       // console.log(prop)
        this.cliente2=prop
       // // console.log(prop)
       //
@@ -884,7 +985,7 @@ export default {
 
       this.$q.loading.show()
       this.$axios.get(process.env.API+'/despacho/'+prop.id).then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
         this.infodespacho=res.data
         this.$q.loading.hide()
         this.dialog_despacho=true
