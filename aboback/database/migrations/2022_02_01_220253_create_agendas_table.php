@@ -24,7 +24,7 @@ class CreateAgendasTable extends Migration
             $table->time('horafin');
             $table->date('fechaterminado')->nullable();
             $table->time('horaterminado')->nullable();
-            $table->unsignedBigInteger('userterminado_id');
+            $table->unsignedBigInteger('userterminado_id')->nullable();
             $table->foreign('userterminado_id')->references('id')->on('users');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');

@@ -30,7 +30,10 @@ class AgendaController extends Controller
 
     public function listagenda(Request $request)
     {
-        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
+        $year=date("Y",strtotime($request->fecha));
+        $mes=date("m",strtotime($request->fecha));
+        return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)
+        ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
     /**
      * Store a newly created resource in storage.
@@ -74,6 +77,9 @@ class AgendaController extends Controller
     public function finalizar(Request $request){
         $agenda=Agenda::find($request->id);
         $agenda->estado='TERMINADO';
+        $agenda->fechaterminado=date('Y-m-d');
+        $agenda->horaterminado=date('H:i:s');
+        $agenda->userterminado_id=$request->user()->id;
         $agenda->save();
 
     }

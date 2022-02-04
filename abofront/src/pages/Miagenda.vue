@@ -1,6 +1,16 @@
 <template>
   <q-page class="q-pa-xs">
     <div class="row">
+      <q-form
+        @submit="misdatos"
+        class="q-gutter-md"
+      >
+
+        <div class="row">
+          <div class="col-6"><q-input v-model="fecha1" type="date" label="Mes/anio" required/></div>
+          <div class="col-3"><q-btn label="Consultar" type="submit" color="primary"/> </div>
+        </div>
+      </q-form>
       <div class="col-12">
         <q-table dense title="MI AGENDA " :rows="agenda" :columns="columns" :filter="filter"  >
           <template v-slot:top-right>
@@ -83,6 +93,7 @@ export default {
       dialog_gastos:false,
       dialogdatos:false,
       despacho:{},
+      fecha1:date.formatDate(Date.now(),'YYYY-MM-DD'),
       agenda:[],
       columns:[
         {field:'fechaini',name:'fecha',label:'FECHA INICIO',align:'center'},
@@ -101,6 +112,7 @@ export default {
     this.misdatos()
   },
   methods:{
+
     verdato(dato){
       console.log(dato)
       this.despacho=dato.despacho
@@ -127,7 +139,7 @@ export default {
       }).onDismiss(() => {
         // console.log('I am triggered on both OK and Cancel')
       })
- 
+
     },
 
     filterFn (val, update) {
@@ -148,7 +160,7 @@ export default {
     },
     misdatos(){
       this.$q.loading.show()
-      this.$axios.post(process.env.API+'/listagenda').then(res=>{
+      this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
         console.log(res.data)
         this.$q.loading.hide()
         this.agenda=res.data
