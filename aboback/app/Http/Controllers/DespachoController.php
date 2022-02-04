@@ -72,7 +72,11 @@ class DespachoController extends Controller
         }
 
     }
-
+    public function updespacho(Request $request){
+        $desp=Despacho::find($request->despacho_id);
+        $desp->proforma_id=$request->proforma_id;
+        $desp->save();
+    }
     /**
      * Display the specified resource.
      *

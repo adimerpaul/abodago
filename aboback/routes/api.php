@@ -45,6 +45,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/impcliente/{id}',[\App\Http\Controllers\DespachoController::class,'impcliente']);
     Route::post('/reqfaltantes',[\App\Http\Controllers\DespachoController::class,'reqfaltantes']);
     Route::post('/updrequisito',[\App\Http\Controllers\DespachoController::class,'updrequisito']);
+    Route::post('/updespacho',[\App\Http\Controllers\DespachoController::class,'updespacho']);
     Route::resource('/cliente',\App\Http\Controllers\ClienteController::class);
     Route::resource('/tramite',\App\Http\Controllers\TramiteController::class);
     Route::resource('/ingreso',\App\Http\Controllers\IngresoController::class);
@@ -58,6 +59,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/precio',\App\Http\Controllers\PrecioController::class);
     Route::resource('/proforma',\App\Http\Controllers\ProformaController::class);
     Route::post('/impcosto',[\App\Http\Controllers\PrecioController::class,'impcosto']);
+    Route::post('/listproforma/{id}',[\App\Http\Controllers\ProformaController::class,'listproforma']);
     Route::resource('/requisito',\App\Http\Controllers\RequisitoController::class);
     Route::resource('/etapa',\App\Http\Controllers\EtapaController::class);
 

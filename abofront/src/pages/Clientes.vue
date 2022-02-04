@@ -671,6 +671,8 @@ export default {
       tabingreso:[],
       tabegreso:[],
       tabegcl:[],
+      proformas:[],
+      proforma:{},
       gastos:[],
       boolmod:false,
       columns:[
@@ -756,6 +758,14 @@ export default {
     this.resetdespacho();
   },
   methods:{
+    misproformas(cliente_id){
+      this.$axios.post(process.env.API+'/listproforma/'+cliente_id).then(res=>{
+        res.data.forEach(r => {
+          this.proformas.push({label:r.monto+'Bs '+r.fecha+' '+r.tramite.nombre});
+        });
+
+      })
+    },
     nuevaagenda(){
       this.modalagenda=true
       this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')

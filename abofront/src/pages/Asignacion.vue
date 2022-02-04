@@ -288,7 +288,7 @@
                     >
                       <q-tab name="requisitos" label="Requisitos" />
                       <q-tab name="agenda" label="Agenda" />
-                      <q-tab name="movies" label="Cotizacion" />
+                      <q-tab name="cotizacion" label="Cotizacion" />
                     </q-tabs>
 
                     <q-separator />
@@ -341,9 +341,12 @@
                         </q-table>
                       </q-tab-panel>
 
-                      <q-tab-panel name="movies">
-                        <div class="text-h6">Movies</div>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      <q-tab-panel name="cotizacion">
+                        <div class="text-h6">Cotizacion</div>
+                        <div class="row">
+                          <div class="col-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
+                          <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
+                        </div>
                       </q-tab-panel>
                     </q-tab-panels>
                   </q-card>
@@ -673,6 +676,8 @@ export default {
       tabegcl:[],
       gastos:[],
       boolmod:false,
+          proformas:[],
+      proforma:{},
       columns:[
         {field:'ci',name:'ci',label:'CI',align:'right'},
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
@@ -756,6 +761,24 @@ export default {
     this.resetdespacho();
   },
   methods:{
+    enlazar(){
+      if(this.proforma=={label:''})
+      return false;
+      console.log(this.proforma.r)
+      this.$axios.post(process.env.API+'/updespacho/',{despacho_id:this.cliente3.id,proforma_id:this.proforma.r.id}).then(res=>{
+      })
+    },
+        misproformas(cliente_id){
+          this.proformas=[]
+          this.proforma={label:''}
+      this.$axios.post(process.env.API+'/listproforma/'+cliente_id).then(res=>{
+        res.data.forEach(r => {
+          this.proformas.push({label:r.total+'Bs '+r.fecha+' '+r.tramite.nombre,r});
+        });
+
+
+      })
+    },
     nuevaagenda(){
       this.modalagenda=true
       this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')
@@ -928,10 +951,12 @@ export default {
     },
     detalle(prop){
       this.despacho=prop
-      // console.log(prop)
+       console.log(prop)
       this.misagendas(this.despacho.id)
       // console.log(prop)
+      this.misproformas(prop.cliente_id)
       this.cliente3=prop
+
       this.dialogdatos=true;
     },
     misagendas(id){

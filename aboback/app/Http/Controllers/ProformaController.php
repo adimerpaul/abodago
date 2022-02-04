@@ -24,6 +24,12 @@ class ProformaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function listproforma($id){
+        return Proforma::with('detalleproformas')->with('tramite')->where('cliente_id',$id)->get();
+
+    }
+
     public function create()
     {
         //

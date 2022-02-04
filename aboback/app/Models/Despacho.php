@@ -20,6 +20,7 @@ class Despacho extends Model
         "demandante",
         "ci",
         "representante",
+        "proforma_id",
         'tramite_id',
         'cliente_id',
     ];

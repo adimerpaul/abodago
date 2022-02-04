@@ -26,6 +26,8 @@ class CreateDespachosTable extends Migration
             $table->string("demandante")->nullable();
             $table->string("representante")->nullable();
             $table->string("ci")->nullable();
+            $table->unsignedBigInteger('proforma_id')->nullable();
+            $table->foreign('proforma_id')->references('id')->on('proformas');
             $table->unsignedBigInteger('tramite_id');
             $table->foreign('tramite_id')->references('id')->on('tramites');
             $table->unsignedBigInteger('cliente_id');
