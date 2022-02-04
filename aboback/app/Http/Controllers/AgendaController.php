@@ -30,7 +30,7 @@ class AgendaController extends Controller
 
     public function listagenda(Request $request)
     {
-        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->orderBy('fechaini','desc')->get();
+        return Agenda::where('user_id', $request->user()->id)->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
     /**
      * Store a newly created resource in storage.
