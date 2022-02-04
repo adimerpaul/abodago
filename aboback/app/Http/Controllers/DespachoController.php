@@ -58,13 +58,12 @@ class DespachoController extends Controller
             DB::table('despacho_requisito')->insert(['requisito_id'=>$row['id'],'despacho_id'=>$despacho->id]);
         }
         foreach($request->demandados as $r){
-            if ($r['ci']!=''){
+            if ($r['ci']!='' && $r['nombre']!=''){
                 $dd=Demandado::where('ci',$r['ci'])->get();
                 if($dd->count()==0){
                     $demandado=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
                 }
                 else{
-                    
                     $demandado=DB::table('demandados')->where('ci',$r['ci'])->update(['nombre'=>$r['nombre']]);
                 }
                 DB::table('demandado_despacho')->insert(['despacho_id'=>$despacho->id,'demandado_id'=>$dd[0]->id]);

@@ -382,14 +382,14 @@
                  </q-td>
                </template>
             <template v-slot:body-cell-opcion="props">
-              <q-tr :props="props">
+<!--              <q-tr :props="props">-->
               <q-td key="opcion" :props="props">
                 <q-btn dense  size="xs" label="pagos" flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
                 <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
                 <q-btn dense  size="xs" label="dato" flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
                 <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
               </q-td>
-              </q-tr>
+<!--              </q-tr>-->
              </template>
              </q-table>
             </q-card-section>
@@ -933,13 +933,29 @@ export default {
         //     myWindow.close();
         //   },500);
         // })
-
+      let demandados="";
+          despacho.demandados.forEach(d=>{
+            // console.log(d)
+            demandados+=d.nombre+","
+          })
         let myWindow = window.open("", "Imprimir", "width=900,height=600");
         myWindow.document.write("" +
-          "<table>" +
+          "<table style='width: 100%;font-size: 28px;padding-left: 50px;padding: 10px;padding-right: 50px;border: 5px solid black;border-radius: 20px'>" +
+          "<tr >" +
+          "<td colspan='2'><b>JUZGADO:</b> "+despacho.juzgado+"</td>" +
+          "</tr>"+
           "<tr>" +
-          "<td><b>JUZGADO</b></td>" +
-          "<td>"+despacho.juzgado+"</td>" +
+          "<td><b>NURREJ:</b> "+despacho.nurej+"</td>" +
+          "<td><b>WEB-ID:</b> "+despacho.webid+"</td>" +
+          "</tr>"+
+          "<tr >" +
+          "<td colspan='2'><b>DEMANDANTE:</b> "+despacho.demandante+"</td>" +
+          "</tr>"+
+          "<tr >" +
+          "<td colspan='2'><b>DEMANDADOS:</b> "+demandados+"</td>" +
+          "</tr>"+
+          "<tr >" +
+          "<td colspan='2'><b>JUEZ:</b> "+despacho.juez+"</td>" +
           "</tr>"+
           "</table>");
         myWindow.document.close();
@@ -1390,12 +1406,12 @@ export default {
       })
     },
     resetdespacho(){
-      this.despacho.webid=' ';
-      this.despacho.nurej=' ';
-      this.despacho.proceso=' ';
-      this.despacho.ci=' ';
-      this.despacho.demandante=' ';
-      this.despacho.representate=' ';
+      this.despacho.webid='';
+      this.despacho.nurej='';
+      this.despacho.proceso='';
+      this.despacho.ci='';
+      this.despacho.demandante='';
+      this.despacho.representate='';
       this.demandados=[{ci:'',nombre:''}];
     },
     guardar(){
