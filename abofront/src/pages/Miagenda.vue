@@ -10,6 +10,13 @@
               </template>
             </q-input>
           </template>
+          <template v-slot:body-cell-estado="props">
+              <q-td key="estado" :props="props">
+                  <q-badge :color="props.row.estado=='EN ESPERA'?'yellow':'green'">
+                    {{props.row.estado}}
+                  </q-badge>
+              </q-td>
+          </template>
           <template v-slot:body-cell-opciones="props">
             <q-tr :props="props">
               <q-td key="opciones" :props="props">
