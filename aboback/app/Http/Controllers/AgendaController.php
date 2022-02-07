@@ -32,7 +32,10 @@ class AgendaController extends Controller
     {
         $year=date("Y",strtotime($request->fecha));
         $mes=date("m",strtotime($request->fecha));
+        if($request->user()->id==1)
         return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)
+        ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
+        return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)->where('user_id',$request->user()->id)
         ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
     /**
@@ -57,7 +60,7 @@ class AgendaController extends Controller
         $agenda->horaini=date('H:i:s');
         $agenda->fechafin=$request->fechafin;
         $agenda->horafin=$request->horafin;
-        $agenda->user_id=$request->user()->id;
+        $agenda->user_id=$request->user_id;
         $agenda->despacho_id=$request->despacho_id;
         $agenda->save();
         return $agenda;

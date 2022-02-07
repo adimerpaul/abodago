@@ -550,7 +550,7 @@
 
             </q-card-section>
             <q-card-section align="right">
-              <q-btn flat label="Imprimir Egresos" color="primary" icon="print" @click="imprimir"/>
+              <q-btn flat label="Imprimir Egresos" color="primary" icon="print" @click="impresionpagos"/>
               <q-btn flat label="Imprimir Egresos clientes" color="primary" icon="print" @click="impcliente"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
@@ -581,30 +581,31 @@
           <div class="text-h6">Crear agenda</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-          <q-form >
 <!--            {{agenda}}-->
             <q-form @submit="crearagenda">
             <div class="row">
               <div class="col-4">
                 <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
               </div>
-              <div class="col-4">
-                <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" />
+              <div class="col-3">
+                <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" required/>
               </div>
-              <div class="col-4">
-                <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time"/>
+              <div class="col-2">
+                <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time" required/>
+              </div>
+              <div class="col-3">
+                <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
               </div>
               <div class="col-5">
-                <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" />
+                <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" required/>
               </div>
               <div class="col-5">
-                <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" />
+                <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" required/>
               </div>
               <div class="col-2 flex flex-center">
                 <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
               </div>
             </div>
-            </q-form>
           </q-form>
         </q-card-section>
         <q-card-actions align="right" class="bg-white text-teal">
@@ -617,7 +618,7 @@
 
 <script>
 // import $ from 'jquery'
-// import { jsPDF } from "jspdf";
+import { jsPDF } from "jspdf";
 import {date} from 'quasar'
 export default {
   data(){
@@ -643,6 +644,7 @@ export default {
       ],
       filter:'',
       usuario:'',
+      user:{label:''},
       dialogcliente:false,
       dialogdatos:false,
       dialogarchivo:false,
@@ -771,8 +773,18 @@ export default {
       this.tramites2=this.tramites
     })
     this.resetdespacho();
+    this.misusuarios()
   },
   methods:{
+    misusuarios(){
+      this.$axios.post(process.env.API+'/listuser').then(res=>{
+        res.data.forEach(r => {
+        this.usuarios.push({label:r.name,r})
+
+        });
+      })
+
+    },
     enlazar(){
       if(this.proforma=={label:''})
       return false;
@@ -824,9 +836,14 @@ export default {
       })
     },
     crearagenda(){
-      this.$q.loading.show()
+      console.log(this.user)
+      if(this.user.r==undefined)
+        return false
+      else{  
+      //this.$q.loading.show()
       this.agenda.despacho_id=this.despacho.id
       this.agenda.etapa_id=this.etapa.id
+      this.agenda.user_id=this.user.r.id
       this.$axios.post(process.env.API+'/agenda',this.agenda).then(res=>{
         // console.log(res.data)
         this.agenda={}
@@ -834,7 +851,7 @@ export default {
         this.misagendas(this.despacho.id)
         // this.$q.loading.hide()
 
-      })
+      })}
     },
     updrequisito(){
       this.reqdespacho.requisitos=this.reqfal;
@@ -1024,6 +1041,50 @@ export default {
           myWindow.close();
         // },500);
     },
+        impresionpagos(){
+      let mc=this
+
+      function header(){
+        var img = new Image()
+        img.src = 'img/logocastillogonzales2.png'
+        doc.addImage(img, 'jpg', 0.5, 0.5, 5, 3)
+        doc.setFont(undefined,'bold')
+        doc.text(10, 3.5, 'GASTOS '+ mc.cliente2.nombre)
+        doc.text(8, 4,  mc.datodespacho.tramite.nombre)
+        doc.setFont(undefined,'normal')
+      }
+      function footer(){
+      doc.setFontSize(7);
+        doc.text(1, 30, 'La Plata No. 6254 entre Sucre y Murguia' )
+        doc.text(1, 30.3, '(Frente Cine Hollywood)' )
+        doc.text(1, 30.6, 'gonzalesdelcastillomarcelo@hotmail.com')
+        doc.text(1, 31, 'Cel: 78611101')
+      doc.setFontSize(9);
+
+      }
+      var doc = new jsPDF('p','cm','legal')
+      // console.log(dat);
+      doc.setFont("courier");
+      doc.setFontSize(9);
+      // var x=0,y=
+      header()
+      footer()
+      // let xx=x
+      // let yy=y
+      let y=0
+      //this.ventas.forEach(r=>{
+        y+=0.5
+
+        if (y+3>25){
+          doc.addPage();
+          header()
+          y=0
+        }
+    //  })
+
+      window.open(doc.output('bloburl'), '_blank');
+    },
+
     imprimir(){
       this.$axios.post(process.env.API+'/impresion/'+this.datodespacho.id).then(res=>{
         let myWindow = window.open("", "Imprimir", "width=900,height=600");
