@@ -551,7 +551,7 @@
             </q-card-section>
             <q-card-section align="right">
               <q-btn flat label="Imprimir Egresos" color="primary" icon="print" @click="impresionpagos"/>
-              <q-btn flat label="Imprimir Egresos clientes" color="primary" icon="print" @click="impcliente"/>
+              <q-btn flat label="Imprimir Egresos clientes" color="primary" icon="print" @click="impresioncliente"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
@@ -723,6 +723,7 @@ export default {
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
+        {field:'concepto',name:'concepto',label:'Concepto',align:'right'},
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
       ],
       egresocol:[
@@ -839,7 +840,7 @@ export default {
       console.log(this.user)
       if(this.user.r==undefined)
         return false
-      else{  
+      else{
       //this.$q.loading.show()
       this.agenda.despacho_id=this.despacho.id
       this.agenda.etapa_id=this.etapa.id
@@ -1046,25 +1047,46 @@ export default {
 
       function header(){
         var img = new Image()
+        var img2 = new Image()
+
         img.src = 'img/logocastillogonzales2.png'
+        img2.src = 'img/fondo2.png'
+        doc.setFontSize(12);
+
         doc.addImage(img, 'jpg', 0.5, 0.5, 5, 3)
         doc.setFont(undefined,'bold')
-        doc.text(10, 3.5, 'GASTOS '+ mc.cliente2.nombre)
-        doc.text(8, 4,  mc.datodespacho.tramite.nombre)
+        doc.text(10, 2.5, 'GASTOS '+ mc.cliente2.nombre)
+        doc.text(8, 3,  mc.datodespacho.tramite.nombre)
         doc.setFont(undefined,'normal')
+        doc.addImage(img2, 'jpg', 0.5, 12,20,10)
+        doc.setFontSize(7);
       }
       function footer(){
+                var img3 = new Image()
+        var img4 = new Image()
+        var img5 = new Image()
+        var img6 = new Image()
+                img3.src = 'img/ubicacion.jpg'
+        img4.src = 'img/correo.jpg'
+        img5.src = 'img/telf.jpg'
+        img6.src = 'img/linea.png'
       doc.setFontSize(7);
-        doc.text(1, 30, 'La Plata No. 6254 entre Sucre y Murguia' )
-        doc.text(1, 30.3, '(Frente Cine Hollywood)' )
-        doc.text(1, 30.6, 'gonzalesdelcastillomarcelo@hotmail.com')
-        doc.text(1, 31, 'Cel: 78611101')
+        doc.addImage(img3, 'jpg', 0.5, 30.8,0.3,0.3)
+        doc.text(1, 31, 'La Plata No. 6254 entre Sucre y Murguia' )
+        doc.text(1, 31.3, '(Frente Cine Hollywood)' )
+        doc.addImage(img4, 'jpg', 0.5, 31.4,0.3,0.3)
+        doc.text(1, 31.6, 'gonzalesdelcastillomarcelo@hotmail.com')
+        doc.addImage(img5, 'jpg', 0.5, 31.8,0.3,0.3)
+        doc.text(1, 32, 'Cel: 78611101')
+        doc.addImage(img6, 'jpg', 0, 29,21,5)
       doc.setFontSize(9);
 
       }
       var doc = new jsPDF('p','cm','legal')
       // console.log(dat);
-      doc.setFont("courier");
+      doc.addFont('bromellonavidadregular', 'bromellonavidadregular', 'normal');
+      doc.setFont("bromellonavidadregular");
+      //doc.setFont("courier");
       doc.setFontSize(9);
       // var x=0,y=
       header()
@@ -1072,15 +1094,192 @@ export default {
       // let xx=x
       // let yy=y
       let y=0
+      let y1=0
+      let y2=0
+      let sum1=0
+      let sum2=0
       //this.ventas.forEach(r=>{
         y+=0.5
 
-        if (y+3>25){
+        if (y+5>34){
           doc.addPage();
           header()
+          footer()
           y=0
         }
-    //  })
+        doc.setFont(undefined,'bold')
+        doc.text(7, 4,'INGRESOS' )
+        doc.setLineWidth(0.05);
+        doc.line(0.5,4.2,20,4.2)
+        doc.text(1, 4.5,'FECHA' )
+        doc.text(3, 4.5,'RECIBO' )
+        doc.text(4.5, 4.5,'CONCEPTO' )
+        doc.text(9, 4.5,'MONTO Bs' )
+        doc.setFont(undefined,'normal')
+        mc.tabingreso.forEach(ing => {
+          sum1+=parseFloat(ing.monto)
+          y1+=0.5
+        doc.text(1, y1+4.5,ing.fecha+'' )
+        doc.text(3, y1+4.5, ing.recibo+'' )
+        doc.text(4.5, y1+4.5,ing.concepto+'' )
+        doc.text(9, y1+4.5,ing.monto+'' )
+        });
+        doc.setFont(undefined,'bold')
+        doc.text(17, 4, 'EGRESOS')
+        doc.text(14, 4.5,'CONCEPTO' )
+        doc.text(19, 4.5,'MONTO Bs' )
+        doc.setFont(undefined,'normal')
+        mc.tabegreso.forEach(egr => {
+          sum2+=parseFloat( egr.monto)
+          y2+=0.5
+        doc.text(14, y2+4.5,egr.concepto+'')
+        doc.text(19, y2+4.5,egr.monto+'')
+        });
+        if(y2>y1)
+          {doc.line(13.5,4.5,13.5,y2+4.5)
+          y=y2}
+        else
+          {doc.line(13.5,4.5,13.5,y1+4.5)
+          y=y1}
+          y+=0.5
+        doc.line(0.5,y+4.5,20,y+4.5)
+          y+=0.5
+        doc.setFont(undefined,'bold')
+        doc.text(1, y+4.5,' INGRESO TOTAL:')
+        doc.setFont(undefined,'normal')
+        doc.text(9, y+4.5,sum1+' Bs' )
+        doc.setFont(undefined,'bold')
+        doc.text(14, y+4.5,'EGRESO TOTAL')
+        doc.setFont(undefined,'normal')
+        doc.text(19, y+4.5,sum2+' Bs' )
+          y+=0.5
+          let tot= parseFloat(sum1) - parseFloat(sum2)
+        doc.setFont(undefined,'bold')
+         doc.text(1, y+4.5,' TOTAL ADEUDADO:')
+        doc.setFont(undefined,'normal')
+          doc.text(9, y+4.5,tot+' Bs' )
+
+
+      window.open(doc.output('bloburl'), '_blank');
+    },
+
+            impresioncliente(){
+      let mc=this
+
+      function header(){
+        var img = new Image()
+        var img2 = new Image()
+
+        img.src = 'img/logocastillogonzales2.png'
+        img2.src = 'img/fondo2.png'
+        doc.setFontSize(12);
+
+        doc.addImage(img, 'jpg', 0.5, 0.5, 5, 3)
+        doc.setFont(undefined,'bold')
+        doc.text(10, 2.5, 'GASTOS '+ mc.cliente2.nombre)
+        doc.text(8, 3,  mc.datodespacho.tramite.nombre)
+        doc.setFont(undefined,'normal')
+        doc.addImage(img2, 'jpg', 0.5, 12,20,10)
+        doc.setFontSize(7);
+      }
+      function footer(){
+                var img3 = new Image()
+        var img4 = new Image()
+        var img5 = new Image()
+        var img6 = new Image()
+                img3.src = 'img/ubicacion.jpg'
+        img4.src = 'img/correo.jpg'
+        img5.src = 'img/telf.jpg'
+        img6.src = 'img/linea.png'
+      doc.setFontSize(7);
+        doc.addImage(img3, 'jpg', 0.5, 30.8,0.3,0.3)
+        doc.text(1, 31, 'La Plata No. 6254 entre Sucre y Murguia' )
+        doc.text(1, 31.3, '(Frente Cine Hollywood)' )
+        doc.addImage(img4, 'jpg', 0.5, 31.4,0.3,0.3)
+        doc.text(1, 31.6, 'gonzalesdelcastillomarcelo@hotmail.com')
+        doc.addImage(img5, 'jpg', 0.5, 31.8,0.3,0.3)
+        doc.text(1, 32, 'Cel: 78611101')
+        doc.addImage(img6, 'jpg', 0, 29,21,5)
+      doc.setFontSize(9);
+
+      }
+      var doc = new jsPDF('p','cm','legal')
+      // console.log(dat);
+      doc.addFont('bromellonavidadregular', 'bromellonavidadregular', 'normal');
+      doc.setFont("bromellonavidadregular");
+      //doc.setFont("courier");
+      doc.setFontSize(9);
+      // var x=0,y=
+      header()
+      footer()
+      // let xx=x
+      // let yy=y
+      let y=0
+      let y1=0
+      let y2=0
+      let sum1=0
+      let sum2=0
+      //this.ventas.forEach(r=>{
+        y+=0.5
+
+        if (y+5>34){
+          doc.addPage();
+          header()
+          footer()
+          y=0
+        }
+        doc.setFont(undefined,'bold')
+        doc.text(7, 4,'INGRESOS' )
+        doc.setLineWidth(0.05);
+        doc.line(0.5,4.2,20,4.2)
+        doc.text(1, 4.5,'FECHA' )
+        doc.text(3, 4.5,'RECIBO' )
+        doc.text(4.5, 4.5,'CONCEPTO' )
+        doc.text(9, 4.5,'MONTO Bs' )
+        doc.setFont(undefined,'normal')
+        mc.tabingreso.forEach(ing => {
+          sum1+=parseFloat(ing.monto)
+          y1+=0.5
+        doc.text(1, y1+4.5,ing.fecha+'' )
+        doc.text(3, y1+4.5, ing.recibo+'' )
+        doc.text(4.5, y1+4.5,ing.concepto+'' )
+        doc.text(9, y1+4.5,ing.monto+'' )
+        });
+        doc.setFont(undefined,'bold')
+        doc.text(17, 4, 'EGRESOS')
+        doc.text(14, 4.5,'CONCEPTO' )
+        doc.text(19, 4.5,'MONTO Bs' )
+        doc.setFont(undefined,'normal')
+        mc.tabegcl.forEach(egr => {
+          sum2+=parseFloat( egr.monto)
+          y2+=0.5
+        doc.text(14, y2+4.5,egr.concepto+'')
+        doc.text(19, y2+4.5,egr.monto+'')
+        });
+        if(y2>y1)
+          {doc.line(13.5,4.5,13.5,y2+4.5)
+          y=y2}
+        else
+          {doc.line(13.5,4.5,13.5,y1+4.5)
+          y=y1}
+          y+=0.5
+        doc.line(0.5,y+4.5,20,y+4.5)
+          y+=0.5
+        doc.setFont(undefined,'bold')
+        doc.text(1, y+4.5,' INGRESO TOTAL:')
+        doc.setFont(undefined,'normal')
+        doc.text(9, y+4.5,sum1+' Bs' )
+        doc.setFont(undefined,'bold')
+        doc.text(14, y+4.5,'EGRESO TOTAL')
+        doc.setFont(undefined,'normal')
+        doc.text(19, y+4.5,sum2+' Bs' )
+          y+=0.5
+          let tot= parseFloat(sum1) - parseFloat(sum2)
+        doc.setFont(undefined,'bold')
+         doc.text(1, y+4.5,' TOTAL ADEUDADO:')
+        doc.setFont(undefined,'normal')
+          doc.text(9, y+4.5,tot+' Bs' )
+
 
       window.open(doc.output('bloburl'), '_blank');
     },
