@@ -27,7 +27,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Clientes Naturales " :rows="clientes" :columns="columns" :filter="filter"  >
+        <q-table dense title="Personas Naturales " :rows="clientes" :columns="columns" :filter="filter"  >
 <!--          :rows-per-page-options="[50,100,150,200,0]"-->
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -725,7 +725,7 @@ export default {
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
       ],
-      egrclcol:[  
+      egrclcol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},

@@ -27,7 +27,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Clientes Juridicos" :rows="clientes" :columns="columns" :filter="filter"  >
+        <q-table dense title="Personas Juridicos" :rows="clientes" :columns="columns" :filter="filter"  >
 <!--          :rows-per-page-options="[50,100,150,200,0]"-->
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -379,19 +379,27 @@
               row-key="name"
              >
              <template v-slot:body-cell-tramite="props">
-               <q-td :props="props">
+               <q-td :props="props" @click="detalle(props.row)">
                  {{props.row.tramite.nombre}}
                </q-td>
              </template>
+             <template v-slot:body-cell-demandados="props">
+               <q-td :props="props" @click="detalle(props.row)">
+                 <ul >
+                   <li v-for="(d,index) in props.row.demandados" :key="index">{{d.nombre}}</li>
+
+                 </ul>
+               </q-td>
+             </template>
             <template v-slot:body-cell-tipo="props">
-              <q-td :props="props">
+              <q-td :props="props" @click="detalle(props.row)">
                 <q-badge :color="props.row.tipo=='TRAMITE'?'accent':'teal'">
                   {{ props.row.tipo }}
                 </q-badge>
               </q-td>
             </template>
                <template v-slot:body-cell-requisitos="props">
-                 <q-td :props="props">
+                 <q-td :props="props" @click="detalle(props.row)">
                    <ul style="padding: 0px;margin: 0px;border: 0px;list-style: none">
                      <li  style="padding: 0px;margin: 0px;border: 0px;font-size: 8px" v-for="r in props.row.requisitos" :key="r.id">{{r.nombre}}</li>
                    </ul>
@@ -627,13 +635,13 @@ export default {
       imagen : null,
       miaccion:'',
       columnsagenda:[
-        {label:'fecha',name:'fechaini',field:'fechaini'},
-        {label:'etapa',name:'etapa',field:'etapa'},
-        {label:'actividad',name:'actividad',field:'actividad'},
-        {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
-        {label:'usuario',name:'usuario',field:'userterminado'},
-        {label:'fecha proximo',name:'fechafin',field:'fechafin'},
-        {label:'estado',name:'estado',field:'estado'},
+        {label:'FECHA',name:'fechaini',field:'fechaini'},
+        {label:'ETAPA',name:'etapa',field:'etapa'},
+        {label:'ACTIVIDAD',name:'actividad',field:'actividad'},
+        {label:'PROXIMO PASO',name:'proximopaso',field:'proximopaso'},
+        {label:'USUARIO',name:'usuario',field:'userterminado'},
+        {label:'FECHA PROXIMO',name:'fechafin',field:'fechafin'},
+        {label:'ESTADO',name:'estado',field:'estado'},
         // {label:'opciones',name:'opciones',field:'opciones'},
       ],
       filter:'',
@@ -692,6 +700,7 @@ export default {
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
         {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
+
         {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
        // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
         // {field:'ref',name:'ref',label:'ref',align:'right'},
@@ -711,7 +720,9 @@ export default {
         {field:'fecha',name:'fecha',label:'FECHA',align:'right'},
         {field:'hora',name:'hora',label:'HORA',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
-        {field:'tramite',name:'tramite',label:'tramite',align:'right'},
+        {field:'tramite',name:'tramite',label:'TRAMITE',align:'right'},
+        {field:'demandante',name:'demandante',label:'DEMANDANTE',align:'right'},
+        {field:'demandados',name:'demandados',label:'DEMANDADOS',align:'right'},
         {field:'requisitos',name:'requisitos',label:'requisitos',align:'right'},
       ],
       ingresocol:[

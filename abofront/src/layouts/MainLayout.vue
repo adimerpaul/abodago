@@ -29,7 +29,7 @@
         </div>
         <div class="text-subtitle1">{{ now }}</div>
       </div>
-      <q-img src="img/fondo.jpg" class="header-image absolute-top" />
+      <q-img src="img/l.jpg" class="header-image absolute-top" style="height:100%"/>
     </q-header>
     <q-drawer
       v-model="leftDrawerOpen"
@@ -165,7 +165,7 @@
             </q-item-section>
 
             <q-item-section>
-              <q-item-label>Clientes Naturales</q-item-label>
+              <q-item-label>Personas Naturales</q-item-label>
               <q-item-label caption>
                 Naturales
               </q-item-label>
@@ -251,13 +251,13 @@
         </q-list>
       </q-scroll-area>
 
-      <q-img class="absolute-top" src="img/fondo.jpg" style="height: 130px">
+      <q-img class="absolute-top" src="img/logocastillogonzales2.png" style="height: 130px">
         <div class="absolute-bottom bg-transparent ">
           <!--          <q-avatar size="56px" class="q-mb-sm">-->
           <!--            <img src="https://cdn.quasar.dev/img/boy-avatar.png">-->
           <!--          </q-avatar>-->
-          <div class="text-weight-bold">Del Castillo y Gonzales </div>
-          <div>Menu</div>
+          <div class="text-weight-bold"> </div>
+          <div></div>
         </div>
       </q-img>
     </q-drawer>
