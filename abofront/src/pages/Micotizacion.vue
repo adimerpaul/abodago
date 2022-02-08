@@ -34,11 +34,13 @@
 </template>
 
 <script>
+import {date} from 'quasar'
 export default {
   data(){
     return{
       filter:'',
       proformas:[],
+      fec :date.formatDate(Date.now(),'DD-MM-YYYY'),
       columns:[
         {label:'cliente',field:'cliente',name:'cliente'},
         {label:'fecha',field:'fecha',name:'fecha'},
@@ -67,7 +69,7 @@ export default {
         myWindow.print();
         myWindow.close();
       })
-    }
+    },
   }
 }
 </script>

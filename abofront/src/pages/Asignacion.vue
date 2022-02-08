@@ -27,7 +27,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Clientes " :rows="clientes" :columns="columns" :filter="filter"  >
+        <q-table dense title="Clientes Juridicos" :rows="clientes" :columns="columns" :filter="filter"  >
 <!--          :rows-per-page-options="[50,100,150,200,0]"-->
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -38,12 +38,24 @@
           </template>
           <template v-slot:body="props">
             <q-tr :props="props">
+             <q-td key="opciones" :props="props">
+                <q-btn-group >
+                  <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
+                  <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
+                  <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
+                </q-btn-group >
+              </q-td>
               <q-td key="ci" :props="props" @click="listdespacho(props.row)">
                 {{ props.row.ci }}
               </q-td>
               <q-td key="nombre" :props="props" @click="listdespacho(props.row)">
                 <!--            <q-badge color="green">-->
                 {{ props.row.nombre }}
+                <!--            </q-badge>-->
+              </q-td>
+                            <q-td key="telefono" :props="props" @click="listdespacho(props.row)">
+                <!--            <q-badge color="green">-->
+                {{ props.row.telefono }}
                 <!--            </q-badge>-->
               </q-td>
               <q-td key="tipo" :props="props">
@@ -111,30 +123,11 @@
                 </template>
                 <!--            </q-badge>-->
               </q-td>
-              <q-td key="opciones" :props="props">
-                <!--            <q-badge color="amber">-->
-<!--                              {{ props.row.estado }}-->
-                <!--            </q-badge>-->
-                <q-btn-group >
-<!--                  <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
-                  <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
-                  <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
-                  <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
-                </q-btn-group >
-<!--                <q-btn-group v-if="props.row.estado=='ACEPTADO'">-->
-<!--&lt;!&ndash;                  <q-btn type="a"  target="__blank" dense :href="url+'/mail/'+props.row.id" color="primary" label="Imprimir" icon="timeline" size="xs" />&ndash;&gt;-->
-<!--&lt;!&ndash;                  <q-btn dense @click="editar(props)" color="teal" label="Editar" icon="edit" size="xs" />&ndash;&gt;-->
-<!--                  <q-btn dense @click="dialogcliente=true;mail=props.row" color="positive" label="Remitir" icon="code" size="xs" />-->
-<!--&lt;!&ndash;                  <q-btn dense @click="anular(props.row)" color="negative" label="Anular" icon="delete" size="xs" />&ndash;&gt;-->
-<!--                  <q-btn dense @click="archivar(props.row)" color="accent" label="Terminar" icon="list" size="xs" />-->
-<!--&lt;!&ndash;                  <q-btn dense @click="archivo(props.row)" color="amber" label="Archivo" icon="upload" size="xs" />&ndash;&gt;-->
-<!--&lt;!&ndash;                  <q-btn dense @click="dividir(props.row)" color="red" label="Dividir" icon="content_cut" size="xs" />&ndash;&gt;-->
-<!--                </q-btn-group>-->
-              </q-td>
+
             </q-tr>
           </template>
         </q-table>
-                        <q-dialog  v-model="dialog_modimg">
+        <q-dialog  v-model="dialog_modimg">
           <q-card style="width: 1200px;min-width: 40vh">
 
             <q-card-section class="q-pt-none">
@@ -157,8 +150,6 @@
             </q-card-section>
             <q-card-section class="q-pt-none">
               <q-form @submit.prevent="registrarlog">
-<!--                <q-input type="textarea" outlined label="Mi acccion" v-model="miaccion" required/>-->
-<!--                <q-select :options="usuarios" label="Seleccionar personal" v-model="usuario" outlined required/>-->
                 <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito()" v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
@@ -168,13 +159,12 @@
                     </q-item>
                   </template>
                 </q-select>
-<!--                <pre>{{tramite}}</pre>-->
                 <div class="row">
-                  <div class="col-4">
+                  <div class="col-12 col-md-6">
                     <div class="text-h6">REQUISITOS</div>
                      <q-checkbox size="xl" dense rigth-label v-model="r.estado" :label="r.nombre" v-for="(r,i) in tramite.requisitos" :key="i" class="full-width" />
                   </div>
-                  <div class="col-8">
+                  <div class="col-12 col-md-6">
                 <div class="row">
                   <div class="col-6"><q-input dense type="date" label="Fecha" outlined  v-model="despacho.fecha"/></div>
                   <div class="col-6"><q-input dense type="time" label="Hora" outlined  v-model="despacho.hora"/></div>
@@ -195,7 +185,8 @@
                 <div v-if="tramite.tipo!='TRAMITE'">
                 <q-input label="representante" outlined dense v-model="despacho.representante"/>
                 <div class="text-h6">DEMANDADOS</div>
-                <table style="width:100%;  border: 1px solid black;" >
+                <div class="responsive">
+                <table style="table table-sm " >
                 <thead>
                   <tr>
                   <th>ID</th>
@@ -216,6 +207,7 @@
                 </tr>
                 </tbody>
                 </table>
+                </div>
                 </div>
                 <q-btn label="CREAR" color="teal" icon="send" class="full-width" type="submit"/>
                 </div>
@@ -295,7 +287,7 @@
 
                     <q-tab-panels v-model="tab" animated>
                       <q-tab-panel name="requisitos">
-                        <div class="text-h6">Mails</div>
+                        <div class="text-h6"></div>
 <!--                        <pre>{{despacho}}</pre>-->
                         <q-list dense bordered padding class="rounded-borders">
                           <q-item clickable v-ripple v-for="r in despacho.requisitos" :key="r.id">
@@ -344,11 +336,11 @@
                       <q-tab-panel name="cotizacion">
                         <div class="text-h6">Cotizacion</div>
                         <div class="row">
-                          <div class="col-6">
-                          <div class="col-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
+                          <div class="col-12 col-md-6">
+                          <div class="col12 col-md-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
                             <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
                           </div>
-                          <div class="col-6">
+                          <div class="col-12 col-md-6" v-if="cliente.proforma!== null">
                             <div> PROFORMA</div>
                             tramite: {{cliente3.proforma.tramite.nombre}}<br>
                             Total: {{cliente3.proforma.total}} <br>
@@ -404,14 +396,14 @@
                  </q-td>
                </template>
             <template v-slot:body-cell-opcion="props">
-<!--              <q-tr :props="props">-->
               <q-td key="opcion" :props="props">
+                <q-btn-group >
                 <q-btn dense  size="xs" label="pagos" flat color="green" @click="listRow(props.row)" icon="list"></q-btn>
                 <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
                 <q-btn dense  size="xs" label="dato" flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
                 <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
+                </q-btn-group >
               </q-td>
-<!--              </q-tr>-->
              </template>
 <!--               <template v-slot:top-left>-->
 <!--                 <q-btn dense label="agregar" @click="aceptar(props.row)" color="positive"  icon="add_circle" size="xs" />-->
@@ -584,25 +576,25 @@
 <!--            {{agenda}}-->
             <q-form @submit="crearagenda">
             <div class="row">
-              <div class="col-4">
+              <div class="col-12 col-md-4">
                 <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-3">
                 <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" required/>
               </div>
-              <div class="col-2">
+              <div class="col-12 col-md-2">
                 <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time" required/>
               </div>
-              <div class="col-3">
+              <div class="col-12 col-md-3">
                 <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
               </div>
-              <div class="col-5">
+              <div class="col-12 col-md-5">
                 <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" required/>
               </div>
-              <div class="col-5">
+              <div class="col-12 col-md-5">
                 <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" required/>
               </div>
-              <div class="col-2 flex flex-center">
+              <div class="col-12 col-md-2 flex flex-center">
                 <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
               </div>
             </div>
@@ -693,8 +685,10 @@ export default {
           proformas:[],
       proforma:{},
       columns:[
+        {field:'opciones',name:'opciones',label:'OPCIONES',align:'center'},
         {field:'ci',name:'ci',label:'CI',align:'right'},
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
+        {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
         {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
        // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
@@ -708,16 +702,15 @@ export default {
         // // {field:'estado',name:'estado',label:'estado',align:'right'},
         // {field:'folio',name:'folio',label:'folio',align:'right'},
         // {field:'archivo',name:'archivo',label:'archivo',align:'right'},
-        {field:'opciones',name:'opciones',label:'OPCIONES',align:'right'},
       ],
 
       descol:[
+        {field:'opcion',name:'opcion',label:'OPCION',align:'center'},
         {field:'fecha',name:'fecha',label:'FECHA',align:'right'},
         {field:'hora',name:'hora',label:'HORA',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
         {field:'tramite',name:'tramite',label:'tramite',align:'right'},
         {field:'requisitos',name:'requisitos',label:'requisitos',align:'right'},
-        {field:'opcion',name:'opcion',label:'OPCION',align:'center'}
       ],
       ingresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
@@ -732,7 +725,7 @@ export default {
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
       ],
-      egrclcol:[
+      egrclcol:[  
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
@@ -797,8 +790,9 @@ export default {
           this.proformas=[]
           this.proforma={label:''}
       this.$axios.post(process.env.API+'/listproforma/'+cliente_id).then(res=>{
+        console.log(res.data)
         res.data.forEach(r => {
-          this.proformas.push({label:r.total+'Bs '+r.fecha+' '+r.tramite.nombre,r});
+          this.proformas.push({label:r.total+'Bs '+r.fecha+' '+r.tramite.nombre ,r});
         });
 
 
