@@ -9,11 +9,14 @@ export function auth_success(state, data){
   state.status = 'success'
   state.token = data.token
   state.user = data.user
-  state.boolusuarios=data.user.permisos.find(p=>p.id===1)!=undefined
-  state.boolrecepcion=data.user.permisos.find(p=>p.id===2)!=undefined
-  state.booldesignacion=data.user.permisos.find(p=>p.id===3)!=undefined
-  state.boolseguimiento=data.user.permisos.find(p=>p.id===4)!=undefined
-  state.boolmisrecepciones=data.user.permisos.find(p=>p.id===5)!=undefined
+  state.boolagenda=data.user.permisos.find(p=>p.id===1)!=undefined
+  state.boolusuarios=data.user.permisos.find(p=>p.id===2)!=undefined
+  state.booltramite=data.user.permisos.find(p=>p.id===3)!=undefined
+  state.booljuridico=data.user.permisos.find(p=>p.id===4)!=undefined
+  state.boolnatural=data.user.permisos.find(p=>p.id===5)!=undefined
+  state.booldemandado=data.user.permisos.find(p=>p.id===6)!=undefined
+  state.boolcotizacion=data.user.permisos.find(p=>p.id===7)!=undefined
+  state.boolmicotizacion=data.user.permisos.find(p=>p.id===8)!=undefined
   // state.inventario=data.user.permisos.find(p=>p.id===4)!=undefined
   // state.ventadetalle=data.user.permisos.find(p=>p.id===5)!=undefined
   // state.historialventadetalle=data.user.permisos.find(p=>p.id===6)!=undefined
@@ -32,12 +35,14 @@ export function   auth_error(state){
 export function salir(state){
   state.status = ''
   state.token = ''
+  state.boolagenda=false
   state.boolusuarios=false
-  state.boolrecepcion=false
-  state.boolseguimiento=false
-  state.user={unit:{}}
-  state.booldesignacion=false
-  state.boolmisrecepciones=false
+  state.booltramite=false
+  state.booljuridico=false
+  state.boolnatural=false
+  state.booldemandado=false
+  state.boolcotizacion=false
+  state.boolmicotizacion=false
   // state.ventadetalle=false
   // state.historialventadetalle=false
   // state.ventalocal=false

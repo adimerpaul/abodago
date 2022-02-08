@@ -74,7 +74,7 @@ class AgendaController extends Controller
      */
     public function show($despacho_id)
     {
-        return Agenda::with('user')->with('etapa')->where('despacho_id',$despacho_id)->get();
+        return Agenda::with('user')->with('userterminado')->with('etapa')->where('despacho_id',$despacho_id)->get();
     }
 
     public function finalizar(Request $request){

@@ -13,6 +13,14 @@
       </q-form>
       <div class="col-12">
         <q-table dense title="MI AGENDA " :rows="agenda" :columns="columns" :filter="filter"  >
+                    <template v-slot:body-cell-opciones="props">
+            <q-tr :props="props">
+              <q-td key="opciones" :props="props">
+                  <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="props.row.estado=='EN ESPERA'" @click="actualiza(props.row)"/>
+                  <q-btn dense label="Datos" color="info"  icon="list" size="xs" @click="verdato(props.row)"/>
+              </q-td>
+            </q-tr>
+          </template>
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -27,14 +35,7 @@
                   </q-badge>
               </q-td>
           </template>
-          <template v-slot:body-cell-opciones="props">
-            <q-tr :props="props">
-              <q-td key="opciones" :props="props">
-                  <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="props.row.estado=='EN ESPERA'" @click="actualiza(props.row)"/>
-                  <q-btn dense label="Datos" color="info"  icon="list" size="xs" @click="verdato(props.row)"/>
-              </q-td>
-            </q-tr>
-          </template>
+
         </q-table>
 
         <q-dialog v-model="dialogdatos">
@@ -96,13 +97,13 @@ export default {
       fecha1:date.formatDate(Date.now(),'YYYY-MM-DD'),
       agenda:[],
       columns:[
+        {field:'opciones',name:'opciones',label:'OPCIONES',align:'center'},
         {field:'fechaini',name:'fecha',label:'FECHA INICIO',align:'center'},
         {field:row=>row.etapa.nombre,name:'etapa',label:'ETAPA',align:'center'},
         {field:'actividad',name:'actividad',label:'ACTIVIDAD',align:'center'},
         {field:'proximopaso',name:'proximopaso',label:'PROXIMO PASO',align:'center'},
         {field:'fechafin',name:'fecha',label:'FECHA PP',align:'center'},
         {field:'estado',name:'estado',label:'ESTADO',align:'center'},
-        {field:'opciones',name:'opciones',label:'OPCIONES',align:'center'},
       ],
 
     }
@@ -176,7 +177,7 @@ export default {
       })
     },
     mensaje(){
-        console.log(this.agenda)
+      console.log(this.agenda)
       this.agenda.forEach(element => {
         console.log(element)
         if(element.estado=='EN ESPERA')

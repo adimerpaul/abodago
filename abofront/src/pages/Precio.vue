@@ -121,6 +121,20 @@ export default {
   },
   methods: {
         impresioncot(){
+                if (this.cotizacion.length==0){
+        this.$q.notify({
+          color:'red',
+          caption:'Debe tener cotizaciones'
+        })
+        return false
+      }
+
+      this.$axios.post(process.env.API+'/impcosto',{
+        datos:this.cotizacion,
+        cliente_id:this.cliente.id,
+        tramite_id:this.tramite.id,
+        total:this.total
+      }).then(res=>{
           console.log(this.cotizacion)
       let mc=this
 
@@ -198,7 +212,7 @@ export default {
         });
           y+=0.5
         doc.line(0.5,y+4.6,21,y+4.6)
-              
+
         doc.setFont(undefined,'bold')
         doc.text(1, y+4.5,'TOTAL BS' )
         doc.text(15, y+4.5,sum1+'' )
@@ -213,10 +227,10 @@ export default {
         mc.tramite.requisitos.forEach(r => {
           y+=0.5
           doc.text(2, y+4.5,''+r.nombre )
-          
+
         });
 
-      window.open(doc.output('bloburl'), '_blank');
+      window.open(doc.output('bloburl'), '_blank');})
     },
 
     misprecios(){

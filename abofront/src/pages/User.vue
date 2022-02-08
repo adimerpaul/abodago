@@ -124,40 +124,7 @@
       </template>
       <template v-slot:body="props">
         <q-tr :props="props">
-          <q-td key="name" :props="props">
-            {{props.row.name}}
-          </q-td>
-          <!--          <q-td key="unid" :props="props">-->
-          <!--            {{props.row.unid.nombre}}-->
-          <!--          </q-td>-->
-          <!--          <q-td key="codigo" :props="props">-->
-          <!--            {{props.row.codigo}}-->
-          <!--          </q-td>-->
-          <!--          <q-td key="celular" :props="props">-->
-          <!--            {{props.row.celular}}-->
-          <!--          </q-td>-->
-          <!--          <q-td key="carnet" :props="props">-->
-          <!--            {{props.row.carnet}}-->
-          <!--          </q-td>-->
-          <q-td key="email" :props="props">
-            {{props.row.email}}
-          </q-td>
-<!--          <q-td key="unit" :props="props">-->
-<!--            {{props.row.unit.nombre}}-->
-<!--          </q-td>-->
-          <q-td key="permisos" :props="props">
-            <!--            {{props.row.permisos}}-->
-            <ul>
-              <li v-for="(p,i) in props.row.permisos" :key="i">{{p.nombre}}</li>
-            </ul>
-          </q-td>
-          <q-td key="fechalimite" :props="props">
-            {{props.row.fechalimite}}
-          </q-td>
-          <q-td key="tipo" :props="props">
-            <q-badge :color="props.row.tipo=='USUARIO'?'teal':'accent'">{{props.row.tipo}}</q-badge>
-          </q-td>
-          <q-td key="opcion" :props="props">
+                    <q-td key="opcion" :props="props">
             <q-btn
               dense
               round
@@ -191,63 +158,42 @@
               icon="delete"
             ></q-btn>
           </q-td>
-
-          <!--          <q-td key="opcion" :props="props">-->
-          <!--            <q-btn-->
-          <!--              dense-->
-          <!--              round-->
-          <!--              flat-->
-          <!--              color="green"-->
-          <!--              @click="addRow(props)"-->
-          <!--              icon="playlist_add"-->
-          <!--            ></q-btn>-->
-          <!--            <q-btn-->
-          <!--              dense-->
-          <!--              round-->
-          <!--              flat-->
-          <!--              color="green"-->
-          <!--              @click="verRow(props)"-->
-          <!--              icon="list"-->
-          <!--            ></q-btn>-->
-          <!--            <q-btn-->
-          <!--              dense-->
-          <!--              round-->
-          <!--              flat-->
-          <!--              color="yellow"-->
-          <!--              @click="editRow(props)"-->
-          <!--              icon="edit"-->
-          <!--            ></q-btn>-->
-          <!--            <q-btn-->
-          <!--              dense-->
-          <!--              round-->
-          <!--              flat-->
-          <!--              color="red"-->
-          <!--              @click="deleteRow(props)"-->
-          <!--              icon="delete"-->
-          <!--            ></q-btn>-->
+          <q-td key="name" :props="props">
+            {{props.row.name}}
+          </q-td>
+          <!--          <q-td key="unid" :props="props">-->
+          <!--            {{props.row.unid.nombre}}-->
           <!--          </q-td>-->
+          <!--          <q-td key="codigo" :props="props">-->
+          <!--            {{props.row.codigo}}-->
+          <!--          </q-td>-->
+          <!--          <q-td key="celular" :props="props">-->
+          <!--            {{props.row.celular}}-->
+          <!--          </q-td>-->
+          <!--          <q-td key="carnet" :props="props">-->
+          <!--            {{props.row.carnet}}-->
+          <!--          </q-td>-->
+          <q-td key="email" :props="props">
+            {{props.row.email}}
+          </q-td>
+<!--          <q-td key="unit" :props="props">-->
+<!--            {{props.row.unit.nombre}}-->
+<!--          </q-td>-->
+          <q-td key="permisos" :props="props">
+            <!--            {{props.row.permisos}}-->
+            <ul>
+              <li v-for="(p,i) in props.row.permisos" :key="i">{{p.nombre}}</li>
+            </ul>
+          </q-td>
+          <q-td key="fechalimite" :props="props">
+            {{props.row.fechalimite}}
+          </q-td>
+          <q-td key="tipo" :props="props">
+            <q-badge :color="props.row.tipo=='USUARIO'?'teal':'accent'">{{props.row.tipo}}</q-badge>
+          </q-td>
+
         </q-tr>
       </template>
-      <!--      <template v-slot:body-cell-opcion="props">-->
-      <!--        <q-td :props="props">-->
-      <!--        <q-btn-->
-      <!--            dense-->
-      <!--            round-->
-      <!--            flat-->
-      <!--            color="yellow"-->
-      <!--            @click="editRow(props)"-->
-      <!--            icon="edit"-->
-      <!--          ></q-btn>-->
-      <!--          <q-btn-->
-      <!--            dense-->
-      <!--            round-->
-      <!--            flat-->
-      <!--            color="red"-->
-      <!--            @click="deleteRow(props)"-->
-      <!--            icon="delete"-->
-      <!--          ></q-btn>-->
-      <!--        </q-td>-->
-      <!--      </template>-->
     </q-table>
     <!--    {{permisos2}}-->
     <q-dialog v-model="dialog_mod">
@@ -398,6 +344,7 @@ export default {
       modelpermiso:false,
       uni:{},
       columns: [
+        { name: "opcion", label: "OPCIÓN", field: "action", sortable: false },
         {name: "name", align: "left", label: "NOMBRE ", field: "name", sortable: true,},
         // {name: "celular", align: "left", label: "Celular ", field: "celular", sortable: true,},
         // {name: "carnet", align: "left", label: "Carnet ", field: "carnet", sortable: true,},
@@ -408,7 +355,6 @@ export default {
         {name: "permisos", align: "left", label: "PERMISOS", field: "permisos", sortable: true,},
         {name: "fechalimite", align: "left", label: "FECHA LÍMITE", field: "fechalimite", sortable: true,},
         {name: "tipo", align: "left", label: "TIPO", field: "tipo", sortable: true,},
-        { name: "opcion", label: "OPCIÓN", field: "action", sortable: false },
       ],
       data: [],
       units:[]

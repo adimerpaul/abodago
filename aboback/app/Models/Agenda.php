@@ -20,12 +20,18 @@ class Agenda extends Model
         'horaterminado',
         'horafin',
         'user_id',
+        'userterminado_id',
         'despacho_id',
     ];
 
     public function user(){
         return $this->belongsTo(User::class);
     }
+    
+    public function userterminado(){
+        return $this->belongsTo(User::class);
+    }
+
     public function etapa(){
         return $this->belongsTo(Etapa::class);
     }

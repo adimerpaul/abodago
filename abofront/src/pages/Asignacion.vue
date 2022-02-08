@@ -251,23 +251,23 @@
                 <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
                 <div>
                 <q-input label="representante" outlined dense v-model="cliente3.representante"/>
-<!--                <div class="text-h6">DEMANDADOS</div>-->
-<!--                <table style="width:100%;  border: 1px solid black;" >-->
-<!--                <thead>-->
-<!--                  <tr>-->
-<!--                  <th>ID</th>-->
-<!--                  <th>CI</th>-->
-<!--                  <th>NOMBRE</th>-->
-<!--                  </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr v-for="(i,index) in cliente3.demandados" :key="index">-->
-<!--                    <th scope="row">{{index+1}}</th>-->
-<!--                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>-->
-<!--                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--                </table>-->
+                <div class="text-h6">DEMANDADOS</div>
+                <table style="width:100%;  border: 1px solid black;" >
+               <thead>
+                 <tr>
+                 <th>ID</th>
+                 <th>CI</th>
+                <th>NOMBRE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(i,index) in cliente3.demandados" :key="index">
+                    <th scope="row">{{index+1}}</th>
+                    <td style="text-align:center">{{i.ci}} </td>
+                    <td style="text-align:center"> {{i.nombre}}</td>
+                </tr>
+                </tbody>
+               </table>
                   <q-card>
                     <q-tabs
                       v-model="tab"
@@ -308,8 +308,10 @@
                             </q-td>
                           </template>
                           <template v-slot:body-cell-usuario="props">
-                            <q-td :props="props">
-                              {{props.row.user.name}}
+                            <q-td :props="props" v-if="props.row.userterminado!=null">
+                              {{props.row.userterminado.name}}
+                            </q-td>
+                            <q-td :prop="props" v-else>
                             </q-td>
                           </template>
                           <template v-slot:body-cell-fechafin="props">
@@ -629,7 +631,7 @@ export default {
         {label:'etapa',name:'etapa',field:'etapa'},
         {label:'actividad',name:'actividad',field:'actividad'},
         {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
-        {label:'usuario',name:'usuario',field:'usuario'},
+        {label:'usuario',name:'usuario',field:'userterminado'},
         {label:'fecha proximo',name:'fechafin',field:'fechafin'},
         {label:'estado',name:'estado',field:'estado'},
         // {label:'opciones',name:'opciones',field:'opciones'},
@@ -725,7 +727,7 @@ export default {
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
       ],
-      egrclcol:[  
+      egrclcol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
@@ -989,7 +991,7 @@ export default {
         // this.tabegcl=res.data;
         this.agendas=res.data
         this.$q.loading.hide()
-        // console.log(res.data)
+        console.log(res.data)
       });
     },
     imprimir2(despacho){
@@ -1490,7 +1492,7 @@ export default {
         this.$axios.put(process.env.API+'/cliente/'+this.cliente.id,this.cliente).then(res=>{
                     this.$q.notify({
             message: 'Modificado',
-            caption: 'Registro Modifcado',
+            caption: 'Registro Modificado',
             color: 'green',
             icon:'done'
           });

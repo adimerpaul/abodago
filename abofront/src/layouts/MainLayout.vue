@@ -60,6 +60,7 @@
           </q-item>
 
           <q-item
+            v-if="$store.state.login.boolagenda"
             clickable
             to="/"
           >
@@ -115,7 +116,7 @@
 <!--            </q-item-section>-->
 <!--          </q-item>-->
           <q-item
-            v-if="$store.state.login.booldesignacion"
+            v-if="$store.state.login.booltramite"
             clickable
             to="/requisitos"
           >
@@ -134,7 +135,7 @@
           </q-item>
 
           <q-item
-            v-if="$store.state.login.booldesignacion"
+            v-if="$store.state.login.booljuridico"
             clickable
             to="/asignacion"
           >
@@ -153,7 +154,7 @@
           </q-item>
 
           <q-item
-            v-if="$store.state.login.booldesignacion"
+            v-if="$store.state.login.boolnatural"
             clickable
             to="/clientes"
           >
@@ -172,9 +173,10 @@
           </q-item>
 
           <q-item
+            v-if="$store.state.login.booldemandado"
+
             clickable
             to="/demandado"
-            v-if="$store.getters['login/isLoggedIn']"
           >
             <q-item-section
               avatar
@@ -190,27 +192,10 @@
             </q-item-section>
           </q-item>
 
-          <q-item
-            v-if="$store.state.login.boolmisrecepciones"
-            clickable
-            to="/misrecepciones"
-          >
-            <q-item-section
-              avatar
-            >
-              <q-icon name="picture_as_pdf" />
-            </q-item-section>
 
-            <q-item-section>
-              <q-item-label>Mis recepciones</q-item-label>
-              <q-item-label caption>
-                Historial de mis recepciones
-              </q-item-label>
-            </q-item-section>
-          </q-item>
 
           <q-item
-            v-if="$store.getters['login/isLoggedIn']"
+                        v-if="$store.state.login.boolcotizacion"
             clickable
             to="/precio"
           >
@@ -227,7 +212,8 @@
           </q-item>
 
           <q-item
-            v-if="$store.getters['login/isLoggedIn']"
+              v-if="$store.state.login.boolmicotizacion"
+
             clickable
             to="/micotizacion"
           >
