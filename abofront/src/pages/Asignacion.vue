@@ -339,10 +339,10 @@
                         <div class="text-h6">Cotizacion</div>
                         <div class="row">
                           <div class="col-12 col-md-6">
-                          <div class="col12 col-md-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
-                            <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
+                          <div class="col12 col-md-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined v-if="proformas!=[]"/></div>
+                            <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" v-if="proformas!=[]"/></div>
                           </div>
-                          <div class="col-12 col-md-6" v-if="cliente.proforma!== null">
+                          <div class="col-12 col-md-6" v-if="cliente3.proforma!== null">
                             <div> PROFORMA</div>
                             tramite: {{cliente3.proforma.tramite.nombre}}<br>
                             Total: {{cliente3.proforma.total}} <br>

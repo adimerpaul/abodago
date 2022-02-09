@@ -13,9 +13,6 @@
             <div class="col-12 q-pa-xs col-sm-3">
               <q-input dense outlined label="Telefono" v-model="cliente.telefono" />
             </div>
-<!--            <div class="col-12 q-pa-xs col-sm-2">-->
-<!--              <q-select dense outlined label="Tipo" v-model="cliente.tipo" :options="['PERSONA','EMPRESA']"/>-->
-<!--            </div>-->
             <div class="col-12 q-pa-xs col-sm-3 flex flex-center">
               <input type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
             </div>
@@ -27,8 +24,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Personas Naturales " :rows="clientes" :columns="columns" :filter="filter"  >
-<!--          :rows-per-page-options="[50,100,150,200,0]"-->
+        <q-table dense title="Personas Naturales" :rows="clientes" :columns="columns" :filter="filter"  >
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -251,23 +247,23 @@
                 <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
                 <div>
                 <q-input label="representante" outlined dense v-model="cliente3.representante"/>
-<!--                <div class="text-h6">DEMANDADOS</div>-->
-<!--                <table style="width:100%;  border: 1px solid black;" >-->
-<!--                <thead>-->
-<!--                  <tr>-->
-<!--                  <th>ID</th>-->
-<!--                  <th>CI</th>-->
-<!--                  <th>NOMBRE</th>-->
-<!--                  </tr>-->
-<!--                </thead>-->
-<!--                <tbody>-->
-<!--                <tr v-for="(i,index) in cliente3.demandados" :key="index">-->
-<!--                    <th scope="row">{{index+1}}</th>-->
-<!--                    <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" ></td>-->
-<!--                    <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>-->
-<!--                </tr>-->
-<!--                </tbody>-->
-<!--                </table>-->
+                <div class="text-h6">DEMANDADOS</div>
+                <table style="width:100%;  border: 1px solid black;" >
+               <thead>
+                 <tr>
+                 <th>ID</th>
+                 <th>CI</th>
+                <th>NOMBRE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(i,index) in cliente3.demandados" :key="index">
+                    <th scope="row">{{index+1}}</th>
+                    <td style="text-align:center">{{i.ci}} </td>
+                    <td style="text-align:center"> {{i.nombre}}</td>
+                </tr>
+                </tbody>
+               </table>
                   <q-card>
                     <q-tabs
                       v-model="tab"
@@ -308,13 +304,15 @@
                             </q-td>
                           </template>
                           <template v-slot:body-cell-usuario="props">
-                            <q-td :props="props">
-                              {{props.row.user.name}}
+                            <q-td :props="props" v-if="props.row.userterminado!=null">
+                              {{props.row.userterminado.name}}
+                            </q-td>
+                            <q-td :prop="props" v-else>
                             </q-td>
                           </template>
-                          <template v-slot:body-cell-fechafin="props">
+                          <template v-slot:body-cell-fechafini="props">
                             <q-td :props="props">
-                              {{props.row.fechafin}} {{props.row.horafin}}
+                              {{props.row.fechaini}} {{props.row.horaini}}
                             </q-td>
                           </template>
                           <template v-slot:body-cell-estado="props">
@@ -337,10 +335,10 @@
                         <div class="text-h6">Cotizacion</div>
                         <div class="row">
                           <div class="col-12 col-md-6">
-                          <div class="col12 col-md-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined /></div>
-                            <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" /></div>
+                          <div class="col12 col-md-4"> <q-select v-model="proforma" :options="proformas" label="Cotizaciones" outlined v-if="proformas!=[]"/></div>
+                            <div><q-btn color="primary" icon="check" label="Agregar" @click="enlazar" v-if="proformas!=[]"/></div>
                           </div>
-                          <div class="col-12 col-md-6" v-if="cliente.proforma!== null">
+                          <div class="col-12 col-md-6" v-if="cliente3.proforma!== null">
                             <div> PROFORMA</div>
                             tramite: {{cliente3.proforma.tramite.nombre}}<br>
                             Total: {{cliente3.proforma.total}} <br>
@@ -377,19 +375,27 @@
               row-key="name"
              >
              <template v-slot:body-cell-tramite="props">
-               <q-td :props="props">
+               <q-td :props="props" @click="detalle(props.row)">
                  {{props.row.tramite.nombre}}
                </q-td>
              </template>
+             <template v-slot:body-cell-demandados="props">
+               <q-td :props="props" @click="detalle(props.row)">
+                 <ul >
+                   <li v-for="(d,index) in props.row.demandados" :key="index">{{d.nombre}}</li>
+
+                 </ul>
+               </q-td>
+             </template>
             <template v-slot:body-cell-tipo="props">
-              <q-td :props="props">
+              <q-td :props="props" @click="detalle(props.row)">
                 <q-badge :color="props.row.tipo=='TRAMITE'?'accent':'teal'">
                   {{ props.row.tipo }}
                 </q-badge>
               </q-td>
             </template>
                <template v-slot:body-cell-requisitos="props">
-                 <q-td :props="props">
+                 <q-td :props="props" @click="detalle(props.row)">
                    <ul style="padding: 0px;margin: 0px;border: 0px;list-style: none">
                      <li  style="padding: 0px;margin: 0px;border: 0px;font-size: 8px" v-for="r in props.row.requisitos" :key="r.id">{{r.nombre}}</li>
                    </ul>
@@ -567,33 +573,42 @@
         </q-dialog>
       </div>
     </div>
+
     <q-dialog v-model="modalagenda" full-width>
       <q-card >
         <q-card-section>
           <div class="text-h6">Crear agenda</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-<!--            {{agenda}}-->
             <q-form @submit="crearagenda">
             <div class="row">
               <div class="col-12 col-md-4">
                 <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
               </div>
               <div class="col-12 col-md-3">
-                <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" required/>
+                <q-input dense outlined label="fecha" v-model="agenda.fechaini" type="date" required/>
               </div>
               <div class="col-12 col-md-2">
-                <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time" required/>
-              </div>
-              <div class="col-12 col-md-3">
+                <q-input dense outlined label=" hora" v-model="agenda.horaini" type="time" required/>
+              </div><br>
+                            <div class="col-12 col-md-3">
                 <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
               </div>
-              <div class="col-12 col-md-5">
+                            <div class="col-12 col-md-5">
                 <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" required/>
               </div>
+
               <div class="col-12 col-md-5">
                 <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" required/>
               </div>
+                <div class="col-12 col-md-3">
+                <q-input dense outlined label="Fecha PP" v-model="agenda.fechafin" type="date" required/>
+              </div>
+              <div class="col-12 col-md-2">
+                <q-input dense outlined label="Hora PP" v-model="agenda.horafin" type="time" required/>
+              </div>
+
+
               <div class="col-12 col-md-2 flex flex-center">
                 <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
               </div>
@@ -625,13 +640,13 @@ export default {
       imagen : null,
       miaccion:'',
       columnsagenda:[
-        {label:'fecha',name:'fechaini',field:'fechaini'},
-        {label:'etapa',name:'etapa',field:'etapa'},
-        {label:'actividad',name:'actividad',field:'actividad'},
-        {label:'proximopaso',name:'proximopaso',field:'proximopaso'},
-        {label:'usuario',name:'usuario',field:'usuario'},
-        {label:'fecha proximo',name:'fechafin',field:'fechafin'},
-        {label:'estado',name:'estado',field:'estado'},
+        {label:'FECHA',name:'fechaini',field:'fechaini'},
+        {label:'ETAPA',name:'etapa',field:'etapa'},
+        {label:'ACTIVIDAD',name:'actividad',field:'actividad'},
+        {label:'PROXIMO PASO',name:'proximopaso',field:'proximopaso'},
+        {label:'USUARIO',name:'usuario',field:'userterminado'},
+        {label:'FECHA PROXIMO',name:'fechafin',field:'fechafin'},
+        {label:'ESTADO',name:'estado',field:'estado'},
         // {label:'opciones',name:'opciones',field:'opciones'},
       ],
       filter:'',
@@ -690,6 +705,7 @@ export default {
         {field:'nombre',name:'nombre',label:'NOMBRE',align:'right'},
         {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
+
         {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
        // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
         // {field:'ref',name:'ref',label:'ref',align:'right'},
@@ -709,7 +725,9 @@ export default {
         {field:'fecha',name:'fecha',label:'FECHA',align:'right'},
         {field:'hora',name:'hora',label:'HORA',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
-        {field:'tramite',name:'tramite',label:'tramite',align:'right'},
+        {field:'tramite',name:'tramite',label:'TRAMITE',align:'right'},
+        {field:'demandante',name:'demandante',label:'DEMANDANTE',align:'right'},
+        {field:'demandados',name:'demandados',label:'DEMANDADOS',align:'right'},
         {field:'requisitos',name:'requisitos',label:'requisitos',align:'right'},
       ],
       ingresocol:[
@@ -800,6 +818,8 @@ export default {
     },
     nuevaagenda(){
       this.modalagenda=true
+      this.agenda.fechaini=date.formatDate(new Date(),'YYYY-MM-DD')
+      this.agenda.horaini=date.formatDate(new Date(),'HH:mm:00')
       this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')
       this.agenda.horafin=date.formatDate(new Date(),'HH:mm:00')
     },
@@ -989,7 +1009,7 @@ export default {
         // this.tabegcl=res.data;
         this.agendas=res.data
         this.$q.loading.hide()
-        // console.log(res.data)
+        console.log(res.data)
       });
     },
     imprimir2(despacho){
@@ -1490,7 +1510,7 @@ export default {
         this.$axios.put(process.env.API+'/cliente/'+this.cliente.id,this.cliente).then(res=>{
                     this.$q.notify({
             message: 'Modificado',
-            caption: 'Registro Modifcado',
+            caption: 'Registro Modificado',
             color: 'green',
             icon:'done'
           });
