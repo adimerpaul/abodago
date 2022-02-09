@@ -14,12 +14,11 @@
             narrow-indicator
           >
             <q-tab name="login" label="Ingresar" />
-            <q-tab name="registro" label="Registrarse" />
           </q-tabs>
           <q-separator />
           <q-tab-panels v-model="tab" animated>
             <q-tab-panel name="login">
-              <div class="text-h6">Ingresar al sistemas</div>
+              <div class="text-h6">Ingresar al sistema</div>
               Por favor colocar email y contraseña
               <q-form @submit.prevent="login">
                 <div class="row">
@@ -46,9 +45,7 @@
                   </div>
                   <div class="col-12 q-py-md">
                     <q-btn label="INGRESAR" color="primary" icon="login" class="full-width" type="submit"/>
-                    <q-btn label="Registrate" color="secondary" icon="how_to_reg" @click="tab='registro'" class="full-width q-mt-xs" />
                     <div class="text-caption q-py-xs">
-                      <a target="_blank" href="https://api.whatsapp.com/send?phone=59169603027&text=olvide mi contraseña">Olvidate tu contraseña?</a>
                     </div>
 
                   </div>
@@ -57,7 +54,6 @@
             </q-tab-panel>
             <q-tab-panel name="registro">
               <div class="text-h6">Registrate </div>
-              Registro unico para usuarios de la Gamo
               <q-form @submit.prevent="registrar">
                 <div class="row">
                   <div class="col-12">
