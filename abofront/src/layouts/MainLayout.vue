@@ -29,7 +29,7 @@
         </div>
         <div class="text-subtitle1">{{ now }}</div>
       </div>
-      <q-img src="img/l.jpg" class="header-image absolute-top" style="height:100%"/>
+      <q-img src="img/banner.jpg" class="header-image absolute-top" style="height:100%"/>
     </q-header>
     <q-drawer
       v-model="leftDrawerOpen"
@@ -306,7 +306,7 @@ export default {
 .header-image{
   height: 100%;
   z-index: -1;
-  opacity: 0.2;
-  filter: grayscale(100%);
+  opacity: 6;
+  filter: grayscale(10%);
 }
 </style>

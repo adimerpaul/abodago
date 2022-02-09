@@ -314,9 +314,9 @@
                             <q-td :prop="props" v-else>
                             </q-td>
                           </template>
-                          <template v-slot:body-cell-fechafin="props">
+                          <template v-slot:body-cell-fechafini="props">
                             <q-td :props="props">
-                              {{props.row.fechafin}} {{props.row.horafin}}
+                              {{props.row.fechaini}} {{props.row.horaini}}
                             </q-td>
                           </template>
                           <template v-slot:body-cell-estado="props">
@@ -577,33 +577,42 @@
         </q-dialog>
       </div>
     </div>
+
     <q-dialog v-model="modalagenda" full-width>
       <q-card >
         <q-card-section>
           <div class="text-h6">Crear agenda</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
-<!--            {{agenda}}-->
             <q-form @submit="crearagenda">
             <div class="row">
               <div class="col-12 col-md-4">
                 <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
               </div>
               <div class="col-12 col-md-3">
-                <q-input dense outlined label="Proxima fecha" v-model="agenda.fechafin" type="date" required/>
+                <q-input dense outlined label="fecha" v-model="agenda.fechaini" type="date" required/>
               </div>
               <div class="col-12 col-md-2">
-                <q-input dense outlined label="Proximo hora" v-model="agenda.horafin" type="time" required/>
-              </div>
-              <div class="col-12 col-md-3">
+                <q-input dense outlined label=" hora" v-model="agenda.horaini" type="time" required/>
+              </div><br>
+                            <div class="col-12 col-md-3">
                 <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
               </div>
-              <div class="col-12 col-md-5">
+                            <div class="col-12 col-md-5">
                 <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" required/>
               </div>
+
               <div class="col-12 col-md-5">
                 <q-input dense outlined label="Proximo paso" v-model="agenda.proximopaso" type="textarea" required/>
               </div>
+                <div class="col-12 col-md-3">
+                <q-input dense outlined label="Fecha PP" v-model="agenda.fechafin" type="date" required/>
+              </div>
+              <div class="col-12 col-md-2">
+                <q-input dense outlined label="Hora PP" v-model="agenda.horafin" type="time" required/>
+              </div>
+
+
               <div class="col-12 col-md-2 flex flex-center">
                 <q-btn type="submit" label="agregar" icon="add_circle" color="positive"/>
               </div>
@@ -813,6 +822,8 @@ export default {
     },
     nuevaagenda(){
       this.modalagenda=true
+      this.agenda.fechaini=date.formatDate(new Date(),'YYYY-MM-DD')
+      this.agenda.horaini=date.formatDate(new Date(),'HH:mm:00')
       this.agenda.fechafin=date.formatDate(new Date(),'YYYY-MM-DD')
       this.agenda.horafin=date.formatDate(new Date(),'HH:mm:00')
     },
