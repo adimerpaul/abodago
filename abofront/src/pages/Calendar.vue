@@ -25,6 +25,7 @@ export default {
       fecha1:date.formatDate(new Date(),'YYYY-MM-DD'),
       events: [],
       calendarOptions: {
+        selectable:true,
         plugins: [ dayGridPlugin, interactionPlugin ],
         initialView: 'dayGridMonth',
         dateClick: this.handleDateClick,
@@ -32,6 +33,7 @@ export default {
           // { title: 'event 1', date: '2022-02-01' },
           // { title: 'event 2', date: '2022-02-02' }
         ],
+        
         weekends: false // initial value
       },
 
@@ -54,7 +56,7 @@ export default {
         // console.log(res.data)
         this.events=[]
         res.data.forEach(r=>{
-          console.log(r)
+          // console.log(r)
           if (r.userterminado_id==null){
             this.events.push({ title: r.proximopaso, date: r.fechafin,color:'#D32F2F' },)
           }else{
