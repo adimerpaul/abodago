@@ -134,7 +134,7 @@ export default {
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
-         console.log(res.data)
+         // console.log(res.data)
         this.events=[]
         res.data.forEach(r=>{
           // console.log(r)
@@ -160,9 +160,11 @@ export default {
       })
     },
      eventTitleClick: function(args) {
-      console.log(args.event.id)
+      // console.log(args.event.id)
+       this.$q.loading.show()
       this.$axios.post(process.env.API+'/evagenda/'+args.event.id).then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
+        this.$q.loading.hide()
         this.despacho=res.data[0].despacho
         this.agen=res.data[0]
         this.dialogdatos=true;
