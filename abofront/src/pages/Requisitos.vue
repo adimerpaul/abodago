@@ -15,8 +15,8 @@
             <div class="col-12 q-pa-xs col-sm-3">
               <q-select dense v-model="regtramite.tipo" :options="['TRAMITE','PROCESO JUDICIAL']" label="TIPO" outlined required/>
             </div>
-            <div class="col-12 q-pa-xs col-sm-2 flex flex-center">
-              <q-btn type="submit" color="primary" icon="send" label="Crear"/>
+            <div class="col-12 q-pa-xs col-sm-2 ">
+              <q-btn type="submit" color="positive" icon="send" label="Crear"/>
             </div>
         </q-form>
         </q-card-section>
