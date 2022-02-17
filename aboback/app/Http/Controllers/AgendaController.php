@@ -38,6 +38,13 @@ class AgendaController extends Controller
         return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)->where('user_id',$request->user()->id)
         ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
+
+
+    public function evagenda($id)
+    {
+        return Agenda::find($id)->with('user')->with('despacho')->with('etapa')->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

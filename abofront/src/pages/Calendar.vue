@@ -38,6 +38,7 @@
                 </div>
             </q-card-section>
             <q-card-section align="right">
+              <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="agen.estado=='EN ESPERA'" @click="actualiza"/>
               <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
@@ -62,13 +63,15 @@ export default {
       fecha1:date.formatDate(new Date(),'YYYY-MM-DD'),
       events: [],
       despacho:{},
+      agen:{},
       dialogdatos:false,
       calendarOptions: {
         selectable:true,
         plugins: [ dayGridPlugin, interactionPlugin ],
         initialView: 'dayGridMonth',
-        dateClick: this.handleDateClick,
+       // dateClick: this.handleDateClick,
         eventClick: this.eventTitleClick,
+       // select:this.handleSelect,
         events: [
           // { title: 'event 1', date: '2022-02-01' },
           // { title: 'event 2', date: '2022-02-02' }
@@ -90,17 +93,41 @@ export default {
     // console.log(str);
   },
   methods: {
+        actualiza(){
+      this.$q.dialog({
+        title: 'Fin de Actividad',
+        message: 'Esta Seguro de Finalizar?',
+        cancel: true,
+      }).onOk(() => {
+      this.$axios.post(process.env.API+'/finalizar',{id:this.agen.id}).then(res=>{
+        this.dialogdatos=false
+        this.misdatos()
+          this.$q.notify({
+            message: 'Actualizado',
+            caption: 'Agenda Actualizada',
+            color: 'green',
+            icon:'done'
+          });
+          this.misdatos()
+      })
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
+    },
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
-        // console.log(res.data)
+         console.log(res.data)
         this.events=[]
         res.data.forEach(r=>{
           // console.log(r)
           if (r.userterminado_id==null){
-            this.events.push({ title: r.proximopaso, date: r.fechafin,color:'#D32F2F',r },)
+            this.events.push({ title: r.actividad, date: r.fechaini,color:'#D32F2F',id:r.id })
           }else{
-            this.events.push({ title: r.proximopaso, date: r.fechafin,color:'#388E3C',r },)
+            this.events.push({ title: r.actividad, date: r.fechaini,color:'#388E3C',id:r.id })
           }
 
         })
@@ -118,8 +145,15 @@ export default {
         this.$q.loading.hide()
       })
     },
-     eventTitleClick: function(info) {
-      console.log(info)
+     eventTitleClick: function(args) {
+      console.log(args.event.id)
+      this.$axios.post(process.env.API+'/evagenda/'+args.event.id).then(res=>{
+        console.log(res.data)
+        this.despacho=res.data[0].despacho
+        this.agen=res.data[0]
+        this.dialogdatos=true;
+      })
+      
 
      },
     handleDateClick: function(arg) {
