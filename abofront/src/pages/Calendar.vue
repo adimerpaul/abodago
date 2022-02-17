@@ -1,12 +1,26 @@
 <template>
 <q-page class="q-pa-xs">
-  <q-form @submit="misdatos" class="q-gutter-md">
-    <div class="row col-10" style="display: flex;  align-items: center;  justify-content: center">
-      <div class="col-5"><q-input dense outlined v-model="fecha1" type="date" label="Mes/anio" required/></div>
-      <div class="col-5 flex flex-center"><q-btn icon="search" label="Consultar" type="submit" color="primary"/> </div>
+  <div class="row">
+    <div class="col-12">
+      <q-form @submit="misdatos" class="q-gutter-md">
+        <div class="row " style="display: flex;  align-items: center;  justify-content: center">
+          <div class="col-12 col-sm-1"></div>
+          <div class="col-12 col-sm-5"><q-input dense outlined v-model="fecha1" type="date" label="Mes/anio" required/></div>
+          <div class="col-12 col-sm-5 flex flex-center"><q-btn icon="search" label="Consultar" type="submit" color="primary"/> </div>
+          <div class="col-12 col-sm-1"></div>
+        </div>
+      </q-form>
     </div>
-  </q-form>
-  <div style="display: flex;  align-items: center;  justify-content: center"><div style="width:90%;"><FullCalendar :options="calendarOptions" /></div></div>
+
+  <div class="col-12 col-sm-1"></div>
+  <div class="col-12 col-sm-10">
+<!--    <div style="display: flex;  align-items: center;  justify-content: center">-->
+      <FullCalendar :options="calendarOptions" />
+<!--    </div>-->
+  </div>
+    <div class="col-12 col-sm-1"></div>
+  </div>
+
           <q-dialog v-model="dialogdatos">
           <q-card >
             <q-card-section>
@@ -153,7 +167,7 @@ export default {
         this.agen=res.data[0]
         this.dialogdatos=true;
       })
-      
+
 
      },
     handleDateClick: function(arg) {
