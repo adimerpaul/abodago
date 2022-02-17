@@ -36,6 +36,10 @@ class TramiteController extends Controller
     public function store(Request $request)
     {
         //
+        $tramite = new Tramite;
+        $tramite->nombre=strtoupper($request->nombre);
+        $tramite->tipo=$request->tipo;
+        $tramite->save();
     }
 
     /**

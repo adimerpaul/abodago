@@ -1,11 +1,33 @@
 <template>
 <q-page class="q-pa-xs">
-  <div class="row">
-    <div class="col-12">
-      <q-form>
+  <q-btn color="positive" icon="check" label="Agregar" @click="dialog_req=true" />
+      <q-dialog v-model="dialog_req" >
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">AGREGAR TRAMITE / PROCESO</div>
+        </q-card-section>
 
-      </q-form>
-    </div>
+        <q-card-section class="q-pt-none">
+          <q-form @submit="agrtramite">
+            <div class="col-12 q-pa-xs col-sm-2">
+              <q-input dense outlined label="Nombre" v-model="regtramite.nombre" required/>
+            </div>
+            <div class="col-12 q-pa-xs col-sm-3">
+              <q-select dense v-model="regtramite.tipo" :options="['TRAMITE','PROCESO JUDICIAL']" label="TIPO" outlined required/>
+            </div>
+            <div class="col-12 q-pa-xs col-sm-2 flex flex-center">
+              <q-btn type="submit" color="primary" icon="send" label="Crear"/>
+            </div>
+        </q-form>
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancelar" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+  <div class="row">
+
     <div class="col-12">
       <q-table title="Requisitos" dense :columns="columns" :rows="tramites">
         <template v-slot:body-cell-requisitos="props">
@@ -65,16 +87,18 @@ export default {
     return{
       filter:'',
       requisito:{},
+      dialog_req:false,
       modalcrear:false,
+      regtramite:{},
       tramites:[],
       tramite:{},
       columns:[
+        {name:'opciones',label:'opciones',field:'opciones'},
         {name:'nombre',label:'nombre',field:'nombre'},
         {name:'tipo',label:'tipo',field:'tipo'},
         {name:'valor',label:'valor',field:'valor'},
         // {name:'procedimiento',label:'procedimiento',field:'procedimiento'},
         {name:'requisitos',label:'requisitos',field:'requisitos'},
-        {name:'opciones',label:'opciones',field:'opciones'},
       ]
     }
   },
@@ -82,6 +106,14 @@ export default {
     this.misdatos()
   },
   methods:{
+    agrtramite(){
+      this.$axios.post(process.env.API+'/tramite',this.regtramite).then(res=>{
+        this.dialog_req=false
+        this.regtramite={}
+        this.misdatos()
+      })
+
+    },
     crearrequisito(){
       this.requisito.tramite_id=this.tramite.id
       this.$q.loading.show()
