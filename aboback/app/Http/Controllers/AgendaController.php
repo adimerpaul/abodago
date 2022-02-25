@@ -28,21 +28,34 @@ class AgendaController extends Controller
         //
     }
 
+    public function agendar(Request $request)
+    {
+//        return $request;
+        $agenda=new Agenda();
+        $agenda->estado='AGENDAR';
+        $agenda->actividad=$request->actividad;
+        $agenda->fechaini=$request->fecha;
+        $agenda->horaini=$request->hora;
+        $agenda->user_id=$request->user()->id;
+        $agenda->save();
+        return $agenda;
+    }
+
     public function listagenda(Request $request)
     {
         $year=date("Y",strtotime($request->fecha));
         $mes=date("m",strtotime($request->fecha));
         if($request->user()->id==1)
-        return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)
+        return Agenda::whereMonth('fechaini',$mes)->whereYear('fechaini',$year)
         ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
-        return Agenda::whereMonth('fechafin',$mes)->whereYear('fechafin',$year)->where('user_id',$request->user()->id)
+        return Agenda::whereMonth('fechaini',$mes)->whereYear('fechaini',$year)->where('user_id',$request->user()->id)
         ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
 
 
     public function evagenda($id)
     {
-        return Agenda::find($id)->with('user')->with('despacho')->with('etapa')->get();
+        return Agenda::where('id',$id)->with('user')->with('despacho')->with('etapa')->get();
     }
 
     /**

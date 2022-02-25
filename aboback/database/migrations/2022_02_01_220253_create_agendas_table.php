@@ -28,9 +28,9 @@ class CreateAgendasTable extends Migration
             $table->foreign('userterminado_id')->references('id')->on('users');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('despacho_id');
+            $table->unsignedBigInteger('despacho_id')->nullable();
             $table->foreign('despacho_id')->references('id')->on('despachos');
-            $table->unsignedBigInteger('etapa_id');
+            $table->unsignedBigInteger('etapa_id')->nullable();
             $table->foreign('etapa_id')->references('id')->on('etapas');
             $table->timestamps();
         });

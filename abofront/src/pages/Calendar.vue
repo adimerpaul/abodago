@@ -83,10 +83,17 @@ export default {
       calendarOptions: {
         selectable:true,
         plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin],
+            headerToolbar: {
+      left: 'prev,next',
+      center: 'title',
+      right: 'dayGridMonth,timeGridWeek,dayGridDay',
+    },
                 header: {
             right: 'dayGridMonth,timeGridWeek,dayGridDay',
             center: 'title',
-            left: 'prev,next'
+            left: 'prev,next',
+
+
         },
         initialView: 'timeGridWeek',
         allDaySlot:false,
@@ -147,14 +154,18 @@ export default {
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
-         // console.log(res.data)
+          console.log(res.data)
         this.events=[]
         res.data.forEach(r=>{
           // console.log(r)
           if (r.userterminado_id==null){
+            if(r.estado!='AGENDAR')
             this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#D32F2F',id:r.id })
+                        else 
+            {this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#BD87BB',id:r.id })}
           }else{
             this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#388E3C',id:r.id })
+
           }
 
         })
@@ -173,21 +184,45 @@ export default {
       })
     },
      eventTitleClick: function(args) {
-       console.log(args.event)
+       console.log(args.event.id)
        this.$q.loading.show()
       this.$axios.post(process.env.API+'/evagenda/'+args.event.id).then(res=>{
-        // console.log(res.data)
+         console.log(res.data)
+        this.agen={}
         this.$q.loading.hide()
         this.despacho=res.data[0].despacho
         this.agen=res.data[0]
-        this.dialogdatos=true;
+        //console.log(this.agen.estado)
+        if(this.agen.estado!='AGENDAR')
+        {this.dialogdatos=true;}
+        else
+        this.dialogdatos=false;
       })
 
 
      },
      dateClick: function(info){
-       console.log(date.formatDate(info.dateStr,'YYYY-MM-DD'))
-       console.log(date.formatDate(info.dateStr,'HH:mm:ss'))
+       let fec= (date.formatDate(info.dateStr,'YYYY-MM-DD'))
+       let hr=(date.formatDate(info.dateStr,'HH:mm:ss'))
+      this.$q.dialog({
+        title: 'AGENDAR',
+        message: 'Actividad',
+        prompt: {
+          model: '',
+          type: 'text' // optional
+        },
+        cancel: true,
+        persistent: false
+      }).onOk(data => {
+        this.$axios.post(process.env.API+'/agendar',{'actividad':data,'fecha':fec,'hora':hr}).then(res=>{
+          this.misdatos()
+        })
+        // console.log('>>>> OK, received', data)*
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
        
      },
     handleDateClick: function(arg) {
