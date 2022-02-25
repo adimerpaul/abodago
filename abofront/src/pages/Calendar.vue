@@ -67,6 +67,7 @@ import '@fullcalendar/core/vdom' // solves problem with Vite
 import FullCalendar, {formatDate} from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
+import timeGridPlugin from '@fullcalendar/timegrid'
 import {date} from "quasar";
 export default {
   components: {
@@ -81,17 +82,29 @@ export default {
       dialogdatos:false,
       calendarOptions: {
         selectable:true,
-        plugins: [ dayGridPlugin, interactionPlugin ],
-        initialView: 'dayGridMonth',
+        plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin],
+                header: {
+            right: 'dayGridMonth,timeGridWeek,dayGridDay',
+            center: 'title',
+            left: 'prev,next'
+        },
+        initialView: 'timeGridWeek',
+        allDaySlot:false,
+                editable: true,
+        selectMirror: true,
+        dayMaxEvents: true,
+        weekends: true,
+        select: this.handleDateSelect,
        // dateClick: this.handleDateClick,
         eventClick: this.eventTitleClick,
+        dateClick:this.dateClick,
        // select:this.handleSelect,
         events: [
           // { title: 'event 1', date: '2022-02-01' },
           // { title: 'event 2', date: '2022-02-02' }
         ],
 
-        weekends: false // initial value
+        weekends: true // initial value
       },
 
     }
@@ -139,9 +152,9 @@ export default {
         res.data.forEach(r=>{
           // console.log(r)
           if (r.userterminado_id==null){
-            this.events.push({ title: r.actividad, date: r.fechaini,color:'#D32F2F',id:r.id })
+            this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#D32F2F',id:r.id })
           }else{
-            this.events.push({ title: r.actividad, date: r.fechaini,color:'#388E3C',id:r.id })
+            this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#388E3C',id:r.id })
           }
 
         })
@@ -160,7 +173,7 @@ export default {
       })
     },
      eventTitleClick: function(args) {
-      // console.log(args.event.id)
+       console.log(args.event)
        this.$q.loading.show()
       this.$axios.post(process.env.API+'/evagenda/'+args.event.id).then(res=>{
         // console.log(res.data)
@@ -171,6 +184,11 @@ export default {
       })
 
 
+     },
+     dateClick: function(info){
+       console.log(date.formatDate(info.dateStr,'YYYY-MM-DD'))
+       console.log(date.formatDate(info.dateStr,'HH:mm:ss'))
+       
      },
     handleDateClick: function(arg) {
       //this.despacho=arg.r.despacho;

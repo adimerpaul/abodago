@@ -13,6 +13,7 @@
     "@fullcalendar/core": "^5.10.1",
     "@fullcalendar/daygrid": "^5.10.1",
     "@fullcalendar/interaction": "^5.10.1",
+    "@fullcalendar/timegrid": "^5.10.1",
     "@fullcalendar/vue3": "^5.10.1",
     "@quasar/extras": "^1.12.5",
     "axios": "^0.21.1",
@@ -25,6 +26,8 @@
     "jszip": "^3.7.1",
     "pdfmake": "^0.2.4",
     "quasar": "^2.5.5",
+    "vue": "^3.2.31",
+    "vue-router": "^4.0.12",
     "vuex": "^4.0.1"
   },
   "devDependencies": {

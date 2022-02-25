@@ -17,11 +17,11 @@ class CreateAgendasTable extends Migration
             $table->id();
             $table->string('estado')->default('ACTIVO');
             $table->string('actividad');
-            $table->string('proximopaso');
+            $table->string('proximopaso')->nullable();
             $table->date('fechaini');
             $table->time('horaini');
-            $table->date('fechafin');
-            $table->time('horafin');
+            $table->date('fechafin')->nullable();
+            $table->time('horafin')->nullable();
             $table->date('fechaterminado')->nullable();
             $table->time('horaterminado')->nullable();
             $table->unsignedBigInteger('userterminado_id')->nullable();
