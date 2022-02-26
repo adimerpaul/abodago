@@ -86,15 +86,9 @@ export default {
             headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,dayGridDay',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay',
     },
-                header: {
-            right: 'dayGridMonth,timeGridWeek,dayGridDay',
-            center: 'title',
-            left: 'prev,next',
 
-
-        },
         initialView: 'timeGridWeek',
         allDaySlot:false,
                 editable: true,
