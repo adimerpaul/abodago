@@ -51,7 +51,12 @@ class AgendaController extends Controller
         return Agenda::whereMonth('fechaini',$mes)->whereYear('fechaini',$year)->where('user_id',$request->user()->id)
         ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
-
+    public function updagenda(Request $request){
+        $agenda= Agenda::find($request->id);
+        $agenda->actividad=$request->actividad;
+        $agenda->save();
+        return $agenda;
+    }
 
     public function evagenda($id)
     {

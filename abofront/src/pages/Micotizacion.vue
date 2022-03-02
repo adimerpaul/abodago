@@ -3,6 +3,11 @@
     <div class="row">
       <div class="col-12">
         <q-table dense title="Proformas realizadas" :rows="proformas" :columns="columns" :filter="filter">
+                  <template v-slot:body-cell-opciones="props">
+            <q-td :props="props">
+              <q-btn color="primary" label="Imprimir" @click="impresioncot(props.row)" icon="print" size="xs"/>
+            </q-td>
+          </template>
           <template v-slot:body-cell-cliente="props">
             <q-td :props="props">
                 {{ props.row.cliente.nombre }}
@@ -15,11 +20,7 @@
               </ul>
             </q-td>
           </template>
-          <template v-slot:body-cell-opciones="props">
-            <q-td :props="props">
-              <q-btn color="primary" label="Imprimir" @click="impresioncot(props.row)" icon="print" size="xs"/>
-            </q-td>
-          </template>
+
           <template v-slot:top-right>
             <q-input outlined  dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -44,12 +45,12 @@ export default {
       proforma:{},
       fec :date.formatDate(Date.now(),'DD-MM-YYYY'),
       columns:[
+        {label:'OPCIONES',field:'opciones',name:'opciones'},
         {label:'CLIENTE',field:'cliente',name:'cliente'},
         {label:'FECHA',field:'fecha',name:'fecha'},
         {label:'TRMITE',field:row=>row.tramite.nombre,name:'tramite'},
         {label:'DETALLE',field:'detalleproformas',name:'detalleproformas'},
         {label:'TOTAL',field:'total',name:'total'},
-        {label:'OPCIONES',field:'opciones',name:'opciones'},
       ],
     }
   },

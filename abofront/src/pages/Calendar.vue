@@ -58,6 +58,20 @@
           </q-card>
         </q-dialog>
 
+                  <q-dialog v-model="dialogagenda">
+          <q-card >
+            <q-card-section>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input label="ACTIVIDAD" outlined dense v-model="agen.actividad"/>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="actualizaagenda"/>
+              <q-btn flat label="Eliminar" color="primary" icon="delete" v-close-popup />
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+
 
 </q-page>
 </template>
@@ -82,6 +96,7 @@ export default {
       despacho:{},
       agen:{},
       dialogdatos:false,
+      dialogagenda:false,
       calendarOptions: {
       selectable:true,
       plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin], headerToolbar: {
@@ -146,6 +161,12 @@ export default {
       })
 
     },
+         actualizaagenda(){
+            this.$axios.post(process.env.API+'/updagenda',this.agen).then(res=>{
+              this.misdatos()
+            })
+
+         },
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
@@ -190,8 +211,10 @@ export default {
         //console.log(this.agen.estado)
         if(this.agen.estado!='AGENDAR')
         {this.dialogdatos=true;}
-        else
+        else{
         this.dialogdatos=false;
+        this.dialogagenda=true;
+        }
       })
 
 
@@ -220,6 +243,7 @@ export default {
       })
 
      },
+
     handleDateClick: function(arg) {
       //this.despacho=arg.r.despacho;
       console.log(arg)
