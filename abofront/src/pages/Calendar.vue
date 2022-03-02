@@ -5,8 +5,8 @@
       <q-form @submit="misdatos" class="q-gutter-md">
         <div class="row " style="display: flex;  align-items: center;  justify-content: center">
           <div class="col-12 col-sm-1"></div>
-          <div class="col-12 col-sm-5"><q-input dense outlined v-model="fecha1" type="date" label="Mes/anio" required/></div>
-          <div class="col-12 col-sm-5 flex flex-center"><q-btn icon="search" label="Consultar" type="submit" color="primary"/> </div>
+          <!--<div class="col-12 col-sm-5"><q-input dense outlined v-model="fecha1" type="date" label="Mes/anio" required/></div>
+          <div class="col-12 col-sm-5 flex flex-center"><q-btn icon="search" label="Consultar" type="submit" color="primary"/> </div>-->
           <div class="col-12 col-sm-1"></div>
         </div>
       </q-form>
@@ -67,7 +67,6 @@
             </q-card-section>
             <q-card-section align="right">
               <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="actualizaagenda"/>
-              <q-btn flat label="Eliminar" color="primary" icon="delete" v-close-popup />
             </q-card-section>
           </q-card>
         </q-dialog>
@@ -163,6 +162,7 @@ export default {
     },
          actualizaagenda(){
             this.$axios.post(process.env.API+'/updagenda',this.agen).then(res=>{
+              this.dialogagenda=false
               this.misdatos()
             })
 
