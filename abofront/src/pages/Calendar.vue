@@ -58,9 +58,24 @@
           </q-card>
         </q-dialog>
 
-                  <q-dialog v-model="dialogagenda">
+        <q-dialog v-model="dialogagenda1">
           <q-card >
             <q-card-section>
+              AGENDAR
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+                <q-input label="ACTIVIDAD" outlined dense v-model="agen.actividad"/>
+            </q-card-section>
+            <q-card-section align="right">
+              <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="agendar"/>
+            </q-card-section>
+          </q-card>
+        </q-dialog>
+        
+        <q-dialog v-model="dialogagenda">
+          <q-card >
+            <q-card-section>
+            MODIFICAR
             </q-card-section>
             <q-card-section class="q-pt-none">
                 <q-input label="ACTIVIDAD" outlined dense v-model="agen.actividad"/>
@@ -70,7 +85,6 @@
             </q-card-section>
           </q-card>
         </q-dialog>
-
 
 </q-page>
 </template>
@@ -96,6 +110,8 @@ export default {
       agen:{},
       dialogdatos:false,
       dialogagenda:false,
+      usuarios:[],
+      user:{},
       calendarOptions: {
       selectable:true,
       plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin], headerToolbar: {
@@ -127,6 +143,7 @@ export default {
   },
   created() {
     this.misdatos()
+    this.misusuarios()
     let str = formatDate(new Date(), {
       month: 'long',
       year: 'numeric',
@@ -136,6 +153,16 @@ export default {
     // console.log(str);
   },
   methods: {
+    misusuarios(){
+      this.usuarios=[]
+      this.$axios.post(process.env.API+'/listuser').then(res=>{
+        res.data.forEach(r => {
+          this.usuarios.push({label:r.nombre,r});
+          this.user={label:''}
+        });
+      })
+
+    },
         actualiza(){
       this.$q.dialog({
         title: 'Fin de Actividad',
