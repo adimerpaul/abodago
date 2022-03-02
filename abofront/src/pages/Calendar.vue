@@ -120,7 +120,7 @@ export default {
           // { title: 'event 1', date: '2022-02-01' },
           // { title: 'event 2', date: '2022-02-02' }
         ],
-
+        height: "auto",
         weekends: true // initial value
       },
 
