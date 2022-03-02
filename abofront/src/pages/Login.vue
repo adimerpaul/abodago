@@ -208,7 +208,7 @@ export default {
       this.$q.loading.show()
       this.$store.dispatch('login/login', { email:this.email, password:this.password }).then(() =>{
         this.$q.loading.hide()
-        this.$router.push('/asignacion')
+        this.$router.push('/')
       })
         .catch(err => {
           this.$q.loading.hide();
