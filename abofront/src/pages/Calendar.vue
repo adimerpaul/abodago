@@ -69,6 +69,8 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import {date} from "quasar";
+import esLocale from "@fullcalendar/core/locales/es";
+
 export default {
   components: {
     FullCalendar // make the <FullCalendar> tag available
@@ -81,21 +83,20 @@ export default {
       agen:{},
       dialogdatos:false,
       calendarOptions: {
-        selectable:true,
-        plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin],
-            headerToolbar: {
+      selectable:true,
+      plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin], headerToolbar: {
       left: 'prev,next',
       center: 'title',
       right: 'dayGridMonth,timeGridWeek,timeGridDay',
-    },
-
+      },
         initialView: 'timeGridWeek',
+        locale: esLocale,
         allDaySlot:false,
-                editable: true,
+        editable: true,
         selectMirror: true,
         dayMaxEvents: true,
-        weekends: true,
-        select: this.handleDateSelect,
+        // weekends: true,
+        // select: this.handleDateSelect,
        // dateClick: this.handleDateClick,
         eventClick: this.eventTitleClick,
         dateClick:this.dateClick,
@@ -155,7 +156,7 @@ export default {
           if (r.userterminado_id==null){
             if(r.estado!='AGENDAR')
             this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#D32F2F',id:r.id })
-                        else 
+                        else
             {this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#BD87BB',id:r.id })}
           }else{
             this.events.push({ title: r.actividad, start: r.fechaini+' '+r.horaini,color:'#388E3C',id:r.id })
@@ -217,7 +218,7 @@ export default {
       }).onDismiss(() => {
         // console.log('I am triggered on both OK and Cancel')
       })
-       
+
      },
     handleDateClick: function(arg) {
       //this.despacho=arg.r.despacho;

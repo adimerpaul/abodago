@@ -13,7 +13,7 @@
       </q-form>
       <div class="col-12">
         <q-table dense title="MI AGENDA " :rows="agenda" :columns="columns" :filter="filter"  >
-                    <template v-slot:body-cell-opciones="props">
+          <template v-slot:body-cell-opciones="props">
             <q-tr :props="props">
               <q-td key="opciones" :props="props">
                   <q-btn dense label="Finalizar" color="positive"  icon="check" size="xs" v-if="props.row.estado=='EN ESPERA'" @click="actualiza(props.row)"/>

@@ -296,7 +296,7 @@ export default {
       this.$store.dispatch('login/logout')
         .then(() => {
           this.$q.loading.hide()
-          this.$router.push('/')
+          this.$router.push('/login')
         })
     },
   }
