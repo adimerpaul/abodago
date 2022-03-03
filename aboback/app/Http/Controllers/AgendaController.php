@@ -34,8 +34,11 @@ class AgendaController extends Controller
         $agenda=new Agenda();
         $agenda->estado='AGENDAR';
         $agenda->actividad=$request->actividad;
+        $agenda->proximopaso=$request->actividad;
         $agenda->fechaini=$request->fecha;
         $agenda->horaini=$request->hora;
+        $agenda->fechafin=$request->fecha;
+        $agenda->horafin=$request->hora;
         $agenda->user_id=$request->user()->id;
         $agenda->save();
         return $agenda;

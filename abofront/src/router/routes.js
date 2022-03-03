@@ -10,6 +10,7 @@ import Micotizacion from "pages/Micotizacion";
 import Clientes from "pages/Clientes";
 import Miagenda from "pages/Miagenda";
 import Calendar from "pages/Calendar";
+import Etapas from "pages/Etapas";
 
 const routes = [
   {
@@ -26,6 +27,7 @@ const routes = [
       { path: '/misrecepciones', component: Misrecepciones,meta: {requiresAuth: true,} },
       { path: '/micotizacion', component: Micotizacion,meta: {requiresAuth: true,} },
       { path: '/clientes', component: Clientes,meta: {requiresAuth: true,} },
+      { path: '/Etapas', component: Etapas,meta: {requiresAuth: true,} },
       { path: '', component: Calendar,meta: {requiresAuth: true,} },
     ]
   },

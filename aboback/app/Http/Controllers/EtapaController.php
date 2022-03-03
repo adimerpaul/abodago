@@ -35,7 +35,10 @@ class EtapaController extends Controller
      */
     public function store(Request $request)
     {
-        Etapa::create($request->all());
+        $etapa= new Etapa;
+        $etapa->numero=strtoupper($request->numero);
+        $etapa->nombre=strtoupper($request->nombre);
+        $etapa->save();
     }
 
     /**
@@ -69,7 +72,10 @@ class EtapaController extends Controller
      */
     public function update(Request $request, Etapa $etapa)
     {
-        $etapa->update($request->all());
+        $etapa=Etapa::find($request->id);
+        $etapa->numero=strtoupper($request->numero);
+        $etapa->nombre=strtoupper($request->nombre);
+        $etapa->save();
     }
 
     /**

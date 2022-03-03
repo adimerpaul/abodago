@@ -135,6 +135,25 @@
           </q-item>
 
           <q-item
+            v-if="$store.state.login.booltramite"
+            clickable
+            to="/etapas"
+          >
+            <q-item-section
+              avatar
+            >
+              <q-icon name="pending_actions" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Etapas</q-item-label>
+              <q-item-label caption>
+                etapas
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
             v-if="$store.state.login.booljuridico"
             clickable
             to="/asignacion"
