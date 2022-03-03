@@ -65,7 +65,11 @@ class AgendaController extends Controller
 
     public function evagenda($id)
     {
-        return Agenda::where('id',$id)->with('user')->with('despacho')->with('etapa')->get();
+        return Agenda::where('id',$id)
+            ->with('user')
+            ->with('despacho')
+            ->with('etapa')
+            ->get();
     }
 
     /**

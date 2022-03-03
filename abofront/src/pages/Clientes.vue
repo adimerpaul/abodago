@@ -182,7 +182,7 @@
                 <q-input label="representante" outlined dense v-model="despacho.representante"/>
                 <div class="text-h6">DEMANDADOS</div>
                 <div class="responsive">
-                <table style="table table-sm " >
+                <table class="table table-sm " >
                 <thead>
                   <tr>
                   <th>ID</th>

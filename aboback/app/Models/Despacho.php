@@ -27,6 +27,11 @@ class Despacho extends Model
     public function requisitos(){
         return $this->belongsToMany(Requisito::class);
     }
+
+    public function agendas(){
+        return $this->hasMany(Agenda::class);
+    }
+
     public function demandados(){
         return $this->belongsToMany(Demandado::class);
     }

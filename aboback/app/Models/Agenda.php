@@ -27,7 +27,7 @@ class Agenda extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
-    
+
     public function userterminado(){
         return $this->belongsTo(User::class);
     }
@@ -37,7 +37,10 @@ class Agenda extends Model
     }
 
     public function despacho(){
-        return $this->belongsTo(Despacho::class)->with('cliente')->with('tramite');
+        return $this->belongsTo(Despacho::class)
+            ->with('cliente')
+            ->with('agendas')
+            ->with('tramite');
     }
 }
 

@@ -156,7 +156,15 @@
               color="red"
               @click="deleteRow(props)"
               icon="delete"
-            ></q-btn>
+            />
+            <q-btn
+              dense
+              round
+              flat
+              color="accent"
+              @click="agregaragenda(props)"
+              icon="add_circle"
+            />
           </q-td>
           <q-td key="name" :props="props">
             {{props.row.name}}
@@ -301,7 +309,52 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="modelpermiso">
+    <q-dialog v-model="dialog_agenda" full-width>
+      <q-card>
+        <q-card-section>
+          <span class="text-h5">Agregar agenda.</span>
+        </q-card-section>
+        <q-card-section>
+          <q-form @submit="insertaragenda">
+            <div class="row">
+              <div class="col-12 col-sm-12">
+                <q-select dense outlined label="Seleccionar tramite" :options="despachos" v-model="despacho"/>
+              </div>
+              <div class="col-12 col-sm-4">
+                <q-input dense outlined label="fechafin" v-model="agenda.fechafin" type="date" />
+              </div>
+              <div class="col-12 col-sm-4">
+                <q-input dense outlined label="horafin" v-model="agenda.horafin" type="time"/>
+              </div>
+              <div class="col-12 col-sm-4">
+                <q-input dense outlined required label="actividad" v-model="agenda.actividad" />
+              </div>
+              <div class="col-12 col-sm-4">
+                <q-input dense outlined required label="proximopaso" v-model="agenda.proximopaso" />
+              </div>
+              <div class="col-12 col-sm-4">
+                <q-select dense outlined label="Seleccionar etapa" :options="etapas" v-model="etapa"/>
+              </div>
+              <div class="col-12 col-sm-12">
+                <q-btn type="submit" class="full-width" color="positive" label="Agregar" icon="send"></q-btn>
+              </div>
+            </div>
+          </q-form>
+          <q-table :rows="despacho.agendas" :columns="columnsAgenda" >
+            <template v-slot:body-cell-estado="props">
+              <q-td :props="props">
+                <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>
+              </q-td>
+            </template>
+          </q-table>
+        </q-card-section>
+        <q-card-actions align="right">
+<!--          <q-btn flat label="Eliminar" color="deep-orange" @click="onDel" />-->
+          <q-btn flat label="Cancelar" color="negative" icon="delete" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="modelpermiso" >
       <q-card style="width: 700px;max-width: 80vw">
         <q-card-section class="bg-info">
           <div class="text-h7 text-white"><q-icon name="folder"/> PERMISOS DE ACCESO</div>
@@ -327,14 +380,21 @@ const { addToDate } = date
 export default {
   data() {
     return {
+      columnsAgenda:[
+        {field:'estado',label:'estado',name:'estado'},
+        {field:'actividad',label:'actividad',name:'actividad'},
+        {field:'proximopaso',label:'proximopaso',name:'proximopaso'},
+      ],
       alert: false,
       dialog_mod: false,
       dialog_del: false,
+      dialog_agenda: false,
       filter:'',
       dato: {
         fechalimite:date.formatDate( addToDate(new Date(),{days:7}) , 'YYYY-MM-DD')
       },
       model:'',
+      agenda:{fechafin:date.formatDate(Date.now(),'YYYY-MM-DD'),horafin:date.formatDate(Date.now(),'HH:mm')},
       dato2: {},
       options: [],
       props: [],
@@ -357,7 +417,11 @@ export default {
         {name: "tipo", align: "left", label: "TIPO", field: "tipo", sortable: true,},
       ],
       data: [],
-      units:[]
+      units:[],
+      despachos:[],
+      despacho:{},
+      etapas:[],
+      etapa:{},
     };
   },
   created() {
@@ -368,6 +432,17 @@ export default {
     this.$axios.get(process.env.API+'/unit').then(res=>{
       this.units=res.data
     })
+    this.$axios.get(process.env.API+'/etapa').then(res=>{
+      this.etapas=[]
+      res.data.forEach(r=>{
+        let d=r
+        d.label=r.numero+' '+r.nombre
+        // console.log(d)
+        this.etapas.push(d)
+      })
+      this.etapa=this.etapas[0]
+    })
+    this.datosdespachos();
     this.$axios.get(process.env.API+'/permiso').then(res=>{
       res.data.forEach(r=>{
         this.permisos.push({id:r.id,nombre:r.nombre,estado:false})
@@ -376,6 +451,39 @@ export default {
     })
   },
   methods: {
+    datosdespachos(){
+      this.$axios.get(process.env.API+'/despacho').then(res=>{
+        // this.despachos=res.data
+        this.despachos=[]
+        res.data.forEach(r=>{
+          let d=r
+          d.label=r.cliente.nombre+' '+r.tramite.nombre+' '+ r.fecha
+          // console.log(d)
+          this.despachos.push(d)
+        })
+        this.despacho=this.despachos[0]
+        // console.log(this.despacho)
+      })
+    },
+    insertaragenda(){
+      this.agenda.user_id=this.dato2.id
+      this.agenda.despacho_id=this.despacho.id
+      this.agenda.etapa_id=this.etapa.id
+      this.$q.loading.show()
+      this.$axios.post(process.env.API+'/agenda',this.agenda).then(res=>{
+        this.dialog_agenda=false
+        this.datosdespachos()
+        this.$q.loading.hide()
+        this.agenda={fechafin:date.formatDate(Date.now(),'YYYY-MM-DD'),horafin:date.formatDate(Date.now(),'HH:mm')}
+        // console.log(res.data)
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          icon:'close',
+          color:'red'
+        })
+      })
+    },
     updatepermisos(){
       this.$axios.put(process.env.API+'/updatepermisos/'+this.dato2.id,{permisos:this.permisos2}).then(res=>{
         // console.log(res.data)
@@ -427,6 +535,10 @@ export default {
     deleteRow(item) {
       this.dato2 = item.row;
       this.dialog_del = true;
+    },
+    agregaragenda(item){
+      this.dato2 = item.row;
+      this.dialog_agenda = true;
     },
     onSubmit() {
       // if (this.dato.unit=='' || this.dato.unit==undefined){

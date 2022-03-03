@@ -16,7 +16,12 @@ class DespachoController extends Controller
      */
     public function index()
     {
-        return Despacho::all()->with('demandados');
+        return Despacho::
+            with('demandados')
+            ->with('tramite')
+            ->with('cliente')
+            ->with('agendas')
+            ->get();
     }
 
     /**
