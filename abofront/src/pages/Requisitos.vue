@@ -123,12 +123,12 @@ export default {
       tramites:[],
       tramite:{},
       columns:[
-        {name:'opciones',label:'opciones',field:'opciones'},
-        {name:'nombre',label:'nombre',field:'nombre'},
-        {name:'tipo',label:'tipo',field:'tipo'},
-        {name:'valor',label:'valor',field:'valor'},
+        {name:'opciones',label:'OPCIONES',field:'opciones',align:'center'},
+        {name:'nombre',label:'NOMBRE',field:'nombre',align:'center'},
+        {name:'tipo',label:'TIPO',field:'tipo'},
+        {name:'valor',label:'VALOR',field:'valor'},
         // {name:'procedimiento',label:'procedimiento',field:'procedimiento'},
-        {name:'requisitos',label:'requisitos',field:'requisitos'},
+        {name:'requisitos',label:'REQUISITOS',field:'requisitos'},
       ]
     }
   },

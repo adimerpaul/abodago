@@ -88,9 +88,9 @@ export default {
       etapas:[],
       etapa:{},
       columns:[
-        {name:'opciones',label:'opciones',field:'opciones'},
-        {name:'numero',label:'numero',field:'numero'},
-        {name:'nombre',label:'nombre',field:'nombre'},
+        {name:'opciones',label:'OPCIONES',field:'opciones',align:'center'},
+        {name:'numero',label:'NUMERO',field:'numero',align:'center'},
+        {name:'nombre',label:'NOMBRE',field:'nombre',align:'left'},
       ]
     }
   },

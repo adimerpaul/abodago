@@ -318,7 +318,7 @@
           <q-form @submit="insertaragenda">
             <div class="row">
               <div class="col-12 col-sm-12">
-                <q-select dense outlined label="Seleccionar tramite" :options="despachos" v-model="despacho"/>
+                <q-select dense outlined label="Seleccionar tramite" :options="options2" v-model="despacho"  use-input input-debounce="0" @filter="filterFn"/>
               </div>
               <div class="col-12 col-sm-4">
                 <q-input dense outlined label="fechafin" v-model="agenda.fechafin" type="date" />
@@ -389,6 +389,7 @@ export default {
       dialog_mod: false,
       dialog_del: false,
       dialog_agenda: false,
+      options2:[],
       filter:'',
       dato: {
         fechalimite:date.formatDate( addToDate(new Date(),{days:7}) , 'YYYY-MM-DD')
@@ -451,6 +452,21 @@ export default {
     })
   },
   methods: {
+        filterFn (val, update) {
+      if (val === '') {
+        update(() => {
+          this.options2 = this.despachos
+          // with Quasar v1.7.4+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+      update(() => {
+        const needle = val.toLowerCase()
+        this.options2 = this.despachos.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+      })
+    },
     datosdespachos(){
       this.$axios.get(process.env.API+'/despacho').then(res=>{
         // this.despachos=res.data
@@ -461,7 +477,7 @@ export default {
           // console.log(d)
           this.despachos.push(d)
         })
-        this.despacho=this.despachos[0]
+        this.despacho={label:''}
         // console.log(this.despacho)
       })
     },
