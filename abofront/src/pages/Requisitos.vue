@@ -1,12 +1,12 @@
 <template>
 <q-page class="q-pa-xs">
   <q-btn color="positive" icon="check" label="Agregar" @click="dialog_req=true" />
+
       <q-dialog v-model="dialog_req" >
       <q-card style="min-width: 350px">
         <q-card-section>
           <div class="text-h6">AGREGAR TRAMITE / PROCESO</div>
         </q-card-section>
-
         <q-card-section class="q-pt-none">
           <q-form @submit="agrtramite">
             <div class="col-12 q-pa-xs col-sm-2">
@@ -20,12 +20,12 @@
             </div>
         </q-form>
         </q-card-section>
-
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancelar" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
+
   <div class="row">
 
     <div class="col-12">
@@ -43,6 +43,8 @@
           <q-td :props="props">
 <!--            {{props.row}}-->
             <q-btn color="positive" size="xs" @click="modalcrear=true;tramite=props.row" icon="add_circle" label="agregar"/>
+            <q-btn color="warning" size="xs" @click="dialog_modreq=true;modtramite=props.row" icon="check" label="Modificar"/>
+            <q-btn color="red" size="xs" @click="deltramite(props.row)" icon="delete" label="Eliminar"/>
           </q-td>
         </template>
         <template v-slot:top-right>
@@ -54,6 +56,7 @@
         </template>
       </q-table>
     </div>
+
     <q-dialog v-model="modalcrear">
       <q-card>
         <q-card-section>
@@ -78,6 +81,30 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+          <q-dialog v-model="dialog_modreq" >
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">MODIFICAR TRAMITE / PROCESO</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-form @submit="modificar">
+            <div class="col-12 q-pa-xs col-sm-2">
+              <q-input dense outlined label="Nombre" v-model="modtramite.nombre" required/>
+            </div>
+            <div class="col-12 q-pa-xs col-sm-3">
+              <q-select dense v-model="modtramite.tipo" :options="['TRAMITE','PROCESO JUDICIAL']" label="TIPO" outlined required/>
+            </div>
+            <div class="col-12 q-pa-xs col-sm-2 ">
+              <q-btn type="submit" color="warning" icon="send" label="Modificar"/>
+            </div>
+        </q-form>
+        </q-card-section>
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancelar" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </q-page>
 </template>
@@ -89,6 +116,9 @@ export default {
       requisito:{},
       dialog_req:false,
       modalcrear:false,
+      modalmod:false,
+      dialog_modreq:false,
+      modtramite:{},
       regtramite:{},
       tramites:[],
       tramite:{},
@@ -106,6 +136,32 @@ export default {
     this.misdatos()
   },
   methods:{
+    deltramite(tramite){
+      this.$q.dialog({
+        title: 'Confirmar',
+        message: 'Seguro Eliminar?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
+                   this.$axios.delete(process.env.API+'/tramite/'+tramite.id).then(res=>{
+                     this.misdatos()
+           })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
+
+    },
+    modificar(){
+           this.$axios.put(process.env.API+'/tramite/'+this.modtramite.id,this.modtramite).then(res=>{
+        this.dialog_modreq=false
+        this.misdatos()
+      }) 
+    },
     agrtramite(){
       this.$axios.post(process.env.API+'/tramite',this.regtramite).then(res=>{
         this.dialog_req=false

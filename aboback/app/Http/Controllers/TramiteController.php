@@ -74,6 +74,10 @@ class TramiteController extends Controller
     public function update(Request $request, Tramite $tramite)
     {
         //
+        $tramite=Tramite::find($request->id);
+        $tramite->nombre=strtoupper($request->nombre);
+        $tramite->tipo=$request->tipo;
+        $tramite->save();
     }
 
     /**
@@ -84,6 +88,7 @@ class TramiteController extends Controller
      */
     public function destroy(Tramite $tramite)
     {
-        //
+        $tramite->delete();
+
     }
 }

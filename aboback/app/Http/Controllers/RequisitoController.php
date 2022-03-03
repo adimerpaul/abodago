@@ -70,6 +70,7 @@ class RequisitoController extends Controller
     public function update(Request $request, Requisito $requisito)
     {
         //
+
     }
 
     /**
