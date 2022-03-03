@@ -44,6 +44,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/evagenda/{id}',[\App\Http\Controllers\AgendaController::class,'evagenda']);
     Route::post('/agendar',[\App\Http\Controllers\AgendaController::class,'agendar']);
     Route::post('/updagenda',[\App\Http\Controllers\AgendaController::class,'updagenda']);
+    Route::post('/delagenda',[\App\Http\Controllers\AgendaController::class,'delagenda']);
     Route::post('/impresion/{id}',[\App\Http\Controllers\DespachoController::class,'impresion']);
     Route::post('/impcliente/{id}',[\App\Http\Controllers\DespachoController::class,'impcliente']);
     Route::post('/reqfaltantes',[\App\Http\Controllers\DespachoController::class,'reqfaltantes']);

@@ -124,6 +124,7 @@
             </q-card-section>
             <q-card-section align="right">
               <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="actualizaagenda"/>
+              <q-btn dense label="Eliminar" color="red"  icon="delete" size="xs" @click="eliminaagenda"/>
             </q-card-section>
           </q-card>
         </q-dialog>
@@ -241,6 +242,14 @@ export default {
             this.$axios.post(process.env.API+'/updagenda',this.agen).then(res=>{
               this.dialogagenda=false
               this.misdatos()
+            })
+
+         },
+         eliminaagenda(){
+            this.$axios.post(process.env.API+'/delagenda',this.agen).then(res=>{
+              this.dialogagenda=false
+              this.misdatos()
+
             })
 
          },
