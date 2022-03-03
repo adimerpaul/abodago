@@ -57,6 +57,7 @@ class AgendaController extends Controller
     public function updagenda(Request $request){
         $agenda= Agenda::find($request->id);
         $agenda->actividad=$request->actividad;
+        $agenda->proximopaso=$request->actividad;
         $agenda->save();
         return $agenda;
     }
