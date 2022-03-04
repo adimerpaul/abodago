@@ -63,16 +63,17 @@
                   {{ props.row.tipo }}
                 </q-badge>
               </q-td>
-              <q-td key="imagen" :props="props">
+              <q-td key="imagen" :props="props" style="  display: flex; height: 80px; 
+  justify-content: center;">
                 <!--            <q-badge color="purple">-->
 <!--                {{ props.row.imagen }}-->
-                <div style="height: 60px; width: 60px;">
+                <div style="text-align: center;height: 80px; width: 80px;  display: block;">
                 <q-img
                   @click="listdespacho(props.row)"
                   v-if="props.row.imagen!='' && props.row.imagen!=null"
                   :src="url+'/../imagenes/'+props.row.imagen"
                   spinner-color="white"
-                  
+                  style=""
                 /></div>
                 <!--            </q-badge>-->
               </q-td>
@@ -708,7 +709,7 @@ export default {
         {field:'telefono',name:'telefono',label:'TELEFONO',align:'right'},
         {field:'tipo',name:'tipo',label:'TIPO',align:'right'},
 
-        {field:'imagen',name:'imagen',label:'IMAGEN',align:'right'},
+        {field:'imagen',name:'imagen',label:'IMAGEN',align:'center'},
        // {field:'despachos',name:'despachos',label:'despachos',align:'right'},
         // {field:'ref',name:'ref',label:'ref',align:'right'},
         // {field:'remitente',name:'remitente',label:'remitente',align:'right'},
