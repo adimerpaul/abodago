@@ -122,6 +122,7 @@
             </q-card-section>
             <q-card-section class="q-pt-none">
                 <q-input label="ACTIVIDAD" outlined dense v-model="agen.actividad"/>
+                <q-select outlined v-model="user" :options="usuarios" label="Usuarios" />
             </q-card-section>
             <q-card-section align="right">
               <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="actualizaagenda"/>
@@ -244,6 +245,7 @@ export default {
 
     },
          actualizaagenda(){
+           this.agen.usuario_id=this.user.r.id;
             this.$axios.post(process.env.API+'/updagenda',this.agen).then(res=>{
               this.dialogagenda=false
               this.misdatos()
@@ -307,6 +309,7 @@ export default {
         this.$q.loading.hide()
         this.despacho=res.data[0].despacho
         this.agen=res.data[0]
+        this.user={label:this.agen.user.name,r:this.agen.user}
         //console.log(this.agen.estado)
         if(this.agen.estado!='AGENDAR') {
           this.dialogdatos=true

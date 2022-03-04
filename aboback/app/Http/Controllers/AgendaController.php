@@ -58,6 +58,7 @@ class AgendaController extends Controller
         $agenda= Agenda::find($request->id);
         $agenda->actividad=$request->actividad;
         $agenda->proximopaso=$request->actividad;
+        $agenda->user_id=$request->usuario_id;
         $agenda->save();
         return $agenda;
     }
