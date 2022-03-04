@@ -173,7 +173,7 @@ export default {
       plugins: [ dayGridPlugin, timeGridPlugin,interactionPlugin], headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'dayGridMonth,timeGridWeek,timeGridDay',
+      right: 'dayGridMonth,timeGridWeek,timeGridDay,dayGridDay',
       },
         initialView: 'timeGridWeek',
         locale: esLocale,

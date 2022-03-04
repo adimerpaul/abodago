@@ -66,13 +66,14 @@
               <q-td key="imagen" :props="props">
                 <!--            <q-badge color="purple">-->
 <!--                {{ props.row.imagen }}-->
+                <div style="height: 60px; width: 60px;">
                 <q-img
                   @click="listdespacho(props.row)"
                   v-if="props.row.imagen!='' && props.row.imagen!=null"
                   :src="url+'/../imagenes/'+props.row.imagen"
                   spinner-color="white"
-                  style="height: 60px; width: 150px"
-                />
+                  
+                /></div>
                 <!--            </q-badge>-->
               </q-td>
 <!--              <q-td key="ref" :props="props">-->
