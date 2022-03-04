@@ -115,6 +115,16 @@ class DespachoController extends Controller
     public function update(Request $request, Despacho $despacho)
     {
         //
+        $despacho=Despacho::find($request->id);
+        $despacho->juzgado=strtoupper($request->juzgado);
+        $despacho->juez=strtoupper($request->juez);
+        $despacho->webid=$request->webid;
+        $despacho->nurej=$request->nurej;
+        $despacho->proceso=strtoupper($request->proceso);
+        $despacho->ci=strtoupper($request->ci);
+        $despacho->demandante=strtoupper($request->demandante);
+        $despacho->representante=strtoupper($request->representante);
+        $despacho->save();
     }
 
     /**

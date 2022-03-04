@@ -128,7 +128,7 @@ export default {
         {name:'tipo',label:'TIPO',field:'tipo'},
         {name:'valor',label:'VALOR',field:'valor'},
         // {name:'procedimiento',label:'procedimiento',field:'procedimiento'},
-        {name:'requisitos',label:'REQUISITOS',field:'requisitos'},
+        {name:'requisitos',label:'REQUISITOS',field:'requisitos',align:'left'},
       ]
     }
   },
@@ -176,6 +176,7 @@ export default {
       this.$axios.post(process.env.API+'/requisito',this.requisito).then(res=>{
         // this.tramites=res.data
         // console.log(res.data)
+        this.requisito={}
         this.misdatos()
         this.modalcrear=false
       })

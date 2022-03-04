@@ -67,7 +67,7 @@
                   v-if="props.row.imagen!='' && props.row.imagen!=null"
                   :src="url+'/../imagenes/'+props.row.imagen"
                   spinner-color="white"
-                  style="height: 30px; width: 75px"
+                  style="height: 60px; width: 150px"
                 />
                 <!--            </q-badge>-->
               </q-td>
@@ -264,6 +264,8 @@
                 </tr>
                 </tbody>
                </table>
+                <q-btn full-width color="positive"  label="Modificar" @click="moddespacho"/>
+               
                   <q-card>
                     <q-tabs
                       v-model="tab"
@@ -585,15 +587,9 @@
               <div class="col-12 col-md-4">
                 <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
               </div>
-              <div class="col-12 col-md-3">
-                <q-input dense outlined label="fecha" v-model="agenda.fechaini" type="date" required/>
-              </div>
-              <div class="col-12 col-md-2">
-                <q-input dense outlined label=" hora" v-model="agenda.horaini" type="time" required/>
-              </div><br>
                             <div class="col-12 col-md-3">
                 <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
-              </div>
+              </div><br>
                             <div class="col-12 col-md-5">
                 <q-input dense outlined label="Actividad" v-model="agenda.actividad" type="textarea" required/>
               </div>
@@ -1440,6 +1436,28 @@ export default {
         this.despacho={fecha:date.formatDate(Date.now(),'YYYY-MM-DD'),hora:date.formatDate(Date.now(),'HH:mm')}
         this.resetdespacho()
         this.dialogcliente=false
+        this.$q.notify({
+          message:'Despacho registrado!!',
+          color:'green',
+          icon:'done'
+        })
+        this.listdespacho(this.cliente2)
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          color:'red',
+          icon:'error'
+        })
+        this.$q.loading.hide()
+      })
+    },
+        moddespacho(){
+      this.$q.loading.show()
+      this.$axios.put(process.env.API+'/despacho/'+this.cliente3.id,this.cliente3).then(res=>{
+        console.log(res.data)
+        this.misdatos()
+        this.$q.loading.hide()
+        this.dialogdatos=false
         this.$q.notify({
           message:'Despacho registrado!!',
           color:'green',

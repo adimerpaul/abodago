@@ -39,7 +39,7 @@ class AgendaController extends Controller
         $agenda->horaini=$request->hora;
         $agenda->fechafin=$request->fecha;
         $agenda->horafin=$request->hora;
-        $agenda->user_id=$request->user()->id;
+        $agenda->user_id=$request->usuario_id==0?$request->user()->id:$request->usuario_id;
         $agenda->save();
         return $agenda;
     }

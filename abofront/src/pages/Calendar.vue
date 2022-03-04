@@ -106,10 +106,11 @@
               AGENDAR
             </q-card-section>
             <q-card-section class="q-pt-none">
-                <q-input label="ACTIVIDAD" outlined dense v-model="agen.actividad"/>
+                <q-input label="ACTIVIDAD" outlined dense v-model="actividad"/>
+                <q-select outlined v-model="user" :options="usuarios" label="Usuarios" />
             </q-card-section>
             <q-card-section align="right">
-              <q-btn dense label="Modificar" color="positive"  icon="check" size="xs" @click="agendar"/>
+              <q-btn dense label="Registrar" color="positive"  icon="add" size="xs" @click="agendar"/>
             </q-card-section>
           </q-card>
         </q-dialog>
@@ -155,6 +156,9 @@ export default {
       dialogagenda1:false,
       fecha1:date.formatDate(new Date(),'YYYY-MM-DD'),
       events: [],
+      fec:'',
+      hr:'',
+      actividad:'',
       despacho:{},
       agen:{},
       dialogdatos:false,
@@ -207,8 +211,9 @@ export default {
     misusuarios(){
       this.usuarios=[]
       this.$axios.post(process.env.API+'/listuser').then(res=>{
+        console.log(res.data)
         res.data.forEach(r => {
-          this.usuarios.push({label:r.nombre,r});
+          this.usuarios.push({label:r.name,r});
           this.user={label:''}
         });
       })
@@ -252,6 +257,16 @@ export default {
 
             })
 
+         },
+         agendar(){
+           if(this.user.label='')
+           this.user.id=0
+          this.$axios.post(process.env.API+'/agendar',{'actividad':this.actividad,'usuario_id':this.user.id,'fecha':this.fec,'hora':this.hr}).then(res=>{
+            this.actividad=''
+            this.dialogagenda1=false
+            this.misdatos()
+            this.misusuarios()
+        })
          },
     misdatos(){
       this.$q.loading.show()
@@ -304,29 +319,12 @@ export default {
 
      },
      dateClick: function(info){
-       let fec= (date.formatDate(info.dateStr,'YYYY-MM-DD'))
-       let hr=(date.formatDate(info.dateStr,'HH:mm:ss'))
-      this.$q.dialog({
-        title: 'AGENDAR',
-        message: 'Actividad',
-        prompt: {
-          model: '',
-          type: 'text' // optional
-        },
-        cancel: true,
-        persistent: false
-      }).onOk(data => {
-        this.$axios.post(process.env.API+'/agendar',{'actividad':data,'fecha':fec,'hora':hr}).then(res=>{
-          this.misdatos()
-        })
-        // console.log('>>>> OK, received', data)*
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
-      })
+        this.fec= (date.formatDate(info.dateStr,'YYYY-MM-DD'))
+        this.hr=(date.formatDate(info.dateStr,'HH:mm:ss'))
+        this.dialogagenda1=true;
 
      },
+
 
     handleDateClick: function(arg) {
       //this.despacho=arg.r.despacho;
