@@ -259,7 +259,7 @@ export default {
 
          },
          agendar(){
-           if(this.user.label='')
+           if(this.user.label=='')
            this.user.id=0
           this.$axios.post(process.env.API+'/agendar',{'actividad':this.actividad,'usuario_id':this.user.id,'fecha':this.fec,'hora':this.hr}).then(res=>{
             this.actividad=''
