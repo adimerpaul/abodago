@@ -239,6 +239,9 @@
                   <div class="col-6"><q-input dense label="Hora" outlined  v-model="cliente3.hora"/></div>
                 </div>
                 <div >
+                                <q-input label="ci" outlined dense v-model="cliente3.ci"/>
+                <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
+                <div v-if="cliente3.tramite.tipo!='TRAMITE'">
                 <q-input label="Juzgado" outlined dense v-model="cliente3.juzgado"/>
                 <q-input label="Juez" outlined dense v-model="cliente3.juez"/>
                 <div class="row">
@@ -249,8 +252,7 @@
 
                 <q-input label="Proceso" outlined dense v-model="cliente3.proceso"/>
                 </div>
-                <q-input label="ci" outlined dense v-model="cliente3.ci"/>
-                <q-input label="demandante" outlined dense v-model="cliente3.demandante"/>
+
                 <div>
                 <q-input label="representante" outlined dense v-model="cliente3.representante"/>
                 <div class="text-h6">DEMANDADOS</div>
@@ -270,6 +272,7 @@
                 </tr>
                 </tbody>
                </table>
+                </div>
                 <q-btn full-width color="positive"  label="Modificar" @click="moddespacho"/>
 
                   <q-card>
