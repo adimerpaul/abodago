@@ -6,6 +6,8 @@
                   <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-btn color="primary" label="Imprimir" @click="impresioncot(props.row)" icon="print" size="xs"/>
+              <q-btn color="warning" label="Modificar" @click="modcost(props.row)" icon="edit" size="xs"/>
+              <q-btn color="red" label="Eliminar" @click="elimcost(props.row)" icon="delete" size="xs"/>
             </q-td>
           </template>
           <template v-slot:body-cell-cliente="props">
@@ -30,6 +32,104 @@
           </template>
         </q-table>
       </div>
+
+          <q-dialog v-model="dialog_mod" full-width>
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">MODIFICAR</div>
+        </q-card-section>
+
+  <div class="col-md-6 col-sm-12 ">
+    <q-card>
+      <div class="row">
+        <div class="col-12 q-pa-xs">
+          <q-form @submit.prevent="crear">
+            <div class="row">
+              <div class="col-5"><q-input dense outlined label="Nombre" v-model="precio.nombre" required/></div>
+              <div class="col-5"><q-input dense outlined label="Precio" type="number" v-model="precio.precio" required/></div>
+              <div class="col-2 flex flex-center"><q-btn size="xs" icon="add_circle" label="crear" color="positive" type="submit"/></div>
+            </div>
+          </q-form>
+        </div>
+        <div class="col-12">
+          <q-table dense  :rows="precios" :columns="columns2" :rows-per-page-options="[50,100,200,0]" :filter="filter">
+            <template v-slot:top-right>
+              <q-input borderless outlined dense v-model="filter" placeholder="Buscar">
+                <template v-slot:append>
+                  <q-icon name="search" />
+                </template>
+              </q-input>
+            </template>
+            <template v-slot:body="props">
+              <q-tr :props="props">
+                <q-td key="nombre" :props="props">
+                  <input type="text" v-model="props.row.nombre" style="width: 150%">
+                </q-td>
+                <q-td key="nombre" :props="props" >
+                  <div style="text-align: right">
+                    <input type="text" v-model="props.row.precio" style="width: 30%"> Bs.
+                  </div>
+                </q-td>
+                <q-td key="nombre" :props="props">
+                  <q-btn color="info" icon="add_circle" @click="addcotizar(props.row)" size="xs" label="cotizar"/>
+                  <q-btn color="negative" @click="eliminar(props.row)" label="eliminar" icon="remove_circle" size="xs"/>
+                </q-td>
+              </q-tr>
+            </template>
+          </q-table>
+        </div>
+      </div>
+    </q-card>
+  </div>
+  
+  <div class="col-md-6 col-sm-12 ">
+    <div class="row">
+      <div class="col-12 q-pa-xs">
+        <q-input  outlined v-model="info.cliente.nombre" label="Cliente" />
+        <q-input  outlined v-model="info.tramite.nombre" label="TRAMITE / PROCESO" />
+      </div>
+      <div class="col-12">
+        <q-table title="Mi cotizacion" dense  :rows="cotizacion" :columns="columns2" :rows-per-page-options="[10,100,200,0]" :filter="filter">
+          <template v-slot:top-right>
+            <q-input borderless outlined dense v-model="filter" placeholder="Buscar">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:body="props">
+            <q-tr :props="props">
+              <q-td key="nombre" :props="props">
+                {{props.row.nombre}}
+              </q-td>
+              <q-td key="nombre" :props="props" >
+                <div style="text-align: right">
+                  {{props.row.precio}}
+                </div>
+              </q-td>
+              <q-td key="nombre" :props="props">
+                <q-btn color="negative" @click="quitar(props.row)" label="quitar" icon="delete" size="xs"/>
+              </q-td>
+            </q-tr>
+          </template>
+        </q-table>
+      </div>
+      <div class="col-12 flex flex-center">
+        <q-btn :label="'Modificar TOTAL: '+total+'Bs'" @click="modificar" class="full-width" icon="edit" color="warning"/>
+
+      </div>
+
+    </div>
+  </div>
+        <q-card-section class="q-pt-none">
+
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Cancel" v-close-popup />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     </div>
   </q-page>
 </template>
@@ -41,20 +141,31 @@ export default {
   data(){
     return{
       filter:'',
+      precio:{},
       proformas:[],
+      precios:[],     
       proforma:{},
+      cotizacion:[],
+      dialog_mod:false,
+      info:{},
       fec :date.formatDate(Date.now(),'DD-MM-YYYY'),
       columns:[
         {label:'OPCIONES',field:'opciones',name:'opciones'},
         {label:'CLIENTE',field:'cliente',name:'cliente'},
         {label:'FECHA',field:'fecha',name:'fecha'},
-        {label:'TRMITE',field:row=>row.tramite.nombre,name:'tramite'},
+        {label:'TRAMITE',field:row=>row.tramite.nombre,name:'tramite'},
         {label:'DETALLE',field:'detalleproformas',name:'detalleproformas'},
         {label:'TOTAL',field:'total',name:'total'},
       ],
+      columns2:[
+        {field:'nombre',name:'nombre',label:'Nombre',align:'left'},
+        {field:'precio',name:'precio',label:'Precio',align:'right'},
+        {field:'option',name:'option',label:'Opciones',align:'right'},
+      ]
     }
   },
   created() {
+    this.misprecios()
     this.$q.loading.show()
     this.$axios.get(process.env.API+'/proforma').then(res=>{
       // console.log(res.data)
@@ -63,6 +174,74 @@ export default {
     })
   },
   methods:{
+      modificar(){
+              if (this.cotizacion.length==0){
+        this.$q.notify({
+          color:'red',
+          caption:'Debe tener cotizaciones'
+        })
+        return false
+      }
+
+      this.$axios.post(process.env.API+'/upprecio',{
+        id:this.info.id,
+        datos:this.cotizacion,
+        total:this.total
+      }).then(res=>{
+        // console.log(res.data)
+        // return false
+      this.dialog_mod=false
+      })
+      },
+        crear(){
+      this.$q.loading.show()
+      this.$axios.post(process.env.API+'/precio',this.precio).then(res=>{
+        this.precio={}
+        this.misprecios()
+        // this.$q.loading.hide()
+      })
+    },
+    eliminar(precio){
+      this.$q.loading.show()
+      this.$axios.delete(process.env.API+'/precio/'+precio.id).then(res=>{
+        this.misprecios()
+        // this.$q.loading.hide()
+      })
+    },
+    addcotizar(precio){
+      this.cotizacion.push(precio)
+    },
+    quitar(precio){
+      let index =this.cotizacion.findIndex(c=>c.id===precio.id)
+      this.cotizacion.splice(index,1)
+    },
+    misprecios(){
+      this.$q.loading.show()
+      this.$axios.get(process.env.API+'/precio').then(res=>{
+        this.precios=res.data
+        this.$q.loading.hide()
+      })
+
+    },
+    modcost(proforma){
+      this.info=proforma;
+     this.cotizacion=this.info.detalleproformas
+      this.dialog_mod=true
+
+    },
+    misdatos(){
+          this.$axios.get(process.env.API+'/proforma').then(res=>{
+      // console.log(res.data)
+      this.proformas=res.data
+      this.$q.loading.hide()
+    })
+    },
+    elimcost(precio){
+      this.$axios.delete(process.env.API+'/proforma/'+precio.id).then(res=>{
+        this.misdatos()
+      })
+
+    },
     imprimir(proforma){
       console.log(proforma)
       this.$axios.get(process.env.API+'/proforma/'+proforma.id).then(res=>{
@@ -174,6 +353,15 @@ export default {
 
       window.open(doc.output('bloburl'), '_blank');
     },
+  },
+  computed: {
+    total(){
+      let t=0
+      this.cotizacion.forEach(c=>{
+        t+=parseFloat(c.precio)
+      })
+      return t
+    }
   }
 }
 </script>

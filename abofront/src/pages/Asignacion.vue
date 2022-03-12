@@ -529,7 +529,13 @@
                   :rows="tabingreso"
                   :columns="ingresocol"
                   row-key="name"
-                />
+                >
+                            <template v-slot:body-cell-opcion="props">
+              <q-td key="opcion" :props="props">
+                  <q-btn dense  size="xs" flat color="red" @click="deling(props.row)" icon="delete"></q-btn>
+              </q-td>
+             </template>
+                </q-table>
               </div>
               <div class="col-4">
                 <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove"></q-btn>
@@ -538,7 +544,13 @@
                   :rows="tabegreso"
                   :columns="egresocol"
                   row-key="name"
-                />
+                                >
+                            <template v-slot:body-cell-opcion="props">
+              <q-td key="opcion" :props="props">
+                  <q-btn dense  size="xs" flat color="red" @click="deleg(props.row)" icon="delete"></q-btn>
+              </q-td>
+             </template>
+                </q-table>
               </div>
               <div class="col-4">
                 <q-btn dense round flat label="Egr Cliente" color="accent" @click="reclRow()" icon="remove"></q-btn>
@@ -547,7 +559,13 @@
                   :rows="tabegcl"
                   :columns="egrclcol"
                   row-key="name"
-                />
+                                >
+                            <template v-slot:body-cell-opcion="props">
+              <q-td key="opcion" :props="props">
+                  <q-btn dense  size="xs" flat color="red" @click="delegcl(props.row)" icon="delete"></q-btn>
+              </q-td>
+             </template>
+                </q-table>
               </div>
             </div>
             <div>
@@ -742,18 +760,21 @@ export default {
         {field:'monto',name:'monto',label:'monto',align:'right'},
         {field:'concepto',name:'concepto',label:'Concepto',align:'right'},
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
       ],
       egresocol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
       ],
       egrclcol:[
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
       ]
     }
   },
@@ -794,6 +815,28 @@ export default {
     this.misusuarios()
   },
   methods:{
+    deling(pago){
+      this.$axios.delete(process.env.API+'/ingreso/'+pago.id).then(res=>{
+                this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+              this.tabingreso=res.data;
+      });
+      })
+
+    },
+    deleg(pago){
+      this.$axios.delete(process.env.API+'/egreso/'+pago.id).then(res=>{
+                this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
+              this.tabegreso=res.data;
+      });
+      })
+    },
+    delegcl(pago){
+      this.$axios.delete(process.env.API+'/egotro/'+pago.id).then(res=>{
+                this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
+              this.tabegcl=res.data;
+      });
+      })
+    },
     misusuarios(){
       this.$axios.post(process.env.API+'/listuser').then(res=>{
         res.data.forEach(r => {
@@ -1076,7 +1119,10 @@ export default {
         doc.addImage(img, 'jpg', 0.5, 0.5, 5, 3)
         doc.setFont(undefined,'bold')
         doc.text(10, 2.5, 'GASTOS '+ mc.cliente2.nombre)
-        doc.text(8, 3,  mc.datodespacho.tramite.nombre)
+         doc.setFontSize(8);
+        doc.text(6, 3,  mc.datodespacho.tramite.nombre.substring(0,75))
+        if(mc.datodespacho.tramite.nombre.length>75)
+        doc.text(6, 3.5,  mc.datodespacho.tramite.nombre.substring(75))
         doc.setFont(undefined,'normal')
         doc.addImage(img2, 'jpg', 0.5, 12,20,10)
         doc.setFontSize(7);

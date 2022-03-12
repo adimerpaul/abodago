@@ -89,5 +89,6 @@ class EgotroController extends Controller
     public function destroy(Egotro $egotro)
     {
         //
+        $egotro->delete();
     }
 }

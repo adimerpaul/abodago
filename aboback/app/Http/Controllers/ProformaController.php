@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Detalleproforma;
 use App\Models\Proforma;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProformaController extends Controller
 {
@@ -145,5 +146,7 @@ class ProformaController extends Controller
     public function destroy(Proforma $proforma)
     {
         //
+        $proforma->delete();
+
     }
 }

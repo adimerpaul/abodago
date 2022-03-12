@@ -89,5 +89,6 @@ class EgresoController extends Controller
     public function destroy(Egreso $egreso)
     {
         //
+        $egreso->delete();
     }
 }

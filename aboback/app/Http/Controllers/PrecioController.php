@@ -8,6 +8,7 @@ use App\Models\Precio;
 use App\Models\Proforma;
 use App\Models\Tramite;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrecioController extends Controller
 {
@@ -84,7 +85,23 @@ class PrecioController extends Controller
      */
     public function destroy(Precio $precio)
     {
+        DB::SELECT("DELETE from detalleproformas where proforma_id=$precio->id");
         $precio->delete();
+    }
+
+    public function upprecio(Request $request){
+        $proforma=Proforma::find($request->id);
+        $proforma->total=$request->total;
+        $proforma->save();
+
+        DB::SELECT("DELETE from detalleproformas where proforma_id=$request->id");
+        foreach ($request->datos as $r) {
+            $detprof=new Detalleproforma;
+            $detprof->nombre=$r['nombre'];
+            $detprof->precio=$r['precio'];
+            $detprof->proforma_id=$request->id;
+            $detprof->save();
+        }
     }
 
         public function impcosto(Request $request){

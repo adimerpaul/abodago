@@ -130,15 +130,15 @@ class ClienteController extends Controller
     }
 
     public function regreso($id){
-        return db::select("select fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egresos where despacho_id= $id");
+        return db::select("select id,fecha,hora,monto,'' as recibo, concepto,'EGRESO' as tipo from egresos where despacho_id= $id");
     }
 
     public function ringreso($id){
-        return db::select("select fecha, hora, monto, recibo,motivo as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
+        return db::select("select id,fecha, hora, monto, recibo,motivo as concepto,'INGRESO' as tipo from ingresos where despacho_id= $id");
     }
 
     public function regotro($id){
-        return db::select("select fecha,hora,monto,'' as recibo, concepto,'EGCLIENTE' as tipo from egotros where despacho_id= $id");
+        return db::select("select id,fecha,hora,monto,'' as recibo, concepto,'EGCLIENTE' as tipo from egotros where despacho_id= $id");
     }
 
 

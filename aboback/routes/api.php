@@ -32,7 +32,6 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/regreso/{id}',[\App\Http\Controllers\ClienteController::class,'regreso']);
     Route::post('/regotro/{id}',[\App\Http\Controllers\ClienteController::class,'regotro']);
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
-    Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
     Route::post('/imgupdate',[\App\Http\Controllers\ClienteController::class,'imgupdate']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
     Route::post('/clienteimg',[\App\Http\Controllers\ClienteController::class,'clienteimg']);
@@ -63,6 +62,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/precio',\App\Http\Controllers\PrecioController::class);
     Route::resource('/proforma',\App\Http\Controllers\ProformaController::class);
     Route::post('/impcosto',[\App\Http\Controllers\PrecioController::class,'impcosto']);
+    Route::post('/upprecio',[\App\Http\Controllers\PrecioController::class,'upprecio']);
     Route::post('/listproforma/{id}',[\App\Http\Controllers\ProformaController::class,'listproforma']);
     Route::post('/listuser',[\App\Http\Controllers\UserController::class,'listuser']);
     Route::resource('/requisito',\App\Http\Controllers\RequisitoController::class);
