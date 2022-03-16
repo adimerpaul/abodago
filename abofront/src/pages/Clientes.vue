@@ -518,7 +518,7 @@
             <q-card-section class="q-pt-none">
             <div class="text-h6">Ingresos Egresos</div>
             <div class="row">
-              <div class="col-4">
+              <div class="col-md-4 col-sm-12">
                 <q-btn dense round label="Ingreso" flat color="green" @click="addRow()" icon="add"></q-btn>
                 <q-table dense
                   title="LISTA DE INGRESOS"
@@ -533,7 +533,7 @@
              </template>
                 </q-table>
               </div>
-              <div class="col-4">
+              <div class="col-md-4 col-sm-12">
                 <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove"></q-btn>
                 <q-table dense
                   title="LISTA EGRESOS"
@@ -548,7 +548,7 @@
              </template>
                 </q-table>
               </div>
-              <div class="col-4">
+              <div class="col-md-4 col-sm-12">
                 <q-btn dense round flat label="Egr Cliente" color="accent" @click="reclRow()" icon="remove"></q-btn>
                 <q-table dense
                   title="LISTA EGRESOS CLIENTE"
@@ -811,26 +811,68 @@ export default {
   },
   methods:{
         deling(pago){
+                this.$q.dialog({
+        title: 'CONFIRMAR',
+        message: 'ESTA SEGURO DE ELIMINAR?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
       this.$axios.delete(process.env.API+'/ingreso/'+pago.id).then(res=>{
                 this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
               this.tabingreso=res.data;
       });
       })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
 
     },
     deleg(pago){
-      this.$axios.delete(process.env.API+'/egreso/'+pago.id).then(res=>{
+                      this.$q.dialog({
+        title: 'CONFIRMAR',
+        message: 'ESTA SEGURO DE ELIMINAR?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {   
+           this.$axios.delete(process.env.API+'/egreso/'+pago.id).then(res=>{
                 this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
               this.tabegreso=res.data;
       });
       })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
     },
     delegcl(pago){
+                            this.$q.dialog({
+        title: 'CONFIRMAR',
+        message: 'ESTA SEGURO DE ELIMINAR?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {   
       this.$axios.delete(process.env.API+'/egotro/'+pago.id).then(res=>{
                 this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
               this.tabegcl=res.data;
       });
       })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+
     },
     misusuarios(){
       this.$axios.post(process.env.API+'/listuser').then(res=>{

@@ -5,9 +5,11 @@
         <q-table dense title="Proformas realizadas" :rows="proformas" :columns="columns" :filter="filter">
                   <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
+            <q-btn-group size="xs" >
               <q-btn color="primary" label="Imprimir" @click="impresioncot(props.row)" icon="print" size="xs"/>
               <q-btn color="warning" label="Modificar" @click="modcost(props.row)" icon="edit" size="xs"/>
               <q-btn color="red" label="Eliminar" @click="elimcost(props.row)" icon="delete" size="xs"/>
+            </q-btn-group>
             </q-td>
           </template>
           <template v-slot:body-cell-cliente="props">
@@ -237,9 +239,24 @@ export default {
     })
     },
     elimcost(precio){
-      this.$axios.delete(process.env.API+'/proforma/'+precio.id).then(res=>{
-        this.misdatos()
+      
+      this.$q.dialog({
+        title: 'CONFIRMAR',
+        message: 'ESTA SEGURO DE ELIMINAR?',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
+          this.$axios.delete(process.env.API+'/proforma/'+precio.id).then(res=>{
+            this.misdatos()
+          })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
       })
+
 
     },
     imprimir(proforma){
