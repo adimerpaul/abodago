@@ -79,7 +79,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
-      https: false,
+      https: true,
       port: 8080,
       open: true // opens browser window automatically
     },
@@ -148,8 +148,8 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: `Correspondencia`,
-        short_name: `Correspondencia`,
+        name: `abogado`,
+        short_name: `abogado`,
         description: `A Quasar Framework app`,
         display: 'standalone',
         orientation: 'portrait',
