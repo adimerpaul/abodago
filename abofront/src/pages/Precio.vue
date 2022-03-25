@@ -51,7 +51,7 @@
     <div class="row">
       <div class="col-12 q-pa-xs">
         <q-select outlined dense  label="Cliente/Empresa" :options="clientes" v-model="cliente"/>
-        <q-select outlined dense  label="Tramite" :options="tramites" v-model="tramite"/>
+        <q-select outlined dense  label="Tramite/Proceso" :options="tramites" v-model="tramite"/>
       </div>
       <div class="col-12">
         <q-table title="Mi cotizacion" dense  :rows="cotizacion" :columns="columns" :rows-per-page-options="[10,100,200,0]" :filter="filter">

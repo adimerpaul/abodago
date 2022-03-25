@@ -532,6 +532,7 @@
                 >
                             <template v-slot:body-cell-opcion="props">
               <q-td key="opcion" :props="props">
+                  <q-btn dense  size="xs" flat color="info" @click="imprec(props.row)" icon="print"></q-btn>
                   <q-btn dense  size="xs" flat color="red" @click="deling(props.row)" icon="delete"></q-btn>
               </q-td>
              </template>
@@ -664,13 +665,13 @@ export default {
       imagen : null,
       miaccion:'',
       columnsagenda:[
+        {label:'ESTADO',name:'estado',field:'estado'},
         {label:'FECHA',name:'fechaini',field:'fechaini'},
         {label:'ETAPA',name:'etapa',field:'etapa'},
         {label:'ACTIVIDAD',name:'actividad',field:'actividad'},
         {label:'PROXIMO PASO',name:'proximopaso',field:'proximopaso'},
         {label:'USUARIO',name:'usuario',field:'userterminado'},
         {label:'FECHA PROXIMO',name:'fechafin',field:'fechafin'},
-        {label:'ESTADO',name:'estado',field:'estado'},
         // {label:'opciones',name:'opciones',field:'opciones'},
       ],
       filter:'',
@@ -815,6 +816,19 @@ export default {
     this.misusuarios()
   },
   methods:{
+            imprec(pago){
+          this.$axios.get(process.env.API+'/imprecibo/'+pago.id).then(res=>{
+                    let myWindow = window.open("", "Imprimir", "width=1000,height=500");
+        myWindow.document.write(res.data);
+        myWindow.document.close();
+        myWindow.focus();
+        setTimeout(function(){
+          myWindow.print();
+          myWindow.close();
+        },500);
+          })
+
+        },
         deling(pago){
                 this.$q.dialog({
         title: 'CONFIRMAR',

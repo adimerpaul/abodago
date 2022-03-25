@@ -29,7 +29,7 @@
   <div class="row">
 
     <div class="col-12">
-      <q-table title="ETAPAS" dense :columns="columns" :rows="etapas">
+      <q-table title="ETAPAS" dense :columns="columns" :rows="etapas" :filter="filter">
         <template v-slot:body-cell-opciones="props">
           <q-td :props="props">
             <q-btn color="warning" size="xs" @click="dialog_modreq=true;modetapa=props.row" icon="check" label="Modificar"/>
