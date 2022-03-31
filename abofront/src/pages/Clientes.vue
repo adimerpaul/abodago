@@ -1140,6 +1140,9 @@ export default {
           "<td><b>WEB-ID:</b> "+despacho.webid+"</td>" +
           "</tr>"+
           "<tr >" +
+          "<td colspan='2'><b>PROCESO:</b> "+despacho.proceso+"</td>" +
+          "</tr>"+
+          "<tr >" +
           "<td colspan='2'><b>DEMANDANTE:</b> "+despacho.demandante+"</td>" +
           "</tr>"+
           "<tr >" +
