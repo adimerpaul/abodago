@@ -43,6 +43,7 @@
                   <q-btn dense label="modificar" @click="mod(props.row)" color="orange"  icon="edit" size="xs" />
                   <q-btn dense label="foto" @click="modimg(props.row)" color="teal"  icon="image" size="xs" />
                   <q-btn dense label="lista" @click="listdespacho(props.row)" color="accent"  icon="text_snippet" size="xs" />
+                  <q-btn dense label="Eliminar" @click="delcliente(props.row)" color="red"  icon="delete" size="xs" />
                 </q-btn-group >
               </q-td>
               <q-td key="ci" :props="props" @click="listdespacho(props.row)">
@@ -419,6 +420,7 @@
                 <q-btn dense  size="xs" label="actualizar" flat color="teal" @click="faltante(props.row)" icon="checklist"></q-btn>
                 <q-btn dense  size="xs" label="dato" flat color="accent" @click="detalle(props.row)" icon="description"></q-btn>
                 <q-btn dense  size="xs" label="imprimir" flat color="teal" @click="imprimir2(props.row)" icon="print"></q-btn>
+                <q-btn dense  size="xs" label="Eliminar" flat color="red" @click="deldespacho(props.row)" icon="delete"></q-btn>
                 </q-btn-group >
               </q-td>
              </template>
@@ -1056,6 +1058,49 @@ export default {
       });
 
       });
+    },
+        delcliente(prop){
+      this.$q.dialog({
+        title: 'Seguro de Eliminar',
+        message: 'Se eliminara todo lo relacionado con el Cliente',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
+        // console.log('>>>> OK')
+        this.$axios.delete(process.env.API+'/cliente/'+prop.id).then(res=>{
+          this.misdatos(process.env.API)
+
+        })
+
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
+    deldespacho(prop){
+      this.$q.dialog({
+        title: 'Seguro de Eliminar',
+        message: 'Se eliminara todo lo relacionado con el Despacho',
+        cancel: true,
+        persistent: false
+      }).onOk(() => {
+        // console.log('>>>> OK')
+        this.$axios.delete(process.env.API+'/despacho/'+prop.id).then(res=>{
+          this.dialog_despacho=false
+          this.misdatos(process.env.API)
+
+        })
+
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
     },
     regegrcliente(){
       this.egrcl.despacho_id=this.datodespacho.id;
