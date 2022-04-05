@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\Despacho;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -124,9 +125,21 @@ class ClienteController extends Controller
      * @param  \App\Models\Cliente  $cliente
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cliente $cliente)
+    public function destroy($id)
     {
-        //
+        $cliente=cliente::find($id);
+        $despacho=Despacho::where('cliente_id',$id)->get();
+        foreach ($despacho as $r) {
+            DB::SELECT("DELETE from agendas where despacho_id=$r->id");
+            DB::SELECT("DELETE from egotros where despacho_id=$r->id");
+            DB::SELECT("DELETE from egresos where despacho_id=$r->id");
+            DB::SELECT("DELETE from ingresos where despacho_id=$r->id");
+            DB::SELECT("DELETE from despacho_requisito where despacho_id=$r->id");
+            $despacho=Despacho::find($r->id);
+            $despacho->delete();
+        }
+        $cliente->delete();
+
     }
 
     public function regreso($id){
