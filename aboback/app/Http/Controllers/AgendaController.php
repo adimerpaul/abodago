@@ -30,7 +30,7 @@ class AgendaController extends Controller
 
     public function agendar(Request $request)
     {
-//        return $request;
+        return $request;
         $agenda=new Agenda();
         $agenda->estado='AGENDAR';
         $agenda->actividad=$request->actividad;
