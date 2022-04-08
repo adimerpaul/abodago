@@ -211,11 +211,14 @@ export default {
     misusuarios(){
       this.usuarios=[]
       this.$axios.post(process.env.API+'/listuser').then(res=>{
-        console.log(res.data)
+        // console.log(res.data)
+        this.usuarios=[]
         res.data.forEach(r => {
-          this.usuarios.push({label:r.name,r});
-          this.user={label:''}
+          let d =r
+          d.label=r.name
+          this.usuarios.push(d);
         });
+        this.user=this.usuarios[0]
       })
 
     },
