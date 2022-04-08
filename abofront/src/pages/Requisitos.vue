@@ -43,7 +43,9 @@
           <q-td :props="props">
 <!--            {{props.row}}-->
             <q-btn color="positive" size="xs" @click="modalcrear=true;tramite=props.row" icon="add_circle" label="agregar"/>
+            <br>
             <q-btn color="warning" size="xs" @click="dialog_modreq=true;modtramite=props.row" icon="check" label="Modificar"/>
+            <br>
             <q-btn color="red" size="xs" @click="deltramite(props.row)" icon="delete" label="Eliminar"/>
           </q-td>
         </template>
@@ -160,7 +162,7 @@ export default {
            this.$axios.put(process.env.API+'/tramite/'+this.modtramite.id,this.modtramite).then(res=>{
         this.dialog_modreq=false
         this.misdatos()
-      }) 
+      })
     },
     agrtramite(){
       this.$axios.post(process.env.API+'/tramite',this.regtramite).then(res=>{
