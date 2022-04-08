@@ -60,7 +60,7 @@
                   {{ props.row.tipo }}
                 </q-badge>
               </q-td>
-              <q-td key="imagen" :props="props" style="  display: flex; height: 80px; 
+              <q-td key="imagen" :props="props" style="  display: flex; height: 80px;
   justify-content: center;">
                 <!--            <q-badge color="purple">-->
 <!--                {{ props.row.imagen }}-->
@@ -271,7 +271,7 @@
                </table>
                 </div>
                 <q-btn full-width color="positive"  label="Modificar" @click="moddespacho"/>
-               
+
                   <q-card>
                     <q-tabs
                       v-model="tab"
@@ -753,26 +753,29 @@ export default {
         {field:'requisitos',name:'requisitos',label:'requisitos',align:'right'},
       ],
       ingresocol:[
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
         {field:'concepto',name:'concepto',label:'Concepto',align:'right'},
         {field:'recibo',name:'recibo',label:'recibo',align:'right'},
-        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
+
       ],
       egresocol:[
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
-        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
+
       ],
       egrclcol:[
+        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
         {field:'fecha',name:'fecha',label:'fecha',align:'right'},
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
-        {field:'opcion',name:'opcion',label:'opcion',align:'right'},
+
       ]
     }
   },
@@ -854,7 +857,7 @@ export default {
         message: 'ESTA SEGURO DE ELIMINAR?',
         cancel: true,
         persistent: false
-      }).onOk(() => {   
+      }).onOk(() => {
            this.$axios.delete(process.env.API+'/egreso/'+pago.id).then(res=>{
                 this.$axios.post(process.env.API+'/regreso/'+this.datodespacho.id).then(res=>{
               this.tabegreso=res.data;
@@ -875,7 +878,7 @@ export default {
         message: 'ESTA SEGURO DE ELIMINAR?',
         cancel: true,
         persistent: false
-      }).onOk(() => {   
+      }).onOk(() => {
       this.$axios.delete(process.env.API+'/egotro/'+pago.id).then(res=>{
                 this.$axios.post(process.env.API+'/regotro/'+this.datodespacho.id).then(res=>{
               this.tabegcl=res.data;
