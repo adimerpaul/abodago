@@ -247,7 +247,7 @@ export default {
 
     },
          actualizaagenda(){
-           this.agen.usuario_id=this.user.r.id;
+           this.agen.usuario_id=this.user.id;
             this.$axios.post(process.env.API+'/updagenda',this.agen).then(res=>{
               this.dialogagenda=false
               this.misdatos()
