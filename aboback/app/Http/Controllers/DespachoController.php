@@ -141,6 +141,7 @@ class DespachoController extends Controller
         DB::SELECT("DELETE from egresos where despacho_id=$id");
         DB::SELECT("DELETE from ingresos where despacho_id=$id");
         DB::SELECT("DELETE from despacho_requisito where despacho_id=$id");
+        DB::SELECT("DELETE from demandado_despacho where despacho_id=$id");
         $despacho=Despacho::find($id);
         $despacho->delete();
         
