@@ -133,7 +133,7 @@ class ClienteController extends Controller
         $proforma=Proforma::where('cliente_id',$id)->get();
         foreach ($proforma as $d) {
             DB::SELECT("DELETE from detalleproformas where proforma_id=$d->id");
-            $prof=Proforma::find($id);
+            $prof=Proforma::find($d->id);
             $prof->delete();            
         }
         foreach ($despacho as $r) {
