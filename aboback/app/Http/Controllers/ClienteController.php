@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\Despacho;
+use App\Models\Proforma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
