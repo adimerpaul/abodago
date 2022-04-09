@@ -131,21 +131,22 @@ class ClienteController extends Controller
         $cliente=cliente::find($id);
         $despacho=Despacho::where('cliente_id',$id)->get();
         $proforma=Proforma::where('cliente_id',$id)->get();
-
-        foreach ($despacho as $r) {
-            DB::SELECT("DELETE from agendas where despacho_id=$r->id");
-            DB::SELECT("DELETE from egotros where despacho_id=$r->id");
-            DB::SELECT("DELETE from egresos where despacho_id=$r->id");
-            DB::SELECT("DELETE from ingresos where despacho_id=$r->id");
-            DB::SELECT("DELETE from despacho_requisito where despacho_id=$r->id");
-            $despacho=Despacho::find($r->id);
-            $despacho->delete();
-        }
         foreach ($proforma as $d) {
             DB::SELECT("DELETE from detalleproformas where proforma_id=$d->id");
             $prof=Proforma::find($d->id);
             $prof->delete();            
         }
+        foreach ($despacho as $r) {
+            DB::SELECT("DELETE from agendas where despacho_id=$r->id");
+            DB::SELECT("DELETE from egotros where despacho_id=$r->id");
+            DB::SELECT("DELETE from egresos where despacho_id=$r->id");
+            DB::SELECT("DELETE from ingresos where despacho_id=$r->id");
+            DB::SELECT("DELETE from demandado_despacho where despacho_id=$r->id");
+            DB::SELECT("DELETE from despacho_requisito where despacho_id=$r->id");
+            $despacho=Despacho::find($r->id);
+            $despacho->delete();
+        }
+
         $cliente->delete();
 
     }
