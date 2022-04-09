@@ -464,9 +464,9 @@
             <div class="text-h6">INGRESO</div>
               <q-form @submit.prevent="regingreso">
                 <div class="row">
-                <div class="col-4"><q-input dense outlined label="Num Recibo" v-model="ingreso.recibo"/></div>
-                <div class="col-4"><q-input dense outlined label="Motivo" v-model="ingreso.motivo"/></div>
-                <div class="col-4"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
+                
+                <div class="col-6"><q-input dense outlined label="Motivo" v-model="ingreso.motivo"/></div>
+                <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
                 </div>
                 <q-card-section align="right" class="row">
                   <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
@@ -758,7 +758,7 @@ export default {
         {field:'hora',name:'hora',label:'hora',align:'right'},
         {field:'monto',name:'monto',label:'monto',align:'right'},
         {field:'concepto',name:'concepto',label:'Concepto',align:'right'},
-        {field:'recibo',name:'recibo',label:'recibo',align:'right'},
+        {field:'id',name:'recibo',label:'recibo',align:'right'},
 
       ],
       egresocol:[

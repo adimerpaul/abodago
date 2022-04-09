@@ -50,8 +50,24 @@
   <div class="col-12 col-sm-6">
     <div class="row">
       <div class="col-12 q-pa-xs">
-        <q-select outlined dense  label="Cliente/Empresa" :options="clientes" v-model="cliente"/>
-        <q-select outlined dense  label="Tramite/Proceso" :options="tramites" v-model="tramite"/>
+        <q-select outlined dense  label="Cliente/Empresa" :options="opcions2" v-model="cliente" use-input @filter="filterFn2">
+                <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
+        <q-select outlined dense  label="Tramite/Proceso" :options="opcions" v-model="tramite" use-input @filter="filterFn" >        
+        <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
       </div>
       <div class="col-12">
         <q-table title="Mi cotizacion" dense  :rows="cotizacion" :columns="columns" :rows-per-page-options="[10,100,200,0]" :filter="filter">
@@ -108,6 +124,8 @@ export default {
       clientes:[],
       tramites:[],
       tramite:{},
+      opcions:[],
+      opcions2:[],
       fec :date.formatDate(Date.now(),'DD-MM-YYYY'),
       columns:[
         {field:'nombre',name:'nombre',label:'Nombre',align:'left'},
@@ -121,6 +139,38 @@ export default {
     this.misprecios()
   },
   methods: {
+    filterFn (val, update) {
+      if (val === '') {
+        update(() => {
+          this.opcions = this.tramites
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.opcions = this.tramites.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+      })
+    },
+        filterFn2 (val, update) {
+      if (val === '') {
+        update(() => {
+          this.opcions2 = this.clientes
+
+          // here you have access to "ref" which
+          // is the Vue reference of the QSelect
+        })
+        return
+      }
+
+      update(() => {
+        const needle = val.toLowerCase()
+        this.opcions2 = this.clientes.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+      })
+    },
         impresioncot(){
                 if (this.cotizacion.length==0){
         this.$q.notify({
@@ -247,7 +297,9 @@ export default {
           d.label=r.nombre
           this.clientes.push(d)
         })
-        this.cliente=this.clientes[0]
+        //this.cliente=this.clientes[0]
+        this.cliente={label:''}
+        this.opcions2=this.clientes
       })
       this.$axios.get(process.env.API+'/tramite').then(res=>{
         this.tramites=[]
@@ -257,7 +309,8 @@ export default {
           d.label=r.nombre
           this.tramites.push(d)
         })
-        this.tramite=this.tramites[0]
+        this.tramite={label:''}
+        this.opcions=this.tramites
       })
     },
     crear(){

@@ -41,7 +41,7 @@ class IngresoController extends Controller
         $ingreso=new Ingreso;
         $ingreso->user_id=$request->user()->id;
         $ingreso->despacho_id=$request->despacho_id;
-        $ingreso->recibo=$request->recibo;
+        $ingreso->recibo='0';
         $ingreso->motivo=$request->motivo;
         $ingreso->monto=$request->monto;
         $ingreso->fecha=$request->fecha;
@@ -148,6 +148,8 @@ class IngresoController extends Controller
         Oruro, ".date("d", strtotime($ing->fecha))." de ".$mes[intval(date("m", strtotime($ing->fecha))) - 1]." de ". date("Y", strtotime($ing->fecha))."
         <td>
         </tr>
+        <tr><td colspan=4><br><br></td></tr>
+
         <tr>
         <td colspan=2 class='nom' style='text-align:center; width:50%'>Marcelo J. Gonzales Del Castillo</td>
         <td colspan=2 style='text-align:center; width:50%'></td>
@@ -201,6 +203,8 @@ class IngresoController extends Controller
         Oruro, ".date("d", strtotime($ing->fecha))." de ".$mes[intval(date("m", strtotime($ing->fecha))) - 1]." de ". date("Y", strtotime($ing->fecha))."
         <td>
         </tr>
+        <tr><td colspan=4><br><br></td></tr>
+
         <tr>
         <td colspan=2 class='nom' style='text-align:center; width:50%'>Marcelo J. Gonzales Del Castillo</td>
         <td colspan=2 style='text-align:center; width:50%'></td>
