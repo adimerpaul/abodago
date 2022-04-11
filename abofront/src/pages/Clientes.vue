@@ -1556,6 +1556,8 @@ export default {
 
       update(() => {
         const needle = val.toLowerCase()
+          this.tramite.requisitos=[]
+
         this.tramites = this.tramites2.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
       })
     },

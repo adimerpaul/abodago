@@ -142,6 +142,7 @@ export default {
     filterFn (val, update) {
       if (val === '') {
         update(() => {
+          this.tramite={label:'',requisitos:[]}
           this.opcions = this.tramites
 
           // here you have access to "ref" which
@@ -309,7 +310,7 @@ export default {
           d.label=r.nombre
           this.tramites.push(d)
         })
-        this.tramite={label:''}
+        this.tramite={label:'',requisitos:[]}
         this.opcions=this.tramites
       })
     },
