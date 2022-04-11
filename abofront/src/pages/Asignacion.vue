@@ -153,7 +153,7 @@
             </q-card-section>
             <q-card-section class="q-pt-none">
               <q-form @submit.prevent="registrarlog">
-                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" @update:model-value="lrequisito()" v-model="tramite" @filter="filterFn" outlined >
+                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso" v-model="tramite" @filter="filterFn" outlined required>
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -1544,6 +1544,7 @@ export default {
     filterFn (val, update) {
       if (val === '') {
         update(() => {
+          this.tramite={label:'',requisitos:[]}
           this.tramites = this.tramites2
 
           // here you have access to "ref" which
