@@ -10,7 +10,7 @@
             <div class="col-12 q-pa-xs col-sm-3">
               <q-input dense outlined label="Nombre completo" v-model="cliente.nombre" required/>
             </div>
-            <div class="col-12 q-pa-xs col-sm-3">
+            <div class="col-12 q-pa-xs col-sm-2">
               <q-input dense outlined label="Telefono" v-model="cliente.telefono" />
             </div>
             <div class="col-12 q-pa-xs col-sm-3 flex flex-center">
@@ -149,7 +149,7 @@
             </q-card-section>
             <q-card-section class="q-pt-none">
               <q-form @submit.prevent="registrarlog">
-                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso"  v-model="tramite" @filter="filterFn" outlined required>
+                <q-select use-input dense :options="tramites" label="Seleccionar Tramite / Proceso"  v-model="tramite" @filter="filterFn" outlined >
                   <template v-slot:no-option>
                     <q-item>
                       <q-item-section class="text-grey">
@@ -158,6 +158,11 @@
                     </q-item>
                   </template>
                 </q-select>
+<!--                <div class="row">-->
+<!--                  <div class="col-12">-->
+<!--                    <pre>{{tramite}}</pre>-->
+<!--                  </div>-->
+<!--                </div>-->
                 <div class="row">
                   <div class="col-12 col-md-6">
                     <div class="text-h6">REQUISITOS</div>
@@ -174,9 +179,7 @@
                 <div class="row">
                   <div class="col-6"><q-input dense label="NuRej" outlined  v-model="despacho.nurej"/></div>
                   <div class="col-6"><q-input dense label="WebId" outlined  v-model="despacho.webid"/></div>
-
                 </div>
-
                 <q-input label="Proceso" outlined dense v-model="despacho.proceso"/>
                 </div>
                 <q-input label="ci" outlined dense v-model="despacho.ci"/>
@@ -464,7 +467,7 @@
             <div class="text-h6">INGRESO</div>
               <q-form @submit.prevent="regingreso">
                 <div class="row">
-                
+
                 <div class="col-6"><q-input dense outlined label="Motivo" v-model="ingreso.motivo"/></div>
                 <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
                 </div>
@@ -1001,10 +1004,12 @@ export default {
     buscar(i,index){
       this.$axios.get(process.env.API+'/demandado/'+i.ci).then(res=>{
         // console.log(res.data)
-        if(res.data.length>0){
-        this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
-        else{
-        this.demandados[index]={ci:i.ci,nombre:''};
+        if(res.data.length>0) {
+          // this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
+          this.demandados[index].nombre = res.data[0].nombre
+        }else{
+        // this.demandados[index]={ci:i.ci,nombre:''};
+          this.demandados[index].nombre = ''
         }
       })
     },
