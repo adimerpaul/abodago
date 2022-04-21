@@ -163,5 +163,12 @@ class ClienteController extends Controller
         return db::select("select id,fecha,hora,monto,'' as recibo, concepto,'EGCLIENTE' as tipo from egotros where despacho_id= $id");
     }
 
+    public function reporte(Request $request){
+        return DB::SELECT("SELECT *, 
+        (select sum(monto) from clientes c INNER join despachos d on c.id=d.cliente_id inner join ingresos i on d.id=i.despacho_id where c.id=c1.id and i.fecha>='$request->fecha1' and i.fecha<='$request->fecha2') as ingreso,
+        (select sum(monto) from clientes c INNER join despachos d on c.id=d.cliente_id inner join egresos e on d.id=e.despacho_id where c.id=c1.id and e.fecha>='$request->fecha1' and e.fecha<='$request->fecha2') as egreso,
+        (select sum(monto) from clientes c INNER join despachos d on c.id=d.cliente_id inner join egotros o on d.id=o.despacho_id where c.id=c1.id and o.fecha>='$request->fecha1' and o.fecha<='$request->fecha2') as egotro
+         from clientes c1;");
+    }
 
 }

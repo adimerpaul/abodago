@@ -249,6 +249,24 @@
           </q-item>
 
           <q-item
+              v-if="$store.state.login.boolreporte"
+
+            clickable
+            to="/reporte"
+          >
+            <q-item-section avatar>
+              <q-icon name="request_quote" />
+            </q-item-section>
+
+            <q-item-section>
+              <q-item-label>Reporte Ing/Egr</q-item-label>
+              <q-item-label caption>
+                Resumen de ingresos y gastos
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+
+          <q-item
             v-if="$store.getters['login/isLoggedIn']"
             clickable
             @click="logout"

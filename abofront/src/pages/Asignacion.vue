@@ -524,7 +524,7 @@
               <div class="text-h6">Ingresos Egresos</div>
               <div class="row">
                 <div class="col-md-4 col-sm-12">
-                  <q-btn dense round label="Ingreso" flat color="green" @click="addRow()" icon="add"></q-btn>
+                  <q-btn dense round label="Ingreso" flat color="green" @click="addRow()" icon="add" v-if="$store.state.login.boolregingreso"></q-btn>
                   <q-table dense
                            title="LISTA DE INGRESOS"
                            :rows="tabingreso"
@@ -534,13 +534,13 @@
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
                         <q-btn dense  size="xs" flat color="info" @click="imprec(props.row)" icon="print"></q-btn>
-                        <q-btn dense  size="xs" flat color="red" @click="deling(props.row)" icon="delete"></q-btn>
+                        <q-btn dense  size="xs" flat color="red" @click="deling(props.row)" icon="delete" v-if="$store.state.login.boolelingreso"></q-btn>
                       </q-td>
                     </template>
                   </q-table>
                 </div>
                 <div class="col-md-4 col-sm-12">
-                  <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove"></q-btn>
+                  <q-btn dense round flat label="Egreso" color="red" @click="removeRow()" icon="remove" v-if="$store.state.login.boolregingreso"></q-btn>
                   <q-table dense
                            title="LISTA EGRESOS"
                            :rows="tabegreso"
@@ -549,13 +549,13 @@
                   >
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
-                        <q-btn dense  size="xs" flat color="red" @click="deleg(props.row)" icon="delete"></q-btn>
+                        <q-btn dense  size="xs" flat color="red" @click="deleg(props.row)" icon="delete" v-if="$store.state.login.boolelingreso"></q-btn>
                       </q-td>
                     </template>
                   </q-table>
                 </div>
                 <div class="col-md-4 col-sm-12">
-                  <q-btn dense round flat label="Egr Cliente" color="accent" @click="reclRow()" icon="remove"></q-btn>
+                  <q-btn dense round flat label="Egr Cliente" color="accent" @click="reclRow()" icon="remove" v-if="$store.state.login.boolregingreso"></q-btn>
                   <q-table dense
                            title="LISTA EGRESOS CLIENTE"
                            :rows="tabegcl"
@@ -564,7 +564,7 @@
                   >
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
-                        <q-btn dense  size="xs" flat color="red" @click="delegcl(props.row)" icon="delete"></q-btn>
+                        <q-btn dense  size="xs" flat color="red" @click="delegcl(props.row)" icon="delete" v-if="$store.state.login.boolelingreso"></q-btn>
                       </q-td>
                     </template>
                   </q-table>

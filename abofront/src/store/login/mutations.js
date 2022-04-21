@@ -17,6 +17,9 @@ export function auth_success(state, data){
   state.booldemandado=data.user.permisos.find(p=>p.id===6)!=undefined
   state.boolcotizacion=data.user.permisos.find(p=>p.id===7)!=undefined
   state.boolmicotizacion=data.user.permisos.find(p=>p.id===8)!=undefined
+  state.boolreporte=data.user.permisos.find(p=>p.id===9)!=undefined
+  state.boolregingreso=data.user.permisos.find(p=>p.id===10)!=undefined
+  state.boolelingreso=data.user.permisos.find(p=>p.id===11)!=undefined
   // state.inventario=data.user.permisos.find(p=>p.id===4)!=undefined
   // state.ventadetalle=data.user.permisos.find(p=>p.id===5)!=undefined
   // state.historialventadetalle=data.user.permisos.find(p=>p.id===6)!=undefined
@@ -43,6 +46,9 @@ export function salir(state){
   state.booldemandado=false
   state.boolcotizacion=false
   state.boolmicotizacion=false
+  state.boolreporte=false
+  state.boolregingreso=false
+  state.boolelingreso=false
   // state.ventadetalle=false
   // state.historialventadetalle=false
   // state.ventalocal=false
