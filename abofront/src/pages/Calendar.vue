@@ -165,6 +165,7 @@ export default {
       dialogagenda:false,
       usuarios:[],
       user:{},
+      pendiente:[],
       calendarOptions: {
         slotMinTime: "08:00:00",
         slotMaxTime: "22:00:00",
@@ -274,13 +275,20 @@ export default {
             this.misusuarios()
         })
          },
+    verpendiente(){
+
+    },
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
           // console.log(res.data)
         this.events=[]
+        this.pendiente=[]
         res.data.forEach(r=>{
           // console.log(r)
+          if(r.estado=='EN ESPERA' && Date.parse(r.fechafin)<=Date.parse(date.formatDate(new Date(),'YYYY-MM-DD')))
+            this.pendiente.push(r);
+
           if (r.userterminado_id==null){
             if(r.estado!='AGENDAR')
             this.events.push({ title: r.proximopaso, start: r.fechafin+' '+r.horafin,color:'#D32F2F',id:r.id })
@@ -290,7 +298,16 @@ export default {
             this.events.push({ title: r.proximopaso, start: r.fechafin+' '+r.horafin,color:'#388E3C',id:r.id })
           }
         })
-        // console.log(this.events)
+         console.log(this.pendiente)
+                this.pendiente.forEach(element => {
+          this.$q.notify({
+            message: 'Pendiente',
+            caption: ''+element.fechafin+' '+element.proximopaso,
+            color: 'negative',
+            icon:'info'
+          });
+      });
+
         this.$q.loading.hide()
         this.calendarOptions.events=this.events
         // this.agenda=res.data
