@@ -19,6 +19,7 @@ class Agenda extends Model
         'fechaterminado',
         'horaterminado',
         'horafin',
+        'archivo',
         'user_id',
         'userterminado_id',
         'despacho_id',

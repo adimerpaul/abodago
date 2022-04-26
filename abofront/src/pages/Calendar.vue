@@ -51,6 +51,8 @@
 <!--                    <pre>{{agen}}</pre>-->
                   </div>
                   <div class="col-12 col-sm-12">
+                    <input v-if="agen.estado=='EN ESPERA'" type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
+
                     <q-btn v-if="agen.estado=='EN ESPERA'" @click="actualiza" class="full-width" color="positive" label="FINALIZAR" icon="check"></q-btn>
                   </div>
                 </div>
@@ -59,6 +61,16 @@
                 <template v-slot:body-cell-estado="props">
                   <q-td :props="props">
                     <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>
+                  </q-td>
+                </template>
+                <template v-slot:body-cell-usuario="props">
+                  <q-td :props="props">
+                    {{props.row.user.name}}
+                  </q-td>
+                </template>
+              <template v-slot:body-cell-archivo="props">
+                  <q-td :props="props" >
+                    <q-btn v-if="props.row.archivo!=''||props.row.archivo!=undefined" color="info"  :label="props.row.archivo" icon="print" @click="descargar(props.row)" size="xs" />
                   </q-td>
                 </template>
               </q-table>
@@ -152,6 +164,9 @@ export default {
         {field:'estado',label:'estado',name:'estado'},
         {field:'actividad',label:'actividad',name:'actividad'},
         {field:'proximopaso',label:'proximopaso',name:'proximopaso'},
+        {field:'archivo',label:'archivo',name:'archivo'},
+
+        {field:'user',label:'Usuario',name:'usuario'},
       ],
       dialogagenda1:false,
       fecha1:date.formatDate(new Date(),'YYYY-MM-DD'),
@@ -160,6 +175,8 @@ export default {
       hr:'',
       actividad:'',
       despacho:{},
+      url:process.env.API,
+      imagen : null,
       agen:{},
       dialogdatos:false,
       dialogagenda:false,
@@ -198,6 +215,7 @@ export default {
     }
   },
   created() {
+    
     this.misdatos()
     this.misusuarios()
     let str = formatDate(new Date(), {
@@ -209,6 +227,11 @@ export default {
     // console.log(str);
   },
   methods: {
+            descargar(agenda){
+              console.log(agenda) 
+              var fileName=this.url+'/../archivos/'+agenda.archivo; 
+              window.open(fileName, 'Download');
+        },
     misusuarios(){
       this.usuarios=[]
       this.$axios.post(process.env.API+'/listuser').then(res=>{
@@ -229,7 +252,10 @@ export default {
         message: 'Esta Seguro de Finalizar?',
         cancel: true,
       }).onOk(() => {
-      this.$axios.post(process.env.API+'/finalizar',{id:this.agen.id}).then(res=>{
+              var data = new  FormData();
+      data.append('archivo', this.imagen);
+      data.append('id', this.agen.id);
+      this.$axios.post(process.env.API+'/finalizar',data).then(res=>{
         this.dialogdatos=false
         this.misdatos()
           this.$q.notify({
@@ -320,6 +346,11 @@ export default {
         })
         this.$q.loading.hide()
       })
+    },
+        getImage(event){
+      //Asignamos la imagen a  nuestra data
+      // console.log(event.target)
+      this.imagen = event.target.files[0];
     },
      eventTitleClick: function(args) {
        // console.log(args.event.id)

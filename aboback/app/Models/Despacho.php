@@ -29,7 +29,7 @@ class Despacho extends Model
     }
 
     public function agendas(){
-        return $this->hasMany(Agenda::class);
+        return $this->hasMany(Agenda::class)->with('user');
     }
 
     public function demandados(){

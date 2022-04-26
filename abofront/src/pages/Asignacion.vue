@@ -24,7 +24,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Personas Naturales" :rows="clientes" :columns="columns" :filter="filter"  >
+        <q-table dense title="Personas Juridicas" :rows="clientes" :columns="columns" :filter="filter"  >
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -469,7 +469,7 @@
                 <div class="row">
 
                   <div class="col-6"><q-input dense outlined label="Motivo" v-model="ingreso.motivo"/></div>
-                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto"/></div>
+                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="ingreso.monto" step="0.01"/></div>
                 </div>
                 <q-card-section align="right" class="row">
                   <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
@@ -486,7 +486,7 @@
               <q-form @submit.prevent="regegreso">
                 <div class="row">
                   <div class="col-6"><q-input dense outlined label="Concepto" v-model="egreso.concepto"/></div>
-                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egreso.monto"/></div>
+                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egreso.monto" step="0.01"/></div>
                 </div>
                 <q-card-section align="right" class="row">
                   <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>
@@ -504,7 +504,7 @@
               <q-form @submit.prevent="regegrcliente">
                 <div class="row">
                   <div class="col-6"><q-input dense outlined label="Concepto" v-model="egrcl.concepto"/></div>
-                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egrcl.monto"/></div>
+                  <div class="col-6"><q-input dense outlined label="Monto" type="number" v-model="egrcl.monto" step="0.01"/></div>
                 </div>
                 <q-card-section align="right" class="row">
                   <div class="col-6"><q-btn flat label="Registrar" type="submit" color="primary" icon="send" /></div>

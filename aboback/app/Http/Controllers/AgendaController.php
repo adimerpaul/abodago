@@ -122,6 +122,14 @@ class AgendaController extends Controller
         $agenda->fechaterminado=date('Y-m-d');
         $agenda->horaterminado=date('H:i:s');
         $agenda->userterminado_id=$request->user()->id;
+        $nombreArchivo='';
+        if ($request->hasFile('archivo')) {
+            $file=$request->file('archivo');
+            $nombreArchivo = time().".".$file->getClientOriginalExtension();
+            $file->move(\public_path('archivos'), $nombreArchivo);
+        }
+        $agenda->archivo=$nombreArchivo;
+
         $agenda->save();
 
     }
