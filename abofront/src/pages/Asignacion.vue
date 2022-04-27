@@ -574,7 +574,7 @@
                 <span><b>Total Ingreso: </b>{{totaling}}</span> <br>
                 <span><b>Total Egreso: </b>{{totaleg}}</span> <br>
                 <span><b>Total Egreso Cliente: </b>{{totalegcl}}</span> <br>
-                <span><b>Total Adeudado: </b>{{totaling - totaleg}}</span>
+                <span><b>Total Adeudado Cliente: </b>{{totaling - totaleg}}</span>
               </div>
 
             </q-card-section>
@@ -1253,7 +1253,7 @@ export default {
         sum1+=parseFloat(ing.monto)
         y1+=0.5
         doc.text(1, y1+4.5,ing.fecha+'' )
-        doc.text(3, y1+4.5, ing.recibo+'' )
+        doc.text(3, y1+4.5, ing.id+'' )
         doc.text(4.5, y1+4.5,ing.concepto+'' )
         doc.text(9, y1+4.5,ing.monto+'' )
       });
@@ -1265,14 +1265,14 @@ export default {
       mc.tabegreso.forEach(egr => {
         sum2+=parseFloat( egr.monto)
         y2+=0.5
-        doc.text(14, y2+4.5,egr.concepto+'')
-        doc.text(19, y2+4.5,egr.monto+'')
+        doc.text(12, y2+4.5,egr.concepto+'')
+        doc.text(20, y2+4.5,egr.monto+'')
       });
       if(y2>y1)
-      {doc.line(13.5,4.5,13.5,y2+4.5)
+      {doc.line(11.5,4.5,11.5,y2+4.5)
         y=y2}
       else
-      {doc.line(13.5,4.5,13.5,y1+4.5)
+      {doc.line(11.5,4.5,11.5,y1+4.5)
         y=y1}
       y+=0.5
       doc.line(0.5,y+4.5,20,y+4.5)
@@ -1290,7 +1290,7 @@ export default {
       doc.setFont(undefined,'bold')
       doc.text(1, y+4.5,' TOTAL ADEUDADO:')
       doc.setFont(undefined,'normal')
-      doc.text(9, y+4.5,tot+' Bs' )
+      doc.text(9, y+4.5,tot.toFixed(2)+' Bs' )
 
 
       window.open(doc.output('bloburl'), '_blank');
@@ -1377,7 +1377,7 @@ export default {
         sum1+=parseFloat(ing.monto)
         y1+=0.5
         doc.text(1, y1+4.5,ing.fecha+'' )
-        doc.text(3, y1+4.5, ing.recibo+'' )
+        doc.text(3, y1+4.5, ing.id+'' )
         doc.text(4.5, y1+4.5,ing.concepto+'' )
         doc.text(9, y1+4.5,ing.monto+'' )
       });
@@ -1389,14 +1389,14 @@ export default {
       mc.tabegcl.forEach(egr => {
         sum2+=parseFloat( egr.monto)
         y2+=0.5
-        doc.text(14, y2+4.5,egr.concepto+'')
-        doc.text(19, y2+4.5,egr.monto+'')
+        doc.text(12, y2+4.5,egr.concepto+'')
+        doc.text(20, y2+4.5,egr.monto+'')
       });
       if(y2>y1)
-      {doc.line(13.5,4.5,13.5,y2+4.5)
+      {doc.line(11.5,4.5,11.5,y2+4.5)
         y=y2}
       else
-      {doc.line(13.5,4.5,13.5,y1+4.5)
+      {doc.line(11.5,4.5,11.5,y1+4.5)
         y=y1}
       y+=0.5
       doc.line(0.5,y+4.5,20,y+4.5)
@@ -1414,7 +1414,7 @@ export default {
       doc.setFont(undefined,'bold')
       doc.text(1, y+4.5,' TOTAL ADEUDADO:')
       doc.setFont(undefined,'normal')
-      doc.text(9, y+4.5,tot+' Bs' )
+      doc.text(9, y+4.5,tot.toFixed(2)+' Bs' )
 
 
       window.open(doc.output('bloburl'), '_blank');
