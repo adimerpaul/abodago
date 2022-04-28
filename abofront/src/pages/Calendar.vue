@@ -70,7 +70,7 @@
                 </template>
               <template v-slot:body-cell-archivo="props">
                   <q-td :props="props" >
-                    <q-btn v-if="props.row.archivo!=''||props.row.archivo!=undefined" color="info"  :label="props.row.archivo" icon="print" @click="descargar(props.row)" size="xs" />
+                    <q-btn v-if="props.row.archivo!=''" color="info"  :label="props.row.archivo" icon="print" @click="descargar(props.row)" size="xs" />
                   </q-td>
                 </template>
               </q-table>
