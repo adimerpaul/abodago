@@ -574,7 +574,8 @@
               <span><b>Total Ingreso: </b>{{totaling}}</span> <br>
               <span><b>Total Egreso: </b>{{totaleg}}</span> <br>
               <span><b>Total Egreso Cliente: </b>{{totalegcl}}</span> <br>
-              <span><b>Total Adeudado Cliente: </b>{{totaling - totaleg}}</span>
+              <span><b>Total Adeudado : </b>{{totaling - totaleg}}</span>
+              <span><b>Total Adeudado Cliente: </b>{{totaling - totalegcl}}</span>
             </div>
 
             </q-card-section>

@@ -50,6 +50,12 @@
                     <q-input disable dense outlined label="etapa" :model-value="agen.etapa.numero+' '+agen.etapa.nombre" />
 <!--                    <pre>{{agen}}</pre>-->
                   </div>
+                   <div class="col-12 ">
+                    <div class="">DEMANDADOS</div>
+                    <ul>
+                      <li v-for="r in agen.despacho.demandados" :key="r">{{r.ci}} {{r.nombre}}</li>
+                    </ul>
+                  </div>
                   <div class="col-12 col-sm-12">
                     <input v-if="agen.estado=='EN ESPERA'" type="file" dense outlined @change="getImage" ref="ima" accept="image/*"/>
 
@@ -307,7 +313,7 @@ export default {
     misdatos(){
       this.$q.loading.show()
       this.$axios.post(process.env.API+'/listagenda',{fecha:this.fecha1}).then(res=>{
-          // console.log(res.data)
+           console.log(res.data)
         this.events=[]
         this.pendiente=[]
         res.data.forEach(r=>{

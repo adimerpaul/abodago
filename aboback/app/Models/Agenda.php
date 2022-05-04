@@ -39,6 +39,7 @@ class Agenda extends Model
 
     public function despacho(){
         return $this->belongsTo(Despacho::class)
+            ->with('demandados')
             ->with('cliente')
             ->with('agendas')
             ->with('tramite');

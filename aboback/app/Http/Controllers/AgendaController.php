@@ -48,10 +48,11 @@ class AgendaController extends Controller
     {
         $year=date("Y",strtotime($request->fecha));
         $mes=date("m",strtotime($request->fecha));
-//        if($request->user()->id==1 || $request->user()->id==2)
-        return Agenda::with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
-//        return Agenda::where('user_id',$request->user()->id)
-//        ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
+        if($request->user()->id==1 || $request->user()->id==2)
+            return Agenda::with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
+        else
+        return Agenda::where('user_id',$request->user()->id)
+        ->with('user')->with('despacho')->with('etapa')->orderBy('estado','asc')->get();
     }
 
     public function updagenda(Request $request){
