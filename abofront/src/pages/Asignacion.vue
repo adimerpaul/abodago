@@ -24,7 +24,7 @@
         </q-form>
       </div>
       <div class="col-12">
-        <q-table dense title="Personas Juridicas" :rows="clientes" :columns="columns" :filter="filter"  >
+        <q-table dense title="Personas Juridicas" :rows="clientes" :columns="columns" :filter="filter"  :rows-per-page-options="[10,20,50,0]">
           <template v-slot:top-right>
             <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
@@ -308,7 +308,7 @@
                       <q-tab-panel name="agenda">
                         <!--                        <div class="text-h6">Alarms</div>-->
                         <!--                        lorem-->
-                        <q-table :columns="columnsagenda" dense :rows="agendas" :filter="filteragenda">
+                        <q-table :columns="columnsagenda" dense :rows="agendas" :filter="filteragenda" :rows-per-page-options="[10,20,50,0]">
                           <template v-slot:body-cell-etapa="props">
                             <q-td :props="props">
                               {{props.row.etapa.numero}}. {{props.row.etapa.nombre}}
@@ -384,6 +384,7 @@
                 :rows="infodespacho"
                 :columns="descol"
                 row-key="name"
+                :rows-per-page-options="[10,20,50,0]"
               >
                 <template v-slot:body-cell-tramite="props">
                   <q-td :props="props" @click="detalle(props.row)">
@@ -530,6 +531,7 @@
                            :rows="tabingreso"
                            :columns="ingresocol"
                            row-key="name"
+                           :rows-per-page-options="[10,20,50,0]"
                   >
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
@@ -546,6 +548,7 @@
                            :rows="tabegreso"
                            :columns="egresocol"
                            row-key="name"
+                           :rows-per-page-options="[10,20,50,0]"
                   >
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
@@ -561,6 +564,7 @@
                            :rows="tabegcl"
                            :columns="egrclcol"
                            row-key="name"
+                           :rows-per-page-options="[10,20,50,0]"
                   >
                     <template v-slot:body-cell-opcion="props">
                       <q-td key="opcion" :props="props">
@@ -574,7 +578,7 @@
                 <span><b>Total Ingreso: </b>{{totaling}}</span> <br>
                 <span><b>Total Egreso: </b>{{totaleg}}</span> <br>
                 <span><b>Total Egreso Cliente: </b>{{totalegcl}}</span> <br>
-                <span><b>Total Adeudado : </b>{{totaling - totaleg}}</span>
+                <span><b>Total Adeudado : </b>{{totaling - totaleg}}</span> <br>
                 <span><b>Total Adeudado Cliente: </b>{{totaling - totalegcl}}</span>
               </div>
 
@@ -615,7 +619,15 @@
           <q-form @submit="crearagenda">
             <div class="row">
               <div class="col-12 col-md-4">
-                <q-select dense outlined label="" :options="etapas" v-model="etapa"/>
+                <q-select dense outlined label="" :options="etapas" v-model="etapa" @filter="filterEt" use-input    >    
+                <template v-slot:no-option>
+          <q-item>
+            <q-item-section class="text-grey">
+              No results
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-select>
               </div>
               <div class="col-12 col-md-3">
                 <q-select dense outlined label="Usuario" v-model="user" :options="usuarios" required/>
@@ -658,6 +670,7 @@ export default {
     return {
       filteragenda:'',
       etapas:[],
+      etapas2:[],
       etapa:{},
       agendas:[],
       agenda:{},
@@ -940,12 +953,33 @@ export default {
         this.etapas=[]
         res.data.forEach(r=>{
           let d=r
-          d.label=r.numero+'.'+r.nombre
+          d.label=r.nombre
           this.etapas.push(d)
         })
-        this.etapa=this.etapas[0]
+        this.etapa={label:''}
+        this.etapas2=this.etapas
+
       })
     },
+    filterEt (val, update) {
+      console.log(val)
+        if (val === '') {
+          update(() => {
+            this.etapa={label:''}
+            this.etapas = this.etapas2
+
+            // here you have access to "ref" which
+            // is the Vue reference of the QSelect
+          })
+          return
+        }
+
+        update(() => {
+          const needle = val.toLowerCase()
+          this.etapas = this.etapas2.filter(v => v.label.toLowerCase().indexOf(needle) > -1)
+        })
+      },
+    
     faltante(prop){
       console.log(prop);
       this.reqfal=[];
@@ -1256,7 +1290,7 @@ export default {
         doc.text(1, y1+4.5,ing.fecha+'' )
         doc.text(3, y1+4.5, ing.id+'' )
         doc.text(4.5, y1+4.5,ing.concepto+'' )
-        doc.text(9, y1+4.5,ing.monto+'' )
+        doc.text(9, y1+4.5,ing.monto.toFixed(2)+'' )
       });
       doc.setFont(undefined,'bold')
       doc.text(17, 4, 'EGRESOS')
@@ -1266,8 +1300,8 @@ export default {
       mc.tabegreso.forEach(egr => {
         sum2+=parseFloat( egr.monto)
         y2+=0.5
-        doc.text(12, y2+4.5,egr.concepto+'')
-        doc.text(20, y2+4.5,egr.monto+'')
+        doc.text(12, y2+4.5,egr.concepto.substring(0,36)+'')
+        doc.text(20, y2+4.5,egr.monto.toFixed(2)+'','right')
       });
       if(y2>y1)
       {doc.line(11.5,4.5,11.5,y2+4.5)
@@ -1281,11 +1315,11 @@ export default {
       doc.setFont(undefined,'bold')
       doc.text(1, y+4.5,' INGRESO TOTAL:')
       doc.setFont(undefined,'normal')
-      doc.text(9, y+4.5,sum1+' Bs' )
+      doc.text(9, y+4.5,sum1.toFixed(2)+' Bs' )
       doc.setFont(undefined,'bold')
       doc.text(14, y+4.5,'EGRESO TOTAL')
       doc.setFont(undefined,'normal')
-      doc.text(19, y+4.5,sum2+' Bs' )
+      doc.text(19, y+4.5,sum2.toFixed(2)+' Bs' )
       y+=0.5
       let tot= parseFloat(sum1) - parseFloat(sum2)
       doc.setFont(undefined,'bold')
@@ -1380,7 +1414,7 @@ export default {
         doc.text(1, y1+4.5,ing.fecha+'' )
         doc.text(3, y1+4.5, ing.id+'' )
         doc.text(4.5, y1+4.5,ing.concepto+'' )
-        doc.text(9, y1+4.5,ing.monto+'' )
+        doc.text(9, y1+4.5,ing.monto.toFixed(2)+'' )
       });
       doc.setFont(undefined,'bold')
       doc.text(17, 4, 'EGRESOS')
@@ -1390,8 +1424,8 @@ export default {
       mc.tabegcl.forEach(egr => {
         sum2+=parseFloat( egr.monto)
         y2+=0.5
-        doc.text(12, y2+4.5,egr.concepto+'')
-        doc.text(20, y2+4.5,egr.monto+'')
+        doc.text(12, y2+4.5,egr.concepto.substring(0,36)+'')
+        doc.text(20, y2+4.5,egr.monto.toFixed(2)+'','right')
       });
       if(y2>y1)
       {doc.line(11.5,4.5,11.5,y2+4.5)
@@ -1405,11 +1439,11 @@ export default {
       doc.setFont(undefined,'bold')
       doc.text(1, y+4.5,' INGRESO TOTAL:')
       doc.setFont(undefined,'normal')
-      doc.text(9, y+4.5,sum1+' Bs' )
+      doc.text(9, y+4.5,sum1.toFixed(2)+' Bs' )
       doc.setFont(undefined,'bold')
       doc.text(14, y+4.5,'EGRESO TOTAL')
       doc.setFont(undefined,'normal')
-      doc.text(19, y+4.5,sum2+' Bs' )
+      doc.text(19, y+4.5,sum2.toFixed(2)+' Bs' )
       y+=0.5
       let tot= parseFloat(sum1) - parseFloat(sum2)
       doc.setFont(undefined,'bold')

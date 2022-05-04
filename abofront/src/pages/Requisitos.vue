@@ -29,7 +29,7 @@
   <div class="row">
 
     <div class="col-12">
-      <q-table title="Requisitos" dense :columns="columns" :rows="tramites" :filter="filter">
+      <q-table title="Requisitos" dense :columns="columns" :rows="tramites" :filter="filter" :rows-per-page-options="[10,20,50,0]">
         <template v-slot:body-cell-requisitos="props">
           <q-td :props="props">
             <ul style="list-style: none;padding: 0px;margin: 0px;border: 0px">

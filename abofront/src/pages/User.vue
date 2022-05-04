@@ -114,7 +114,7 @@
       </q-card>
     </q-dialog>
 
-    <q-table :filter="filter" title="REGISTRO DE USUARIOS" :rows="data" :columns="columns" row-key="name" :rows-per-page-options="[50,100]">
+    <q-table :filter="filter" title="REGISTRO DE USUARIOS" :rows="data" :columns="columns" row-key="name" :rows-per-page-options="[10,20,50,0]">
       <template v-slot:top-right>
         <q-input outlined dense debounce="300" v-model="filter" placeholder="Buscar usuario">
           <template v-slot:append>
@@ -340,7 +340,7 @@
               </div>
             </div>
           </q-form>
-          <q-table :rows="despacho.agendas" :columns="columnsAgenda" >
+          <q-table :rows="despacho.agendas" :columns="columnsAgenda" :rows-per-page-options="[10,20,50,0]">
             <template v-slot:body-cell-estado="props">
               <q-td :props="props">
                 <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>

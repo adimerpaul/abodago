@@ -12,7 +12,7 @@
         </div>
       </q-form>
       <div class="col-12">
-        <q-table dense title="MI AGENDA " :rows="agenda" :columns="columns" :filter="filter"  >
+        <q-table dense title="MI AGENDA " :rows="agenda" :columns="columns" :filter="filter"  :rows-per-page-options="[10,20,50,0]">
           <template v-slot:body-cell-opciones="props">
             <q-tr :props="props">
               <q-td key="opciones" :props="props">

@@ -23,6 +23,7 @@
           :rows="procesos"
           :columns="columns"
           row-key="name"
+          :rows-per-page-options="[10,20,50,0]"
       />
 
     </div>

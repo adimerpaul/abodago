@@ -14,7 +14,7 @@ class EtapaController extends Controller
      */
     public function index()
     {
-        return Etapa::all();
+        return Etapa::orderBy('nombre','asc')->get();
     }
 
     /**

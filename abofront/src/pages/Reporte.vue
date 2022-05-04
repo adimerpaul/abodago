@@ -14,7 +14,7 @@
 
     <div class="row">
       <div class="col-12">
-        <q-table dense title="Resumen Ingresos Egresos" :rows="reportes" :columns="columns" :filter="filter" >
+        <q-table dense title="Resumen Ingresos Egresos" :rows="reportes" :columns="columns" :filter="filter" :rows-per-page-options="[10,20,50,0]">
  
 
 

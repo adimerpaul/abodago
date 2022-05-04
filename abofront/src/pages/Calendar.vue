@@ -63,7 +63,7 @@
                   </div>
                 </div>
               </q-form>
-              <q-table :rows="despacho.agendas" :columns="columnsAgenda" >
+              <q-table :rows="despacho.agendas" :columns="columnsAgenda" :rows-per-page-options="[10,20,50,0]">
                 <template v-slot:body-cell-estado="props">
                   <q-td :props="props">
                     <q-badge :color="props.row.estado=='EN ESPERA'?'warning':'positive'">{{props.row.estado}}</q-badge>
