@@ -77,6 +77,24 @@ class DespachoController extends Controller
         }
 
     }
+
+    public function updemandado(Request $request){
+        DB::SELECT("DELETE FROM demandado_despacho WHERE despacho_id=$request->id");
+        foreach($request->demandados as $r){
+            if ($r['ci']!='' && $r['nombre']!=''){
+                $dd=Demandado::where('ci',$r['ci'])->get();
+                if($dd->count()==0){
+                    $demandado=DB::table('demandados')->insert(['ci'=>$r['ci'],'nombre'=>$r['nombre']]);
+                    $dd=Demandado::where('ci',$r['ci'])->get();
+                }
+                else{
+                    $demandado=DB::table('demandados')->where('ci',$r['ci'])->update(['nombre'=>$r['nombre']]);
+                }
+                DB::table('demandado_despacho')->insert(['despacho_id'=>$request->id,'demandado_id'=>$dd[0]->id]);
+            }
+        }
+    }
+
     public function updespacho(Request $request){
         $desp=Despacho::find($request->despacho_id);
         $desp->proforma_id=$request->proforma_id;

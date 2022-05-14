@@ -51,6 +51,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/updrequisito',[\App\Http\Controllers\DespachoController::class,'updrequisito']);
     Route::post('/updespacho',[\App\Http\Controllers\DespachoController::class,'updespacho']);
     Route::post('/reporte',[\App\Http\Controllers\ClienteController::class,'reporte']);
+    Route::post('/updemandado',[\App\Http\Controllers\DespachoController::class,'updemandado']);
     Route::resource('/cliente',\App\Http\Controllers\ClienteController::class);
     Route::resource('/tramite',\App\Http\Controllers\TramiteController::class);
     Route::resource('/ingreso',\App\Http\Controllers\IngresoController::class);

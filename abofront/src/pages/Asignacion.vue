@@ -255,6 +255,7 @@
                     <q-input label="Proceso" outlined dense v-model="cliente3.proceso"/>
 
                     <q-input label="representante" outlined dense v-model="cliente3.representante"/>
+                    <q-btn full-width color="positive"  label="Modificar" @click="moddespacho"/>
                     <div class="text-h6">DEMANDADOS</div>
                     <table style="width:100%;  border: 1px solid black;" >
                       <thead>
@@ -262,19 +263,24 @@
                         <th>ID</th>
                         <th>CI</th>
                         <th>NOMBRE</th>
+                        <th>OPCION</th>
+
                       </tr>
                       </thead>
                       <tbody>
                       <tr v-for="(i,index) in cliente3.demandados" :key="index">
                         <th scope="row">{{index+1}}</th>
-                        <td style="text-align:center">{{i.ci}} </td>
-                        <td style="text-align:center"> {{i.nombre}}</td>
+                        <td><input type="text" class="form-control" :name="i.ci" v-model="i.ci" @keyup="buscar2(i,index)"></td>
+                        <td><input type="text" class="form-control" :name="i.nombre" v-model="i.nombre"></td>
+                                            <td>
+                            <q-btn dense color="green" @click="mas2" icon="add"/>
+                            <q-btn dense color="red" icon="remove" @click="menos2(index)"/>
+                        </td>
                       </tr>
                       </tbody>
                     </table>
                   </div>
-                  <q-btn full-width color="positive"  label="Modificar" @click="moddespacho"/>
-
+                  <q-btn full-width color="positive"  label="Modificar Dem" @click="moddema"/>
                   <q-card>
                     <q-tabs
                       v-model="tab"
@@ -836,6 +842,27 @@ export default {
     this.misusuarios()
   },
   methods:{
+      moddema(){
+      this.$q.loading.show()
+      this.$axios.post(process.env.API+'/updemandado',{id:this.cliente3.id,demandados:this.cliente3.demandados}).then(res=>{
+        this.misdatos()
+        this.$q.loading.hide()
+        this.dialogdatos=false
+        this.$q.notify({
+          message:'Despacho registrado!!',
+          color:'green',
+          icon:'done'
+        })
+        this.listdespacho(this.cliente2)
+      }).catch(err=>{
+        this.$q.notify({
+          message:err.response.data.message,
+          color:'red',
+          icon:'error'
+        })
+        this.$q.loading.hide()
+      })
+    },  
     imprec(pago){
       this.$axios.get(process.env.API+'/imprecibo/'+pago.id).then(res=>{
         let myWindow = window.open("", "Imprimir", "width=1000,height=500");
@@ -1048,6 +1075,26 @@ export default {
         }
       })
     },
+       mas2(){
+      this.cliente3.demandados.push({ci:'',nombre:''})
+    },
+    menos2(index){
+        if(index>=1)
+        this.cliente3.demandados.splice(index, 1);
+        if(index==0)
+        this.cliente3.demandados=[{ci:'',nombre:''}]
+    }, 
+            buscar2(i,index){
+      this.$axios.get(process.env.API+'/demandado/'+i.ci).then(res=>{
+        // console.log(res.data)
+        if(res.data.length>0) {
+          // this.demandados[index]={ci:res.data[0].ci,nombre:res.data[0].nombre};}
+          this.cliente3.demandados[index].nombre = res.data[0].nombre
+        }else{
+        // this.demandados[index]={ci:i.ci,nombre:''};
+          this.cliente3.demandados[index].nombre = ''
+        }
+      })},
     lrequisito(){
       console.log(this.tramite.requisitos)
       // this.tramite.requisitos.forEach(r=>{
@@ -1529,13 +1576,19 @@ export default {
       this.cliente2=prop
       // // console.log(prop)
       //
-      // this.infodespacho=[];
+      this.infodespacho=[];
 
       this.$q.loading.show()
       // this.dialog_despacho=true
       this.$axios.get(process.env.API+'/despacho/'+prop.id).then(res=>{
         // console.log(res.data)
-        this.infodespacho=res.data
+        //this.infodespacho=res.data
+                res.data.forEach(d => {
+                      if(d.demandados.length==0)
+            d.demandados=[{id:'',ci:'',nombre:''}]
+        this.infodespacho.push(d)
+
+          });
         this.$q.loading.hide()
         this.dialog_despacho=true
       })
