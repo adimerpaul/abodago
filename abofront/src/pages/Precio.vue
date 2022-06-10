@@ -203,6 +203,9 @@ export default {
         doc.text(18, 1.5,  'Oruro, '+mc.fec)
         doc.text(2, 4, 'Cliente: ')
         doc.setFont(undefined,'normal')
+        doc.setFontSize(8);
+        doc.text(6, 3, ''+ mc.tramite.tipo+' : '+mc.tramite.nombre)
+        doc.setFontSize(12);
         doc.text(5, 4, ''+ mc.cliente.nombre)
 
         doc.addImage(img2, 'jpg', 0.5, 12,20,10)
