@@ -865,7 +865,7 @@ export default {
     },  
     imprec(pago){
       this.$axios.get(process.env.API+'/imprecibo/'+pago.id).then(res=>{
-        let myWindow = window.open("", "Imprimir", "width=1000,height=500");
+                    let myWindow = window.open("", "Imprimir", "width=1000,height=500");
         myWindow.document.write(res.data);
         myWindow.document.close();
         myWindow.focus();
