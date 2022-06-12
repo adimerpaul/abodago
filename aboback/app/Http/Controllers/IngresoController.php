@@ -109,12 +109,8 @@ class IngresoController extends Controller
         </style>
         <table>
         <tr>
-        <td ><img src='img/logocastillogonzales2.png' style='width:3cm;height:1.5cm;'></td>
-        <td>
-        <img  src='img/ubicacion.jpg' style='width:0.3cm;height:0.3cm'> <span class='enc'>La Plata No. 6254 <br> entre Sucre y Murguia Frente Cine Hollywood</span><br>
-        <img  src='img/correo.jpg' style='width:0.3cm;height:0.3cm'><span class='enc'> gonzalesdelcastillomarcelo@hotmail.com </span><br>
-        <img  src='img/telf.png' style='width:0.3cm;height:0.3cm'> <span class='enc'>Cel: 78611101</span>
-        </td>
+        <td style='text-align:center;'><img src='img/logocastillogonzales2.png' style='width:4cm;height:2cm;'></td>
+
         </tr>
        </table>
         <div style='text-align:right;'><b>RECIBO</b> <span style='color:red'><b>No</b> $string</span></div>
