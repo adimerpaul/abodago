@@ -1617,6 +1617,7 @@ export default {
       data.append('imagen', this.imagen);
       data.append('ci', this.cliente.ci);
       data.append('nombre', this.cliente.nombre);
+      data.append('telefono', this.cliente.telefono);
       data.append('tipo', 'PERSONA');
       // this.cliente.imagen=this.imagen
 
