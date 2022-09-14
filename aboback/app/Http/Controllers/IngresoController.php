@@ -133,7 +133,7 @@ class IngresoController extends Controller
         </div>
             <br>
             <br>
-        <div style='text-align:center;'><b>ENTREGUE CONFORME</b></div>
+        <div style='text-align:center;'><b>RECIBI CONFORME</b></div>
         
         ";
         return $cadena;
