@@ -35,7 +35,7 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::post('/ringreso/{id}',[\App\Http\Controllers\ClienteController::class,'ringreso']);
     Route::post('/imgupdate',[\App\Http\Controllers\ClienteController::class,'imgupdate']);
     Route::resource('/permiso',\App\Http\Controllers\PermisoController::class);
-    Route::post('/clienteimg',[\App\Http\Controllers\ClienteController::class,'clienteimg']); 
+    Route::post('/clienteimg',[\App\Http\Controllers\ClienteController::class,'clienteimg']);
 
     Route::resource('/despacho',\App\Http\Controllers\DespachoController::class);
     Route::resource('/agenda',\App\Http\Controllers\AgendaController::class);
@@ -55,6 +55,8 @@ Route::group(['middleware'=>'auth:sanctum'],function (){
     Route::resource('/cliente',\App\Http\Controllers\ClienteController::class);
     Route::resource('/tramite',\App\Http\Controllers\TramiteController::class);
     Route::resource('/ingreso',\App\Http\Controllers\IngresoController::class);
+//    updmonto
+    Route::post('/updmonto/{id}',[\App\Http\Controllers\IngresoController::class,'updmonto']);
     Route::resource('/egreso',\App\Http\Controllers\EgresoController::class);
     Route::resource('/egotro',\App\Http\Controllers\EgotroController::class);
     Route::resource('/requisitos',\App\Http\Controllers\RequisitoController::class);

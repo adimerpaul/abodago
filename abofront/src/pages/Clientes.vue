@@ -547,6 +547,7 @@
                             <template v-slot:body-cell-opcion="props">
               <q-td key="opcion" :props="props">
                   <q-btn dense  size="xs" flat color="info" @click="imprec(props.row)" icon="print"></q-btn>
+                  <q-btn dense  size="xs" flat color="orange" @click="updatemonto(props.row)" icon="edit" v-if="$store.state.login.boolelingreso"></q-btn>
                   <q-btn dense  size="xs" flat color="red" @click="deling(props.row)" icon="delete" v-if="$store.state.login.boolelingreso"></q-btn>
               </q-td>
              </template>
@@ -870,8 +871,8 @@ export default {
       })
     },
                 descargar(agenda){
-              console.log(agenda) 
-              var fileName=this.url+'/../archivos/'+agenda.archivo; 
+              console.log(agenda)
+              var fileName=this.url+'/../archivos/'+agenda.archivo;
               window.open(fileName, 'Download');
         },
         imprec(pago){
@@ -887,6 +888,31 @@ export default {
           })
 
         },
+    updatemonto(pago){
+      console.log(pago)
+      this.$q.dialog({
+        title: 'CONFIRMAR',
+        message: 'Modificar Monto?',
+        cancel: true,
+        prompt: {
+          model: pago.monto,
+          type: 'number'
+        },
+        persistent: false
+      }).onOk(data => {
+        this.$axios.post(process.env.API+'/updmonto/'+pago.id,{monto:data}).then(res=>{
+          this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+              this.tabingreso=res.data;
+        });
+        })
+      }).onOk(() => {
+        // console.log('>>>> second OK catcher')
+      }).onCancel(() => {
+        // console.log('>>>> Cancel')
+      }).onDismiss(() => {
+        // console.log('I am triggered on both OK and Cancel')
+      })
+    },
         deling(pago){
                 this.$q.dialog({
         title: 'CONFIRMAR',
@@ -895,9 +921,9 @@ export default {
         persistent: false
       }).onOk(() => {
       this.$axios.delete(process.env.API+'/ingreso/'+pago.id).then(res=>{
-                this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+        this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
               this.tabingreso=res.data;
-      });
+        });
       })
       }).onOk(() => {
         // console.log('>>>> second OK catcher')

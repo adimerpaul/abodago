@@ -82,6 +82,20 @@ class IngresoController extends Controller
     {
         //
     }
+    public function updmonto(Request $request, $id)
+    {
+//        error_log(json_encode($request->all()));
+        $ingreso=Ingreso::find($id);
+//        $ingreso->user_id=$request->user()->id;
+//        $ingreso->despacho_id=$request->despacho_id;
+//        $ingreso->recibo='0';
+//        $ingreso->motivo=$request->motivo;
+        $ingreso->monto=$request->monto;
+//        $ingreso->fecha=$request->fecha;
+//        $ingreso->hora=$request->hora;
+        $ingreso->save();
+        return $ingreso;
+    }
 
 
     public function imprecibo($id){
@@ -99,7 +113,7 @@ class IngresoController extends Controller
             font-family:'Brush Script MT', cursive;
         }
         table{
-            
+
             border-collapse: collapse;
             width:100%;
         }
@@ -115,18 +129,18 @@ class IngresoController extends Controller
        </table>
         <div style='text-align:right;'><b>RECIBO</b> <span style='color:red'><b>No</b> $string</span></div>
         <div style='text-align:right;'><b>Bs. : </b>".$ing->monto."</div>
-       
-            
-            
-        
-            <b> He recibido del Sr. (a): </b> 
+
+
+
+
+            <b> He recibido del Sr. (a): </b>
         <div style='text-align:center;'>".$cl[0]->nombre."</div>
             <b> La suma de : </b>
         <div style='text-align:center;'>". $formatter->toWords($ing->monto)."  Bolivianos.</div>
-            
+
             <b> Por concepto de: </b>
         <div style='text-align:center;'>".$tr[0]->nombre."</div><br>
-            
+
         <div style='text-align:center;'>
 
         Oruro, ".date("d", strtotime($ing->fecha))." de ".$mes[intval(date("m", strtotime($ing->fecha))) - 1]." de ". date("Y", strtotime($ing->fecha))."
@@ -134,7 +148,7 @@ class IngresoController extends Controller
             <br>
             <br>
         <div style='text-align:center;'><b>RECIBI CONFORME</b></div>
-        
+
         ";
         return $cadena;
 
