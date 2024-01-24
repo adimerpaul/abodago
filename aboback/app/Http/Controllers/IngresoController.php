@@ -78,9 +78,19 @@ class IngresoController extends Controller
      * @param  \App\Models\Ingreso  $ingreso
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ingreso $ingreso)
+    public function update(Request $request, $id)
     {
-        //
+        $request->merge(['motivo' => strtoupper($request->concepto)]);
+        $ingreso=Ingreso::find($id);
+//        $ingreso->user_id=$request->user()->id;
+//        $ingreso->despacho_id=$request->despacho_id;
+//        $ingreso->recibo='0';
+        $ingreso->motivo=$request->motivo;
+        $ingreso->monto=$request->monto;
+        $ingreso->fecha=$request->fecha;
+        $ingreso->hora=$request->hora;
+        $ingreso->save();
+        return $ingreso;
     }
     public function updmonto(Request $request, $id)
     {

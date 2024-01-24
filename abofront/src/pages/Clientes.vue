@@ -670,6 +670,26 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-dialog v-model="dialogPago">
+      <q-card style="width: 300px;min-width: 40vh">
+        <q-card-section>
+          <div class="text-h6"> <q-icon name="list"/> {{pago.motivo}} Pago</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <q-form @submit.prevent="regpago">
+            <q-input dense outlined label="Monto" v-model="pago.monto" type="number" step="0.01"/>
+            <q-input dense outlined label="Fecha" v-model="pago.fecha" type="date"/>
+            <q-input dense outlined label="Hora" v-model="pago.hora" type="time"/>
+            <q-input dense outlined label="Motivo" v-model="pago.concepto"/>
+<!--            <pre>{{pago}}</pre>-->
+            <q-card-section align="right">
+              <q-btn flat label="Registrar" color="primary" icon="send" type="submit" :loading="loading"/>
+              <q-btn flat label="Cancelar" color="primary" icon="delete" v-close-popup :loading="loading"/>
+            </q-card-section>
+          </q-form>
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -680,6 +700,7 @@ import {date} from 'quasar'
 export default {
   data(){
     return {
+      loading:false,
       filteragenda:'',
       etapas:[],
       etapas2:[],
@@ -806,7 +827,9 @@ export default {
         {field:'monto',name:'monto',label:'monto',align:'right'},
          {field:'concepto',name:'concepto',label:'concepto',align:'left'},
 
-      ]
+      ],
+      pago: {},
+      dialogPago: false,
     }
   },
   created() {
@@ -888,30 +911,50 @@ export default {
           })
 
         },
-    updatemonto(pago){
-      console.log(pago)
+    regpago(){
       this.$q.dialog({
         title: 'CONFIRMAR',
-        message: 'Modificar Monto?',
+        message: 'ESTA SEGURO DE REGISTRAR?',
         cancel: true,
-        prompt: {
-          model: pago.monto,
-          type: 'number'
-        },
         persistent: false
-      }).onOk(data => {
-        this.$axios.post(process.env.API+'/updmonto/'+pago.id,{monto:data}).then(res=>{
-          this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
-              this.tabingreso=res.data;
-        });
-        })
       }).onOk(() => {
-        // console.log('>>>> second OK catcher')
-      }).onCancel(() => {
-        // console.log('>>>> Cancel')
-      }).onDismiss(() => {
-        // console.log('I am triggered on both OK and Cancel')
+        this.loading=true
+        this.$axios.put(process.env.API+'/ingreso/'+this.pago.id,this.pago).then(res=>{
+          this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+            this.tabingreso=res.data;
+          });
+          this.dialogPago=false
+        }).finally(()=>{
+          this.loading=false
+        })
       })
+    },
+    updatemonto(pago){
+      this.pago=pago
+      this.dialogPago=true
+      // console.log(pago)
+      // this.$q.dialog({
+      //   title: 'CONFIRMAR',
+      //   message: 'Modificar Monto?',
+      //   cancel: true,
+      //   prompt: {
+      //     model: pago.monto,
+      //     type: 'number'
+      //   },
+      //   persistent: false
+      // }).onOk(data => {
+      //   this.$axios.post(process.env.API+'/updmonto/'+pago.id,{monto:data}).then(res=>{
+      //     this.$axios.post(process.env.API+'/ringreso/'+this.datodespacho.id).then(res=>{
+      //         this.tabingreso=res.data;
+      //   });
+      //   })
+      // }).onOk(() => {
+      //   // console.log('>>>> second OK catcher')
+      // }).onCancel(() => {
+      //   // console.log('>>>> Cancel')
+      // }).onDismiss(() => {
+      //   // console.log('I am triggered on both OK and Cancel')
+      // })
     },
         deling(pago){
                 this.$q.dialog({
