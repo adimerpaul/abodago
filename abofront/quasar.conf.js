@@ -73,7 +73,7 @@ module.exports = configure(function (ctx) {
       env: {
         API: ctx.dev
           ? 'http://localhost:8000/api'
-          : 'https://bcastilloygonzales.siscenter.org/api'
+          : 'https://bcastilloygonzales.tuprogam.com/api'
       }
     },
 
