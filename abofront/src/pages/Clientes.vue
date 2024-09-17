@@ -1548,11 +1548,17 @@ export default {
         doc.text(14, 4.5,'CONCEPTO' )
         doc.text(19, 4.5,'MONTO Bs' )
         doc.setFont(undefined,'normal')
-        mc.tabegcl.forEach(egr => {
+        mc.tabegcl.forEach((egr,index) => {
+          if(index%52==0 && index>0){
+            doc.addPage();
+            header()
+            footer()
+            y2=0
+          }
           sum2+=parseFloat( egr.monto)
           y2+=0.5
-        doc.text(12, y2+4.5,egr.concepto.substring(0,36)+'')
-        doc.text(20, y2+4.5,egr.monto.toFixed(2)+'','right')
+          doc.text(12, y2+4.5,egr.concepto.substring(0,36)+'')
+          doc.text(20, y2+4.5,egr.monto.toFixed(2)+'','right')
         });
         if(y2>y1)
           {doc.line(11.5,4.5,11.5,y2+4.5)
